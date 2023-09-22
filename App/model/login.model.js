@@ -1,6 +1,7 @@
 const mongoose= require('mongoose')
- const Schema = new mongoose.Schema
- const loginschema = new Schema({
+const Schema = mongoose.Schema;
+
+ const loginschema = Schema({
     login_id:{
         type: String,
         require:true
@@ -9,7 +10,7 @@ const mongoose= require('mongoose')
         type:String,
         require:true
     }
- })
- const LOGIN = mongoose.model('login',loginschema)
+ });
+ const login = mongoose.model('login',loginschema)
 
- module.exports=LOGIN;
+ module.exports=login;
