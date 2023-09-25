@@ -1,21 +1,32 @@
-var shops= require('../model/shop.model')
+var architec= require('../model/architec.model')
 var jwt = require('jsonwebtoken');
 
-
-exports.shopdetails_create = async function(req,res){
+exports.architec_create = async function(req,res){
     try {
-        const { shopName,mobileNo,Address } = req.body;
-        const shop_create = await shops.findOne({ shopName: req.body.shopName })
-       
-        const shopData = await shops.create({
-            shopName:shopName,
+        const { architecsName,mobileNo,Address } = req.body;
+        // const architacecreateData = await architec.findOne({ architecsName })
+        // if (architacecreateData ) {
+        //     return res.status(400).json({
+        //         status:"Fail",
+        //         message:"architecsName already exist"
+        //     })
+        // }
+        const architecmobilno = await architec.findOne({ mobileNo })
+        if(architecmobilno)
+        {
+            return res.status(400).json({
+                status:"Fail",
+                message:"mobileno already exist"
+            })
+        }
+        const architecData = await architec.create({
+            architecsName:architecsName,
             mobileNo:mobileNo,
             Address:Address
-
         })
         const payload = {
-           id:shop_create._id,
-           shopName:shopName,
+           id:architecData._id,
+           architecsName:architecsName,
            mobileNo:mobileNo,
            Address:Address
         };
@@ -23,8 +34,8 @@ exports.shopdetails_create = async function(req,res){
 
         res.status(200).json({
             status: "Success",
-            message: "create userdata",
-            data: shopData,
+            message: "create architecData",
+            data: architecData,
             token: token
         })
     } catch (error) {
@@ -34,22 +45,27 @@ exports.shopdetails_create = async function(req,res){
         })
     }
 }
+
 //==============================================================UPDATE DATA============================================================
-exports.shopdetails_update = async function (req, res, next) {
+exports.architec_update = async function (req, res, next) {
     try {
-        const { shopName,mobileNo,Address } = req.body;
-        const updateshopdata = {
-            shopName: shopName,
+        const { architecsName,mobileNo,Address } = req.body;
+        const updatearchitecdata = {
+            architecsName: architecsName,
             mobileNo: mobileNo,
             Address:Address
         }
-      
-        const shopdata = await shops.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateshopdata }, { new: true })
-      
+        const architecdata = await architec.findByIdAndUpdate({ "_id": req.params.id }, { $set: updatearchitecdata }, { new: true })
+      if (!architecdata) {
+       return res.status(400).json({
+            status: "Fail",
+            message: "user not found"
+        })
+      }
         res.status(200).json({
             status: "Success",
             message: "updated data",
-            data: shopdata
+            data: architecdata
         })
     } catch (error) {
         res.status(404).json({
@@ -57,13 +73,12 @@ exports.shopdetails_update = async function (req, res, next) {
             message: "user not found"
         })
     }
-    next();
 }
 //===============================================================DELETE DATA====================================================================
-exports.shopdetails_delete = async function (req, res) {
+exports.architec_delete = async function (req, res) {
     try {
-        const shopdatadelete = await shops.findByIdAndDelete({ "_id": req.params.id });
-        if (!shopdatadelete) {
+        const architecdatadelete = await architec.findByIdAndDelete({ "_id": req.params.id });
+        if (!architecdatadelete) {
             return res.status(400).json({
                 status: "Fail",
                 message: "user not found"
@@ -82,11 +97,11 @@ exports.shopdetails_delete = async function (req, res) {
     }
 }
 //========================================================================VIEW DATA=========================================================
-exports.shopdetails_viewdata = async function (req, res) {
+exports.architec_viewdata = async function (req, res) {
     try {
-        const shopviewdata = await shops.findById({ "_id": req.params.id });
-        if (!shopviewdata) {
-            res.status(401).json({
+        const architecviewdata = await architec.findById({ "_id": req.params.id });
+        if (!architecviewdata) {
+           return res.status(401).json({
                 status: "Fail",
                 message: "user not found"
             })
@@ -94,20 +109,27 @@ exports.shopdetails_viewdata = async function (req, res) {
         res.status(201).json({
             status: "Sucess",
             message: "user Fetch sucessfully",
-            data: shopviewdata
+            data: architecviewdata
         });
     } catch (error) {
         res.status(404).json({
             status: "Fail",
-            message: error.message
+            message: "user no fetch data"
 
         })
     }
 }
 //========================================================================LIST DATA=========================================================
-exports.shopdetails_listdata = async function (req, res) {
+exports.architec_listdata = async function (req, res) {
     try {
-        const listdata = await shops.find()
+        const listdata = await architec.find()
+        // if(!listdata)
+        // {
+        //     return res.status(400).json({
+        //         status:"Fail",
+        //         message:"fail to get data"
+        //     })
+        // }
         res.status(200).json({
             status: "Success",
             message: "get all data",

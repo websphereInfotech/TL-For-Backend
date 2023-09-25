@@ -5,15 +5,27 @@ var jwt = require('jsonwebtoken');
 exports.carpenters_create = async function(req,res){
     try {
         const { carpentersName,mobileNo,Address } = req.body;
-        const carpenter_create = await carpenter.findOne({ carpentersName: req.body.carpentersName })
-
+        // const carpentercreateData = await carpenter.findOne({ carpentersName })
+        // if (carpentercreateData) {
+        //     return res.status(400).json({
+        //         status:"Fail",
+        //         message:"carpentersName already exist"
+        //     })
+        // }
+        const checkmobilno = await carpenter.findOne({ mobileNo })
+        if ( checkmobilno ) {
+            return res.status(400).json({
+                status:"Fail",
+                message:"mobileNo already exist"
+            })
+        }
         const carpenterData = await carpenter.create({
             carpentersName:carpentersName,
             mobileNo:mobileNo,
             Address:Address
         })
         const payload = {
-           id: carpenter_create._id,
+           id: carpenterData.id,
            carpentersName:carpentersName,
            mobileNo:mobileNo,
            Address:Address
@@ -42,11 +54,21 @@ exports.carpenters_update = async function (req, res) {
             mobileNo:mobileNo,
             Address:Address
         }
-        const carpenterdata = await carpenter.findByIdAndUpdate({ "_id": req.params.id }, { $set: updatecarpenterdata }, { new: true })
+        const carpenterdetails=await carpenter.findByIdAndUpdate({ "_id": req.params._id}, { $set: updatecarpenterdata }, { new: true })
+        console.log(updatecarpenterdata);
+        console.log(carpenterdetails);
+        // console.log(updatecarpenterdata);
+        if(!carpenterdetails)
+        {
+            return res.status(400).json({
+                status:"Fail",
+                message:"user not found"
+            })
+        }
         res.status(200).json({
             status: "Success",
             message: "updated data",
-            data: carpenterdata
+            data: carpenterdetails
         })
     } catch (error) {
         res.status(404).json({
@@ -82,7 +104,7 @@ exports.carpenters_viewdata = async function (req, res) {
     try {
         const viewdata = await carpenter.findById({ "_id": req.params.id });
         if (!viewdata) {
-            res.status(401).json({
+            return res.status(401).json({
                 status: "Fail",
                 message: "user not found"
             })
@@ -95,7 +117,7 @@ exports.carpenters_viewdata = async function (req, res) {
     } catch (error) {
         res.status(404).json({
             status: "Fail",
-            message: error.message
+            message:"carpenter no fetch data"
         })
     }
 }
@@ -103,6 +125,13 @@ exports.carpenters_viewdata = async function (req, res) {
 exports.carpenters_listdata = async function (req, res) {
     try {
         const carpenterlistdata = await carpenter.find()
+        // if(!carpenterlistdata)
+        // {
+        //     return res.status(400).json({
+        //         status:"Fail",
+        //         message:"no get data"
+        //     })
+        // }
         res.status(200).json({
             status: "Success",
             message: "get all data",

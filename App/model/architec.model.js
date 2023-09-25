@@ -7,9 +7,9 @@ const Schema = mongoose.Schema;
         require:true
     },
     mobileNo:{
-        type:String,
+        type:Number,
         require:true,
-        // uniqe:true
+        unique: true
     },
     Address:{
         type:String,
