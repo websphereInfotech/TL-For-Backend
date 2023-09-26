@@ -1,17 +1,12 @@
 var jwt = require('jsonwebtoken');
 const user = require('../model/user.model');
+const { userName } = require('../middlware/validation');
 
 
 exports.userdetails_create = async function (req, res) {
     try {
-        const { userName, mobileNo, Address, architecture_id,carpenter_id,shop_id } = req.body;
-        // const usercreateData = await user.findOne({ userName })
-        // if (usercreateData) {
-        //     return res.status(400).json({
-        //         status: "Fail",
-        //         message: "userName already exist"
-        //     })
-        // }
+        const { userName, mobileNo, Address, architecture_id, carpenter_id, shop_id } = req.body;
+
         const usermobileNo = await user.findOne({ mobileNo })
         if (usermobileNo) {
             return res.status(400).json({
@@ -27,15 +22,14 @@ exports.userdetails_create = async function (req, res) {
             carpenter_id,
             shop_id
         })
-
         const payload = {
             id: userData._id,
             userName: userName,
             mobileNo: mobileNo,
             Address: Address,
-            architectureId:architecture_id,
-            carpenterId:carpenter_id,
-            shopId:shop_id
+            architectureId: architecture_id,
+            carpenterId: carpenter_id,
+            shopId: shop_id
         };
         let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1h' })
 
@@ -55,21 +49,20 @@ exports.userdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res, next) {
     try {
-        const { userName, mobileNo, Address, architecture_id,carpenter_id,shop_id } = req.body;
+        const { userName, mobileNo, Address, architecture_id, carpenter_id, shop_id } = req.body;
         const updateshopdata = {
             userName: userName,
             mobileNo: mobileNo,
             Address: Address,
-            architecture_id:architecture_id,
-            carpenter_id:carpenter_id,
-            shop_id:shop_id
+            architecture_id: architecture_id,
+            carpenter_id: carpenter_id,
+            shop_id: shop_id
         }
-
         const userdata = await user.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateshopdata }, { new: true })
         if (!userdata) {
             return res.status(400).json({
-                status:"Fail",
-                message:"user not found"
+                status: "Fail",
+                message: "user not found"
 
             })
         }
@@ -112,7 +105,7 @@ exports.userdetails_viewdata = async function (req, res) {
     try {
         const userviewdata = await user.findById({ "_id": req.params.id });
         if (!userviewdata) {
-           return res.status(400).json({
+            return res.status(400).json({
                 status: "Fail",
                 message: "user not found"
             })
@@ -134,16 +127,28 @@ exports.userdetails_viewdata = async function (req, res) {
 exports.userdetails_listdata = async function (req, res) {
     try {
         const listdata = await user.find()
-        // if(!listdata){
-        //     return res.status(400).json({
-        //         status:"Fail",
-        //         message:"no list data"
-        //     })
-        // }
         res.status(200).json({
             status: "Success",
             message: "get all data",
             data: listdata
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: "Fail",
+            message: error.message
+        })
+    }
+}
+//============================================================================SERCH DATA=========================================================
+exports.userdetails_searchdata = async function (req, res) {
+    try {
+        const nameFeild=req.query.userName
+        const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }})
+      
+        res.status(200).json({
+            status: "Success",
+            message: "fetch data successfully",
+            data: searchdata
         })
     } catch (error) {
         res.status(404).json({

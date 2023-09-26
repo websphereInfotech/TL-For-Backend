@@ -1,34 +1,27 @@
-var architec= require('../model/architec.model')
+var architec = require('../model/architec.model')
 var jwt = require('jsonwebtoken');
 
-exports.architec_create = async function(req,res){
+exports.architec_create = async function (req, res) {
     try {
-        const { architecsName,mobileNo,Address } = req.body;
-        // const architacecreateData = await architec.findOne({ architecsName })
-        // if (architacecreateData ) {
-        //     return res.status(400).json({
-        //         status:"Fail",
-        //         message:"architecsName already exist"
-        //     })
-        // }
+        const { architecsName, mobileNo, Address } = req.body;
+
         const architecmobilno = await architec.findOne({ mobileNo })
-        if(architecmobilno)
-        {
+        if (architecmobilno) {
             return res.status(400).json({
-                status:"Fail",
-                message:"mobileno already exist"
+                status: "Fail",
+                message: "mobileno already exist"
             })
         }
         const architecData = await architec.create({
-            architecsName:architecsName,
-            mobileNo:mobileNo,
-            Address:Address
+            architecsName: architecsName,
+            mobileNo: mobileNo,
+            Address: Address
         })
         const payload = {
-           id:architecData._id,
-           architecsName:architecsName,
-           mobileNo:mobileNo,
-           Address:Address
+            id: architecData._id,
+            architecsName: architecsName,
+            mobileNo: mobileNo,
+            Address: Address
         };
         let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1h' })
 
@@ -49,19 +42,19 @@ exports.architec_create = async function(req,res){
 //==============================================================UPDATE DATA============================================================
 exports.architec_update = async function (req, res, next) {
     try {
-        const { architecsName,mobileNo,Address } = req.body;
+        const { architecsName, mobileNo, Address } = req.body;
         const updatearchitecdata = {
             architecsName: architecsName,
             mobileNo: mobileNo,
-            Address:Address
+            Address: Address
         }
         const architecdata = await architec.findByIdAndUpdate({ "_id": req.params.id }, { $set: updatearchitecdata }, { new: true })
-      if (!architecdata) {
-       return res.status(400).json({
-            status: "Fail",
-            message: "user not found"
-        })
-      }
+        if (!architecdata) {
+            return res.status(400).json({
+                status: "Fail",
+                message: "user not found"
+            })
+        }
         res.status(200).json({
             status: "Success",
             message: "updated data",
@@ -101,7 +94,7 @@ exports.architec_viewdata = async function (req, res) {
     try {
         const architecviewdata = await architec.findById({ "_id": req.params.id });
         if (!architecviewdata) {
-           return res.status(401).json({
+            return res.status(401).json({
                 status: "Fail",
                 message: "user not found"
             })
@@ -123,17 +116,33 @@ exports.architec_viewdata = async function (req, res) {
 exports.architec_listdata = async function (req, res) {
     try {
         const listdata = await architec.find()
-        // if(!listdata)
-        // {
-        //     return res.status(400).json({
-        //         status:"Fail",
-        //         message:"fail to get data"
-        //     })
-        // }
         res.status(200).json({
             status: "Success",
             message: "get all data",
             data: listdata
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: "Fail",
+            message: error.message
+        })
+    }
+}
+//================================================================SEARCH DATA===============================================================
+exports.architecdetails_searchdata = async function (req, res) {
+    try {
+        const name = req.query.architecName
+        if (!name) {
+            return res.status(400).json({
+                status:"Fail",
+                message:"architecsname is not found"
+            })
+        }
+        const searchdata = await architec.find({architecsName: { $regex: name,$options:'i'} })
+        res.status(200).json({
+            status: "Success",
+            message: "fetch data successfully",
+            data: searchdata
         })
     } catch (error) {
         res.status(404).json({

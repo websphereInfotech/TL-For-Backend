@@ -5,7 +5,7 @@ exports.carpenter_Name = function (req, res, next) {
         'string.base': 'carpentersName must be a string',
         'string.empty': 'carpentersName cannot be empty',
         'any.required': 'required field:carpentername',
-        'string.pattern.base': 'lastname must contain only letters (uppercase or lowercase)'
+        'string.pattern.base': 'carpentersname must contain only letters (uppercase or lowercase)'
     });
     var { error: carpentersNameError } = carpentersName.validate(req.body.carpentersName);
     if (carpentersNameError) {
@@ -23,7 +23,7 @@ exports.shopsName = function (req, res, next) {
         'string.base': 'shopName must be a string',
         'string.empty': 'shopName cannot be empty',
         'any.required': 'required field:shopName',
-        'string.pattern.base': 'lastname must contain only letters (uppercase or lowercase)'
+        'string.pattern.base': 'shopname must contain only letters (uppercase or lowercase)'
     });
     var { error: shopNameError } = shopName.validate(req.body.shopName);
     if (shopNameError) {
@@ -36,7 +36,7 @@ exports.shopsName = function (req, res, next) {
         next();
     }
 }
-exports.arcitecsName = function (req, res, next) {
+exports.arcitecsname = function (req, res, next) {
     var architecsName = Joi.string().regex(/^[a-zA-Z\s]+$/).trim().empty().required().messages({
         'string.base': 'architecsName must be a string',
         'string.empty': 'architecsName cannot be empty',
@@ -177,38 +177,6 @@ const userSchema = Joi.object({
 
 exports.loginValidation = validateSchema(userSchema);
 
-// const carpenterSchema = Joi.object({
-//     carpentersName: Joi.string(),
-//     mobileNo: Joi.number().integer().min(1000000000).max(9999999999),
-//     Address:Joi.string()
-// });
 
-// exports.carpenterValidation = validateSchema(carpenterSchema);
-
-// const shopSchema = Joi.object({
-//     shopName: Joi.string().required(),
-//     mobileNo: Joi.number().integer().min(1000000000).max(9999999999).required(),
-//     Address:Joi.string().required()
-// });
-// exports.shopValidation = validateSchema(shopSchema);
-
-// const architecSchema = Joi.object({
-//     architecsName: Joi.string().required(),
-//     mobileNo: Joi.number().integer().min(1000000000).max(9999999999),
-//     Address:Joi.string().required()
-// });
-// exports.architecValidation = validateSchema(architecSchema);
-
-
-
-// const usersSchema = Joi.object({
-//     userName: Joi.string().required(),
-//     mobileNo: Joi.number().integer().min(1000000000).max(9999999999).required(),
-//     Address:Joi.string().required(),
-//     architecture_id:Joi.string().required(),
-//     carpenter_id:Joi.string().required(),
-//     shop_id:Joi.string().required()
-// });
-// exports.usersValidation = validateSchema(usersSchema);
 
 

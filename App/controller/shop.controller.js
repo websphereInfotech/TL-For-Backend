@@ -5,13 +5,7 @@ var jwt = require('jsonwebtoken');
 exports.shopdetails_create = async function (req, res) {
     try {
         const { shopName, mobileNo, Address } = req.body;
-        // const shopcreateData = await shops.findOne({ shopName })
-        // if (shopcreateData) {
-        //     return res.status(400).json({
-        //         status: "Fail",
-        //         message: "carpentersName already exist"
-        //     })
-        // }
+    
         const shopmobileno = await shops.findOne({ mobileNo })
         if (shopmobileno) {
             return res.status(400).json({
@@ -125,17 +119,27 @@ exports.shopdetails_viewdata = async function (req, res) {
 exports.shopdetails_listdata = async function (req, res) {
     try {
         const listdata = await shops.find()
-        // if(!listdata)
-        // {
-        //     return res.status(400).json({
-        //         status:"Fail",
-        //         message:"no any data"
-        //     })
-        // }
         res.status(200).json({
             status: "Success",
             message: "get all data",
             data: listdata
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: "Fail",
+            message: error.message
+        })
+    }
+}
+//================================================================SHOP SEARCH DATA==========================================================
+exports.shopsdetails_searchdata = async function (req, res) {
+    try {
+        const nameField=req.query.shopName
+        const searchdata = await shops.find({shopName:{$regex:nameField,$options: 'i' }})
+        res.status(200).json({
+            status: "Success",
+            message: "fetch data successfully",
+            data: searchdata
         })
     } catch (error) {
         res.status(404).json({

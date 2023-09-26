@@ -1,18 +1,14 @@
-// const express = require("express")
-// const app = express()
-// 
+const loginroute = require("./login.route")
+module.exports = loginroute
 
-// exports.loginroute = require("./App/router/login.route")
-// app.use('/api', loginroute)
+const shoproute = require("./shop.route")
+module.exports =shoproute
 
-// const shoproute = require("./App/router/shop.route")
-// app.use('/api', shoproute)
+const architectureRoute = require("./architec.route")
+module.exports =architectureRoute
 
-// const architectureRoute = require("./App/router/architec.route")
-// app.use('/api', architectureRoute)
+const carpenterRoute = require("./carpenter.route")
+module.exports=carpenterRoute
 
-// const carpenterRoute = require("./App/router/carpenter.route")
-// app.use('/api', carpenterRoute)
-
-// const userroute = require("./App/router/user.route")
-// app.use('/api', userroute)
+const userroute = require("./user.route")
+module.exports=userroute

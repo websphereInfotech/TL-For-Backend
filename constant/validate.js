@@ -1,4 +1,4 @@
-const{carpenter_Name,shopsName,arcitecsName,mobileNo,address,
+const{carpenter_Name,shopsName,arcitecsname,mobileNo,address,
     userName,architectureId,carpenterId,shopId}=require('../App/middlware/validation')
 exports.validate = function (method) {
 
@@ -17,13 +17,13 @@ exports.validate = function (method) {
             ];
         case 'architacecreate':
             return [
-                arcitecsName,
+                arcitecsname,
                 mobileNo,
                 address
             ];
         case 'architaceupdate':
             return [
-                arcitecsName,
+                arcitecsname,
                 mobileNo,
                 address
             ]; 
