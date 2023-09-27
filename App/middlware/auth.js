@@ -10,16 +10,14 @@ exports.verifytoken = (req, res, next) => {
         });
     }
     let istoken = token.split(" ")[1];
-    jwt.verify(istoken, process.env.KEY, async (error, VerifyToken) => {
+    jwt.verify(istoken, process.env.KEY, async (error) => {
         try {
-            const Tokenverify = await Token.findOne({ token:istoken, isActive: true })
-            if (!Tokenverify || error) {
+            if (error) {
                 return res.status(400).json({
                     status: "Fail",
                     message: "Fail to verify"
                 })
             }
-            req.token = VerifyToken
             next();
         } catch (error) {
             return res.status(404).json({

@@ -127,9 +127,11 @@ exports.userdetails_viewdata = async function (req, res) {
 exports.userdetails_listdata = async function (req, res) {
     try {
         const listdata = await user.find()
+        var Datacount=listdata.length
         res.status(200).json({
             status: "Success",
             message: "get all data",
+            dataslength: Datacount,
             data: listdata
         })
     } catch (error) {
@@ -144,6 +146,8 @@ exports.userdetails_searchdata = async function (req, res) {
     try {
         const nameFeild=req.query.userName
         const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }})
+
+        //
       
         res.status(200).json({
             status: "Success",

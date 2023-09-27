@@ -115,9 +115,11 @@ exports.carpenters_viewdata = async function (req, res) {
 exports.carpenters_listdata = async function (req, res) {
     try {
         const carpenterlistdata = await carpenter.find()
+        dataCount=carpenterlistdata.length
         res.status(200).json({
             status: "Success",
             message: "get all data",
+            dataslength:dataCount,
             data: carpenterlistdata
         })
     } catch (error) {

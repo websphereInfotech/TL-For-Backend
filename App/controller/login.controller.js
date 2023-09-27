@@ -18,16 +18,6 @@ exports.login_page = async function(req,res){
                 message:"Enter valid password"
             })
         }
-        const existingToken = await Token.findOneAndUpdate(
-            { login_id: loginIdFind._id, isActive: true },
-            { $set: { isActive: false } }
-          );
-      if(!existingToken){
-        return res.status(400).json({
-            status:"Fail",
-            message:"user is login"
-        })
-      }
         const payload={
             id:loginIdFind._id,
             login_id:loginIdFind.login_id,

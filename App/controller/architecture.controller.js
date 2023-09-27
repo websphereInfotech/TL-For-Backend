@@ -116,9 +116,11 @@ exports.architec_viewdata = async function (req, res) {
 exports.architec_listdata = async function (req, res) {
     try {
         const listdata = await architec.find()
+        dataCount=listdata.length
         res.status(200).json({
             status: "Success",
             message: "get all data",
+            dataslength:dataCount,
             data: listdata
         })
     } catch (error) {
