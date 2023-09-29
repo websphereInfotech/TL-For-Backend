@@ -53,10 +53,10 @@ exports.userdetails_create = async function (req, res) {
     }
 }
 //==============================================================UPDATE DATA============================================================
-exports.userdetails_update = async function (req, res, next) {
+exports.userdetails_update = async function (req, res) {
     try {
-        const { userName, mobileNo, address,  serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
-        const updateshopdata = {
+        const { userName, mobileNo, address,serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
+        const updateuserdata = {
             userName: userName,
             mobileNo: mobileNo,
             address: address,
@@ -68,7 +68,7 @@ exports.userdetails_update = async function (req, res, next) {
             carpenter_id: carpenter_id,
             shop_id: shop_id
         }
-        const userdata = await user.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateshopdata }, { new: true })
+        const userdata = await user.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateuserdata }, { new: true })
         if (!userdata) {
             return res.status(400).json({
                 status: "Fail",

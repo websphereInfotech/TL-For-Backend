@@ -5,7 +5,13 @@ var jwt = require('jsonwebtoken');
 exports.shopdetails_create = async function (req, res) {
     try {
         const { shopName, mobileNo, address } = req.body;
-    
+        const shopdata = await shops.findOne({ shopName })
+        if (shopdata) {
+            return res.status(400).json({
+                status: "Fail",
+                message: "Shop Name Already Exist"
+            })
+        }
         const shopmobileno = await shops.findOne({ mobileNo })
         if (shopmobileno) {
             return res.status(400).json({

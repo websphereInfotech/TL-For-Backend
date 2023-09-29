@@ -5,11 +5,18 @@ var jwt = require('jsonwebtoken');
 exports.carpenters_create = async function(req,res){
     try {
         const { carpentersName,mobileNo,address } = req.body;
+        const carpenterdata = await architec.findOne({ carpentersName })
+        if (carpenterdata) {
+            return res.status(400).json({
+                status: "Fail",
+                message: "Carpenter Name Already Exist"
+            })
+        }
         const checkmobilno = await carpenter.findOne({ mobileNo })
         if ( checkmobilno ) {
             return res.status(400).json({
                 status:"Fail",
-                message:"mobileNo already exist"
+                message:"Mobile Number Already Exist"
             })
         }
         const carpenterData = await carpenter.create({

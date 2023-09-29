@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 exports.carpenter_Name = function (req, res, next) {
-    var carpentersName = Joi.string().trim().regex(/^[a-zA-Z\s]+$/).empty().required().messages({
+    var carpentersName = Joi.string().trim() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).empty().required().messages({
         'string.base': 'carpentersName must be a string',
         'string.empty': 'carpentersName cannot be empty',
         'any.required': 'required field:carpentername',
@@ -19,7 +19,7 @@ exports.carpenter_Name = function (req, res, next) {
     }
 }
 exports.shopsName = function (req, res, next) {
-    var shopName = Joi.string().regex(/^[a-zA-Z\s]+$/).trim().empty().required().messages({
+    var shopName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
         'string.base': 'shopName must be a string',
         'string.empty': 'shopName cannot be empty',
         'any.required': 'required field:shopName',
@@ -37,7 +37,7 @@ exports.shopsName = function (req, res, next) {
     }
 }
 exports.arcitecsname = function (req, res, next) {
-    var architecsName = Joi.string().regex(/^[a-zA-Z\s]+$/).trim().empty().required().messages({
+    var architecsName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
         'string.base': 'architecsName must be a string',
         'string.empty': 'architecsName cannot be empty',
         'any.required': 'required field:architecsName',
@@ -90,7 +90,7 @@ exports.address = function (req, res, next) {
     }
 }
 exports.userName = function (req, res, next) {
-    var userName = Joi.string().regex(/^[a-zA-Z\s]+$/).trim().empty().required().messages({
+    var userName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
         'string.base': 'userName must be a string',
         'string.empty': 'userName cannot be empty',
         'any.required': 'required field:userName',
