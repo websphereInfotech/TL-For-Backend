@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken');
 exports.carpenters_create = async function(req,res){
     try {
         const { carpentersName,mobileNo,address } = req.body;
-        const carpenterdata = await architec.findOne({ carpentersName })
+        const carpenterdata = await carpenter.findOne({ carpentersName })
         if (carpenterdata) {
             return res.status(400).json({
                 status: "Fail",
