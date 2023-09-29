@@ -1,11 +1,10 @@
 var jwt = require('jsonwebtoken');
 const user = require('../model/user.model');
-const { userName } = require('../middlware/validation');
 
 
 exports.userdetails_create = async function (req, res) {
     try {
-        const { userName, mobileNo, Address, architecture_id, carpenter_id, shop_id } = req.body;
+        const { userName, mobileNo, address, serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
 
         const usermobileNo = await user.findOne({ mobileNo })
         if (usermobileNo) {
@@ -17,7 +16,11 @@ exports.userdetails_create = async function (req, res) {
         const userData = await user.create({
             userName,
             mobileNo,
-            Address,
+            address,
+            serialNumber,
+            rate,
+            description,
+            quantity,
             architecture_id,
             carpenter_id,
             shop_id
@@ -26,13 +29,16 @@ exports.userdetails_create = async function (req, res) {
             id: userData._id,
             userName: userName,
             mobileNo: mobileNo,
-            Address: Address,
+            address: address,
+            serialNumber:serialNumber,
+            rate:rate,
+            description:description,
+            quantity:quantity,
             architectureId: architecture_id,
             carpenterId: carpenter_id,
             shopId: shop_id
         };
-        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1h' })
-
+        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
         res.status(200).json({
             status: "Success",
             message: "create userdata",
@@ -49,11 +55,15 @@ exports.userdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res, next) {
     try {
-        const { userName, mobileNo, Address, architecture_id, carpenter_id, shop_id } = req.body;
+        const { userName, mobileNo, address,  serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
         const updateshopdata = {
             userName: userName,
             mobileNo: mobileNo,
-            Address: Address,
+            address: address,
+            serialNumber:serialNumber,
+            rate:rate,
+            description:description,
+            quantity:quantity,
             architecture_id: architecture_id,
             carpenter_id: carpenter_id,
             shop_id: shop_id
@@ -63,7 +73,6 @@ exports.userdetails_update = async function (req, res, next) {
             return res.status(400).json({
                 status: "Fail",
                 message: "user not found"
-
             })
         }
         res.status(200).json({
@@ -131,7 +140,7 @@ exports.userdetails_listdata = async function (req, res) {
         res.status(200).json({
             status: "Success",
             message: "get all data",
-            dataslength: Datacount,
+            count: Datacount,
             data: listdata
         })
     } catch (error) {
@@ -146,9 +155,6 @@ exports.userdetails_searchdata = async function (req, res) {
     try {
         const nameFeild=req.query.userName
         const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }})
-
-        //
-      
         res.status(200).json({
             status: "Success",
             message: "fetch data successfully",

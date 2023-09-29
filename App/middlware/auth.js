@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const Token = require('../model/token.model')
 
 exports.verifytoken = (req, res, next) => {
     let token = req.headers["authorization"];
@@ -15,7 +14,7 @@ exports.verifytoken = (req, res, next) => {
             if (error) {
                 return res.status(400).json({
                     status: "Fail",
-                    message: "Fail to verify"
+                    message: "JWT expired"
                 })
             }
             next();

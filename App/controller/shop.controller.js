@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken');
 
 exports.shopdetails_create = async function (req, res) {
     try {
-        const { shopName, mobileNo, Address } = req.body;
+        const { shopName, mobileNo, address } = req.body;
     
         const shopmobileno = await shops.findOne({ mobileNo })
         if (shopmobileno) {
@@ -16,16 +16,16 @@ exports.shopdetails_create = async function (req, res) {
         const shopData = await shops.create({
             shopName: shopName,
             mobileNo: mobileNo,
-            Address: Address
+            address: address
 
         })
         const payload = {
             id: shopData._id,
             shopName: shopName,
             mobileNo: mobileNo,
-            Address: Address
+            address: address
         };
-        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1h' })
+        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
 
         res.status(200).json({
             status: "Success",
@@ -43,13 +43,13 @@ exports.shopdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.shopdetails_update = async function (req, res, next) {
     try {
-        const { shopName, mobileNo, Address } = req.body;
+        const { shopName, mobileNo, address } = req.body;
         const updateshopdata = {
             shopName: shopName,
             mobileNo: mobileNo,
-            Address: Address
+            ddress: address
         }
-
+        
         const shopdata = await shops.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateshopdata }, { new: true })
         if (!shopdata) {
             return res.status(400).json({
@@ -123,7 +123,7 @@ exports.shopdetails_listdata = async function (req, res) {
         res.status(200).json({
             status: "Success",
             message: "get all data",
-            dataslength:Datacount,
+            count:Datacount,
             data: listdata
         })
     } catch (error) {

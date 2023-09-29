@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken');
 
 exports.carpenters_create = async function(req,res){
     try {
-        const { carpentersName,mobileNo,Address } = req.body;
+        const { carpentersName,mobileNo,address } = req.body;
         const checkmobilno = await carpenter.findOne({ mobileNo })
         if ( checkmobilno ) {
             return res.status(400).json({
@@ -15,15 +15,15 @@ exports.carpenters_create = async function(req,res){
         const carpenterData = await carpenter.create({
             carpentersName:carpentersName,
             mobileNo:mobileNo,
-            Address:Address
+            address:address
         })
         const payload = {
            id: carpenterData.id,
            carpentersName:carpentersName,
            mobileNo:mobileNo,
-           Address:Address
+           address:address
         };
-        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1h' })
+        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
 
         res.status(200).json({
             status: "Success",
@@ -41,12 +41,13 @@ exports.carpenters_create = async function(req,res){
 // //==============================================================UPDATE DATA============================================================
 exports.carpenters_update = async function (req, res) {
     try {
-        const {carpentersName,mobileNo,Address } = req.body;
+        const {carpentersName,mobileNo,address } = req.body;
         const updatecarpenterdata = {
             carpentersName:carpentersName,
             mobileNo:mobileNo,
-            Address:Address
+            address:address
         }
+        
         const carpenterdetails=await carpenter.findByIdAndUpdate(req.params.id, { $set: updatecarpenterdata }, { new: true })
         if(!carpenterdetails)
         {
@@ -119,7 +120,7 @@ exports.carpenters_listdata = async function (req, res) {
         res.status(200).json({
             status: "Success",
             message: "get all data",
-            dataslength:dataCount,
+            count:dataCount,
             data: carpenterlistdata
         })
     } catch (error) {

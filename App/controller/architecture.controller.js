@@ -3,7 +3,7 @@ var jwt = require('jsonwebtoken');
 
 exports.architec_create = async function (req, res) {
     try {
-        const { architecsName, mobileNo, Address } = req.body;
+        const { architecsName, mobileNo, address } = req.body;
 
         const architecmobilno = await architec.findOne({ mobileNo })
         if (architecmobilno) {
@@ -15,15 +15,15 @@ exports.architec_create = async function (req, res) {
         const architecData = await architec.create({
             architecsName: architecsName,
             mobileNo: mobileNo,
-            Address: Address
+            address: address
         })
         const payload = {
             id: architecData._id,
             architecsName: architecsName,
             mobileNo: mobileNo,
-            Address: Address
+            address: address
         };
-        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1h' })
+        let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
 
         res.status(200).json({
             status: "Success",
@@ -42,11 +42,11 @@ exports.architec_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.architec_update = async function (req, res, next) {
     try {
-        const { architecsName, mobileNo, Address } = req.body;
+        const { architecsName, mobileNo, address } = req.body;
         const updatearchitecdata = {
             architecsName: architecsName,
             mobileNo: mobileNo,
-            Address: Address
+            address: address
         }
         const architecdata = await architec.findByIdAndUpdate({ "_id": req.params.id }, { $set: updatearchitecdata }, { new: true })
         if (!architecdata) {
@@ -120,7 +120,7 @@ exports.architec_listdata = async function (req, res) {
         res.status(200).json({
             status: "Success",
             message: "get all data",
-            dataslength:dataCount,
+            count:dataCount,
             data: listdata
         })
     } catch (error) {
@@ -130,7 +130,7 @@ exports.architec_listdata = async function (req, res) {
         })
     }
 }
-//================================================================SEARCH DATA===============================================================
+//================================================================SEARCH DATA===================================================================
 exports.architecdetails_searchdata = async function (req, res) {
     try {
         const name = req.query.architecName

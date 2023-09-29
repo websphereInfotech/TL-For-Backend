@@ -1,5 +1,5 @@
 const{carpenter_Name,shopsName,arcitecsname,mobileNo,address,
-    userName,architectureId,carpenterId,shopId}=require('../App/middlware/validation')
+    userName,serialNumber,rate,quantity,description}=require('../App/middlware/validation')
 exports.validate = function (method) {
 
     switch (method) {
@@ -44,18 +44,20 @@ exports.validate = function (method) {
                 userName,
                 mobileNo,
                 address,
-                architectureId,
-                carpenterId,
-                shopId
+                serialNumber,
+                rate,
+                quantity,
+                description
             ];
         case 'userupdate':
             return[
                 userName,
                 mobileNo,
                 address,
-                architectureId,
-                carpenterId,
-                shopId
+                serialNumber,
+                rate,
+                quantity,
+                description
             ];
     }
 } 

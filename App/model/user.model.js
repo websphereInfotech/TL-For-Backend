@@ -1,3 +1,4 @@
+const { number } = require('joi');
 const mongoose= require('mongoose')
 const Schema = mongoose.Schema;
 
@@ -11,21 +12,34 @@ const Schema = mongoose.Schema;
         require:true,
         unique: true
     },
-    Address:{
+    address:{
         type:String,
+        require:true
+    },
+    serialNumber:{
+        type:Number,
+        require:true
+    },
+    rate:{
+        type:Number,
+        require:true
+    },
+    description:{
+        type:String,
+        require:true
+    },
+    quantity:{
+        type:Number,
         require:true
     },
     architecture_id:{
-        type:String,
-        require:true
+        type:String
     },
     carpenter_id:{
-        type:String,
-        require:true
+        type:String
     },
     shop_id:{
-        type:String,
-        require:true
+        type:String
     }
  });
  const user = mongoose.model('user',userschema)

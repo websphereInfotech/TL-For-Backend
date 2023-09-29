@@ -11,7 +11,7 @@ const Schema = mongoose.Schema;
         require:true,
         unique: true
     },
-    Address:{
+    address:{
         type:String,
         require:true
     }

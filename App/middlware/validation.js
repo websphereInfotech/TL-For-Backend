@@ -73,16 +73,16 @@ exports.mobileNo = function (req, res, next) {
     }
 }
 exports.address = function (req, res, next) {
-    var Address = Joi.string().trim().empty().required().messages({
-        'string.base': 'Address must be a string',
-        'string.empty': 'Address cannot be empty',
-        'any.required': 'required field:Address',
+    var address = Joi.string().trim().empty().required().messages({
+        'string.base': 'address must be a string',
+        'string.empty': 'address cannot be empty',
+        'any.required': 'required field:address',
     });
-    var { error: AddressError } = Address.validate(req.body.Address);
-    if (AddressError) {
+    var { error: addressError } = address.validate(req.body.address);
+    if (addressError) {
         return res.status(400).json({
             status: "fail",
-            message:  AddressError.message
+            message:  addressError.message
         });
     }
     else {
@@ -108,51 +108,72 @@ exports.userName = function (req, res, next) {
     }
 }
 
-exports.architectureId = function (req, res, next) {
-    var architecture_id = Joi.string().trim().empty().required().messages({
-        'string.base': 'architecture_id must be a string',
-        'string.empty': 'architecture_id cannot be empty',
-        'any.required': 'required field:architectureId',
+exports.serialNumber = function (req, res, next) {
+    var serialNumber = Joi.string().empty().required().regex(/^\d+$/).messages({
+        'number.base': 'serialnumbner must be a number',
+        'string.empty': 'serialNumber cannot be empty',
+        'any.required': 'required field:serialNumber',
+        'string.pattern.base': 'serialNumber must contain only numeric characters',
     });
-    var { error: architecture_idError } = architecture_id.validate(req.body.architecture_id);
-    if (architecture_idError) {
+    var { error: serialNumberError } = serialNumber.validate(req.body.serialNumber);
+    if (serialNumberError) {
         return res.status(400).json({
             status: "fail",
-            message:  architecture_idError.message
+            message:  serialNumberError.message
         });
     }
     else {
         next();
     }
 }
-exports.carpenterId = function (req, res, next) {
-    var carpenter_id = Joi.string().trim().empty().required().messages({
-        'string.base': 'carpenter_id must be a string',
-        'string.empty': 'carpenter_id cannot be empty',
-        'any.required': 'required field:carpenterId',
+exports. rate = function (req, res, next) {
+    var rate = Joi.string().empty().required().regex(/^\d+$/).messages({
+        'number.base': 'rate must be a number',
+        'string.empty': 'rate cannot be empty',
+        'any.required': 'required field:rate',
+        'string.pattern.base': 'rate must contain only numeric characters',
+
     });
-    var { error: carpenter_idError } = carpenter_id.validate(req.body.carpenter_id);
-    if (carpenter_idError) {
+    var { error: rateError } = rate.validate(req.body.rate);
+    if (rateError) {
         return res.status(400).json({
             status: "fail",
-            message: carpenter_idError.message
+            message: rateError.message
         });
     }
     else {
         next();
     }
 }
-exports.shopId = function (req, res, next) {
-    var shop_id = Joi.string().trim().empty().required().messages({
-        'string.base': 'shop_id must be a string',
-        'string.empty': 'shop_id cannot be empty',
-        'any.required': 'required field:shopId',
+exports.description = function (req, res, next) {
+    var description = Joi.string().empty().required().messages({
+        'string.base': 'description must be a string',
+        'string.empty': 'description cannot be empty',
+        'any.required': 'required field:description',
     });
-    var { error: shop_idError } = shop_id.validate(req.body.shop_id);
-    if (shop_idError) {
+    var { error: descriptionError } = description.validate(req.body.description);
+    if (descriptionError) {
         return res.status(400).json({
             status: "fail",
-            message:  shop_idError.message
+            message:  descriptionError.message
+        });
+    }
+    else {
+        next();
+    }
+}
+exports.quantity = function (req, res, next) {
+    var quantity = Joi.string().empty().regex(/^\d+$/).required().messages({
+        'number.base': 'quantity must be a number',
+        'string.empty': 'quantity cannot be empty',
+        'any.required': 'required field:quantity',
+        'string.pattern.base': 'quantity must contain only numeric characters',
+    });
+    var { error: quantityError } = quantity.validate(req.body.quantity);
+    if (quantityError) {
+        return res.status(400).json({
+            status: "fail",
+            message:  quantityError.message
         });
     }
     else {
