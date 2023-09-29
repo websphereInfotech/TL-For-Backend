@@ -2,10 +2,10 @@ const Joi = require('joi');
 
 exports.carpenter_Name = function (req, res, next) {
     var carpentersName = Joi.string().trim() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).empty().required().messages({
-        'string.base': 'carpentersName must be a string',
-        'string.empty': 'carpentersName cannot be empty',
-        'any.required': 'required field:carpentername',
-        'string.pattern.base': 'carpentersname must contain only letters (uppercase or lowercase)'
+        'string.base': 'Carpenter Name Must Be String',
+        'string.empty': 'Carpenter Name Cannot Be Empty',
+        'any.required': 'required field : Carpenter Name',
+        'string.pattern.base': 'Carpenter Name Must Contain Only Letters (Uppercase or lowercase)'
     });
     var { error: carpentersNameError } = carpentersName.validate(req.body.carpentersName);
     if (carpentersNameError) {
@@ -19,11 +19,10 @@ exports.carpenter_Name = function (req, res, next) {
     }
 }
 exports.shopsName = function (req, res, next) {
-    var shopName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
-        'string.base': 'shopName must be a string',
-        'string.empty': 'shopName cannot be empty',
-        'any.required': 'required field:shopName',
-        'string.pattern.base': 'shopname must contain only letters (uppercase or lowercase)'
+    var shopName = Joi.string().trim().empty().required().messages({
+        'string.base': 'Shop Name Must Be String',
+        'string.empty': 'Shop Name Cannot Be Empty',
+        'any.required': 'required field : Shop Name',
     });
     var { error: shopNameError } = shopName.validate(req.body.shopName);
     if (shopNameError) {
@@ -38,10 +37,10 @@ exports.shopsName = function (req, res, next) {
 }
 exports.arcitecsname = function (req, res, next) {
     var architecsName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
-        'string.base': 'architecsName must be a string',
-        'string.empty': 'architecsName cannot be empty',
-        'any.required': 'required field:architecsName',
-        'string.pattern.base': 'architecsName must contain only letters (uppercase or lowercase)'
+        'string.base': 'Architecture Name Must Be String',
+        'string.empty': 'Architecture Name Cannot Be Empty',
+        'any.required': 'required field : Architecture Name',
+        'string.pattern.base': 'Architecture Name Must Contain Only Letters (Uppercase or lowercase)'
     });
     var { error: architecsNameError } = architecsName.validate(req.body.architecsName);
     if (architecsNameError) {
@@ -56,10 +55,10 @@ exports.arcitecsname = function (req, res, next) {
 }
 exports.mobileNo = function (req, res, next) {
     var mobileNo = Joi.string().regex(/^[0-9]{10}$/).trim().empty().required().messages({
-        'string.base': 'mobileNo must be a string',
-        'string.empty': 'mobileNo cannot be empty',
-      'string.pattern.base': 'mobileNo must be a 10-digit number',
-        'any.required': 'required field:mobilNumber',
+        'string.base': 'MobileNo Must Be A String',
+        'string.empty': 'Mobile Number Cannot Be Empty',
+      'string.pattern.base': 'Nobile Number Must Be A 10 Digit Number',
+        'any.required': 'required field : Mobile Number',
     });
     var { error: mobileNoError } = mobileNo.validate(req.body.mobileNo);
     if (mobileNoError) {
@@ -74,9 +73,9 @@ exports.mobileNo = function (req, res, next) {
 }
 exports.address = function (req, res, next) {
     var address = Joi.string().trim().empty().required().messages({
-        'string.base': 'address must be a string',
-        'string.empty': 'address cannot be empty',
-        'any.required': 'required field:address',
+        'string.base': 'Address Must Be A String',
+        'string.empty': 'Address Cannot Be Empty',
+        'any.required': 'required field : Address',
     });
     var { error: addressError } = address.validate(req.body.address);
     if (addressError) {
@@ -91,10 +90,10 @@ exports.address = function (req, res, next) {
 }
 exports.userName = function (req, res, next) {
     var userName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
-        'string.base': 'userName must be a string',
-        'string.empty': 'userName cannot be empty',
-        'any.required': 'required field:userName',
-        'string.pattern.base': 'userName must contain only letters (uppercase or lowercase)'
+        'string.base': 'User Name Must Be String',
+        'string.empty': 'User Name Cannot Be Empty',
+        'any.required': 'required field : User Name',
+        'string.pattern.base': 'User Name Must Contain Only Letters (Uppercase or lowercase)'
     });
     var { error: userNameError } = userName.validate(req.body.userName);
     if (userNameError) {
@@ -110,10 +109,10 @@ exports.userName = function (req, res, next) {
 
 exports.serialNumber = function (req, res, next) {
     var serialNumber = Joi.string().empty().required().regex(/^\d+$/).messages({
-        'number.base': 'serialnumbner must be a number',
-        'string.empty': 'serialNumber cannot be empty',
-        'any.required': 'required field:serialNumber',
-        'string.pattern.base': 'serialNumber must contain only numeric characters',
+        'number.base': 'Serial Numbner Must Be A Number',
+        'string.empty': 'Serial Number Cannot Be Empty',
+        'any.required': 'required field : Serial Number',
+        'string.pattern.base': 'Serial Number Must Contain Only Numeric Characters',
     });
     var { error: serialNumberError } = serialNumber.validate(req.body.serialNumber);
     if (serialNumberError) {
@@ -128,10 +127,10 @@ exports.serialNumber = function (req, res, next) {
 }
 exports. rate = function (req, res, next) {
     var rate = Joi.string().empty().required().regex(/^\d+$/).messages({
-        'number.base': 'rate must be a number',
-        'string.empty': 'rate cannot be empty',
-        'any.required': 'required field:rate',
-        'string.pattern.base': 'rate must contain only numeric characters',
+        'number.base': 'Rate Must Be A Number',
+        'string.empty': 'Rate Cannot Be Empty',
+        'any.required': 'required field : Rate',
+        'string.pattern.base': 'Rate  Must Contain Only Numeric Characters',
 
     });
     var { error: rateError } = rate.validate(req.body.rate);
@@ -147,9 +146,9 @@ exports. rate = function (req, res, next) {
 }
 exports.description = function (req, res, next) {
     var description = Joi.string().empty().required().messages({
-        'string.base': 'description must be a string',
-        'string.empty': 'description cannot be empty',
-        'any.required': 'required field:description',
+        'string.base': 'Description Must Be A String',
+        'string.empty': 'Description Cannot Be Empty',
+        'any.requireD': 'required field : Description',
     });
     var { error: descriptionError } = description.validate(req.body.description);
     if (descriptionError) {
@@ -164,10 +163,10 @@ exports.description = function (req, res, next) {
 }
 exports.quantity = function (req, res, next) {
     var quantity = Joi.string().empty().regex(/^\d+$/).required().messages({
-        'number.base': 'quantity must be a number',
-        'string.empty': 'quantity cannot be empty',
-        'any.required': 'required field:quantity',
-        'string.pattern.base': 'quantity must contain only numeric characters',
+        'number.base': 'Quantity Must Be A Number',
+        'string.empty': 'Quantity Cannot Be Empty',
+        'any.required': 'required field : Quantity',
+        'string.pattern.base': 'Quantity Must Contain Only Numeric Characters',
     });
     var { error: quantityError } = quantity.validate(req.body.quantity);
     if (quantityError) {
