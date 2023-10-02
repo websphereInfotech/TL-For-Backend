@@ -16,7 +16,7 @@ exports.shopdetails_create = async function (req, res) {
         if (shopmobileno) {
             return res.status(400).json({
                 status: "Fail",
-                message: "mobilN0 already exist"
+                message: "Mobile Number already exist"
             })
         }
         const shopData = await shops.create({
@@ -35,7 +35,7 @@ exports.shopdetails_create = async function (req, res) {
 
         res.status(200).json({
             status: "Success",
-            message: "create userdata",
+            message: "Shop Data Create Successfully",
             data: shopData,
             token: token
         })
@@ -65,7 +65,7 @@ exports.shopdetails_update = async function (req, res, next) {
         }
         res.status(200).json({
             status: "Success",
-            message: "updated data",
+            message: " Shop Data Update Successfully",
             data: shopdata
         })
     } catch (error) {
@@ -110,7 +110,7 @@ exports.shopdetails_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "user Fetch sucessfully",
+            message: "Shop Fetch Data sucessfully",
             data: shopviewdata
         });
     } catch (error) {

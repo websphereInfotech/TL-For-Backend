@@ -33,7 +33,7 @@ exports.architec_create = async function (req, res) {
 
         res.status(200).json({
             status: "Success",
-            message: "create architecData",
+            message: " Architectures Data Create Successfully",
             data: architecData,
             token: token
         })
@@ -63,7 +63,7 @@ exports.architec_update = async function (req, res, next) {
         }
         res.status(200).json({
             status: "Success",
-            message: "updated data",
+            message: "Architecture Data Update Successfully",
             data: architecdata
         })
     } catch (error) {
@@ -107,7 +107,7 @@ exports.architec_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "user Fetch sucessfully",
+            message: "Architecture Fetch Data Sucessfully",
             data: architecviewdata
         });
     } catch (error) {

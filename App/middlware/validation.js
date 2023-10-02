@@ -55,7 +55,6 @@ exports.arcitecsname = function (req, res, next) {
 }
 exports.mobileNo = function (req, res, next) {
     var mobileNo = Joi.string().regex(/^[0-9]{10}$/).trim().empty().required().messages({
-        'string.base': 'MobileNo Must Be A String',
         'string.empty': 'Mobile Number Cannot Be Empty',
       'string.pattern.base': 'Nobile Number Must Be A 10 Digit Number',
         'any.required': 'required field : Mobile Number',

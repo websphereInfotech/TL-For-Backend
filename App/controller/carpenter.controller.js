@@ -34,7 +34,7 @@ exports.carpenters_create = async function(req,res){
 
         res.status(200).json({
             status: "Success",
-            message: "create userdata",
+            message: "Carpenter Data Create Successfully",
             data: carpenterData,
             token: token
         })
@@ -65,7 +65,7 @@ exports.carpenters_update = async function (req, res) {
         }
         res.status(200).json({
             status: "Success",
-            message: "updated data",
+            message: "Carpenter Data Update Successfully",
             data: carpenterdetails
         })
     } catch (error) {
@@ -109,7 +109,7 @@ exports.carpenters_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "user Fetch sucessfully",
+            message: "Carpenter Fetch Data sucessfully",
             data: viewdata
         });
     } catch (error) {
