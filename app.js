@@ -3,6 +3,8 @@ const express = require("express")
 const bodyParser = require('body-parser');
 const connectDB = require('./config/mongodb');
 const morgan = require('morgan');
+var cors = require('cors')
+
 const app = express()
 const {loginRoute,shopRoute,architectureRoute,carpenterRoute,userRoute}=require('./App/router/timberland.route')
 var port = process.env.PORT || 3000
@@ -11,7 +13,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cors())
 connectDB()
 
 app.use('/api', loginRoute)

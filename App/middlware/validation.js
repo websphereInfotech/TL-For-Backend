@@ -54,11 +54,13 @@ exports.arcitecsname = function (req, res, next) {
     }
 }
 exports.mobileNo = function (req, res, next) {
-    var mobileNo = Joi.string().regex(/^[0-9]{10}$/).trim().empty().required().messages({
+    var mobileNo = Joi.number().integer().min(1000000000).max(9999999999).empty().required().messages({
         'string.empty': 'Mobile Number Cannot Be Empty',
-      'string.pattern.base': 'Nobile Number Must Be A 10 Digit Number',
-        'any.required': 'required field : Mobile Number',
-    });
+        'number.base': 'Mobile Number must be a number',
+        'number.min': 'Mobile Number must have at least 10 digits',
+         'number.max': 'Mobile Number cannot have more than 10 digits',
+        'any.required': 'required field:Mobile Number'
+       });
     var { error: mobileNoError } = mobileNo.validate(req.body.mobileNo);
     if (mobileNoError) {
         return res.status(400).json({
