@@ -36,7 +36,12 @@ exports.shopsName = function (req, res, next) {
     }
 }
 exports.arcitecsname = function (req, res, next) {
-    var architecsName = Joi.string() .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/).trim().empty().required().messages({
+    var architecsName = Joi.string() 
+    .regex(/^[A-Za-z\s!@#$%^&*(),.?":{}|<>]+$/)
+    .trim()
+    .empty()
+    .required()
+    .messages({
         'string.base': 'Architecture Name Must Be String',
         'string.empty': 'Architecture Name Cannot Be Empty',
         'any.required': 'required field : Architecture Name',
@@ -54,24 +59,41 @@ exports.arcitecsname = function (req, res, next) {
     }
 }
 exports.mobileNo = function (req, res, next) {
-    var mobileNo = Joi.number().integer().min(1000000000).max(9999999999).empty().required().messages({
-        'string.empty': 'Mobile Number Cannot Be Empty',
-        'number.base': 'Mobile Number must be a number',
-        'number.min': 'Mobile Number must have at least 10 digits',
-         'number.max': 'Mobile Number cannot have more than 10 digits',
-        'any.required': 'required field:Mobile Number'
-       });
-    var { error: mobileNoError } = mobileNo.validate(req.body.mobileNo);
+    const { mobileNo } = req.body;
+
+    // Check if mobileNo is empty (null, undefined, or an empty string)
+    if (mobileNo === null || mobileNo === undefined || mobileNo === '') {
+        return res.status(400).json({
+            status: "fail",
+            message: "Mobile Number Cannot Be Empty"
+        });
+    }
+
+    // Use Joi to validate the number
+    const mobileNoSchema = Joi.number()
+        .integer()
+        .min(1000000000)
+        .max(9999999999)
+        .required()
+        .messages({
+            'number.base': 'Mobile Number Must Be A Number',
+            'number.min': 'Mobile Number Must Have At Least 10 Digits',
+            'number.max': 'Mobile Number Cannot Have More Than 10 Digits',
+            'any.required': 'Required field: Mobile Number'
+        });
+
+    const { error: mobileNoError } = mobileNoSchema.validate(mobileNo);
+
     if (mobileNoError) {
         return res.status(400).json({
             status: "fail",
-            message:  mobileNoError.message
+            message: mobileNoError.message
         });
-    }
-    else {
+    } else {
         next();
     }
 }
+
 exports.address = function (req, res, next) {
     var address = Joi.string().trim().empty().required().messages({
         'string.base': 'Address Must Be A String',
