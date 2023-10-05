@@ -4,13 +4,6 @@ var jwt = require('jsonwebtoken');
 exports.architec_create = async function (req, res) {
     try {
         const { architecsName, mobileNo, address } = req.body;
-        const architecdata = await architec.findOne({ architecsName })
-        if (architecdata) {
-            return res.status(400).json({
-                status: "Fail",
-                message: "Architecture Name Already Exist"
-            })
-        }
         const architecmobilno = await architec.findOne({ mobileNo })
         if (architecmobilno) {
             return res.status(400).json({
@@ -33,7 +26,7 @@ exports.architec_create = async function (req, res) {
 
         res.status(200).json({
             status: "Success",
-            message: " Architectures Data Create Successfully",
+            message: " Architectures Create Successfully",
             data: architecData,
             token: token
         })
@@ -63,7 +56,7 @@ exports.architec_update = async function (req, res, next) {
         }
         res.status(200).json({
             status: "Success",
-            message: "Architecture Data Update Successfully",
+            message: "Architecture update Successfully",
             data: architecdata
         })
     } catch (error) {
@@ -107,7 +100,7 @@ exports.architec_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "Architecture Fetch Data Sucessfully",
+            message: "Architecture Fetch Sucessfully",
             data: architecviewdata
         });
     } catch (error) {
@@ -149,7 +142,7 @@ exports.architecdetails_searchdata = async function (req, res) {
         const searchdata = await architec.find({architecsName: { $regex: name,$options:'i'} })
         res.status(200).json({
             status: "Success",
-            message: "fetch data successfully",
+            message: "Architecture fetch successfully",
             data: searchdata
         })
     } catch (error) {

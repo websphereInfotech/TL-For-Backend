@@ -5,6 +5,20 @@ const user = require('../model/user.model');
 exports.userdetails_create = async function (req, res) {
     try {
         const { userName, mobileNo, address, serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
+        const checkmobilno = await user.findOne({ mobileNo })
+        if ( checkmobilno ) {
+            return res.status(400).json({
+                status:"Fail",
+                message:"Mobile Number Already Exist"
+            })
+        }
+        const checkserialno = await user.findOne({ serialNumber})
+        if ( checkserialno ) {
+            return res.status(400).json({
+                status:"Fail",
+                message:"Serial Number Already Exist"
+            })
+        }
         const userData = await user.create({
             userName,
             mobileNo,
@@ -33,7 +47,7 @@ exports.userdetails_create = async function (req, res) {
         let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
         res.status(200).json({
             status: "Success",
-            message: "User Data Create Successfully",
+            message: "User Create Successfully",
             data: userData,
             token: token
         })
@@ -69,7 +83,7 @@ exports.userdetails_update = async function (req, res) {
         }
         res.status(200).json({
             status: "Success",
-            message: "User Data Update Successfully",
+            message: "User Update Successfully",
             data: userdata
         })
     } catch (error) {
@@ -113,7 +127,7 @@ exports.userdetails_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "User Fetch Data Sucessfully",
+            message: "User Fetch Sucessfully",
             data: userviewdata
         });
     } catch (error) {
@@ -149,7 +163,7 @@ exports.userdetails_searchdata = async function (req, res) {
         const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }})
         res.status(200).json({
             status: "Success",
-            message: "fetch data successfully",
+            message: "Fetch Successfully",
             data: searchdata
         })
     } catch (error) {

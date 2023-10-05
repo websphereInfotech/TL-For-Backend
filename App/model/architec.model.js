@@ -12,9 +12,8 @@ const Schema = mongoose.Schema;
         unique: true
     },
     address:{
-        type:String,
-        require:true
-    }
+        type:String
+        }
  });
  const architec = mongoose.model('architectuer',architecschema)
 

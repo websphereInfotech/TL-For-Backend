@@ -5,13 +5,6 @@ var jwt = require('jsonwebtoken');
 exports.carpenters_create = async function(req,res){
     try {
         const { carpentersName,mobileNo,address } = req.body;
-        const carpenterdata = await carpenter.findOne({ carpentersName })
-        if (carpenterdata) {
-            return res.status(400).json({
-                status: "Fail",
-                message: "Carpenter Name Already Exist"
-            })
-        }
         const checkmobilno = await carpenter.findOne({ mobileNo })
         if ( checkmobilno ) {
             return res.status(400).json({
@@ -34,7 +27,7 @@ exports.carpenters_create = async function(req,res){
 
         res.status(200).json({
             status: "Success",
-            message: "Carpenter Data Create Successfully",
+            message: "Carpenter Create Successfully",
             data: carpenterData,
             token: token
         })
@@ -54,7 +47,6 @@ exports.carpenters_update = async function (req, res) {
             mobileNo:mobileNo,
             address:address
         }
-        
         const carpenterdetails=await carpenter.findByIdAndUpdate(req.params.id, { $set: updatecarpenterdata }, { new: true })
         if(!carpenterdetails)
         {
@@ -65,7 +57,7 @@ exports.carpenters_update = async function (req, res) {
         }
         res.status(200).json({
             status: "Success",
-            message: "Carpenter Data Update Successfully",
+            message: "Carpenter Update Successfully",
             data: carpenterdetails
         })
     } catch (error) {
@@ -109,7 +101,7 @@ exports.carpenters_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "Carpenter Fetch Data sucessfully",
+            message: "Carpenter Fetch sucessfully",
             data: viewdata
         });
     } catch (error) {
@@ -145,7 +137,7 @@ exports.carpentersdetails_searchdata = async function (req, res) {
       
         res.status(200).json({
             status: "Success",
-            message: "fetch data successfully",
+            message: "Fetch Data Successfully",
             data: searchdata
         })
     } catch (error) {

@@ -7,11 +7,7 @@ const Schema = mongoose.Schema;
     },
     token:{
         type:String
-        },
-    isActive:{
-        type:Boolean,
-        default:true
-    }
+        }
  });
  const token = mongoose.model('token',tokenschema)
 

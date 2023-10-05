@@ -1,43 +1,37 @@
 const{carpenter_Name,shopsName,arcitecsname,mobileNo,address,
-    userName,serialNumber,rate,quantity,description}=require('../App/middlware/validation')
+    userName,serialNumber,rate,quantity,description,password,login_id}=require('../App/middlware/validation')
 exports.validate = function (method) {
 
     switch (method) {
         case 'carpentercreate':
             return [
                 carpenter_Name,
-                mobileNo,
-                address
+                mobileNo
             ];
         case 'carpenterupdate':
             return[
                 carpenter_Name,
-                mobileNo,
-                address
+                mobileNo  
             ];
         case 'architacecreate':
             return [
                 arcitecsname,
-                mobileNo,
-                address
+                mobileNo
             ];
         case 'architaceupdate':
             return [
                 arcitecsname,
-                mobileNo,
-                address
+                mobileNo
             ]; 
         case 'shopcreate':
             return[
                 shopsName,
-                mobileNo,
-                address
+                mobileNo
             ];
         case 'shopupdate':
             return[
             shopsName,
-            mobileNo,
-            address
+            mobileNo
         ];
         case 'usercreate':
             return[
@@ -53,11 +47,15 @@ exports.validate = function (method) {
             return[
                 userName,
                 mobileNo,
-                address,
                 serialNumber,
+                address,
                 rate,
                 quantity,
                 description
             ];
+        case 'login':return[
+            login_id,
+            password
+        ]
     }
 } 

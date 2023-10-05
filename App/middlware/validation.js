@@ -60,16 +60,12 @@ exports.arcitecsname = function (req, res, next) {
 }
 exports.mobileNo = function (req, res, next) {
     const { mobileNo } = req.body;
-
-    // Check if mobileNo is empty (null, undefined, or an empty string)
     if (mobileNo === null || mobileNo === undefined || mobileNo === '') {
         return res.status(400).json({
             status: "fail",
             message: "Mobile Number Cannot Be Empty"
         });
     }
-
-    // Use Joi to validate the number
     const mobileNoSchema = Joi.number()
         .integer()
         .min(1000000000)
@@ -95,10 +91,8 @@ exports.mobileNo = function (req, res, next) {
 }
 
 exports.address = function (req, res, next) {
-    var address = Joi.string().trim().empty().required().messages({
-        'string.base': 'Address Must Be A String',
-        'string.empty': 'Address Cannot Be Empty',
-        'any.required': 'required field : Address',
+    var address = Joi.string().messages({
+        'string.base': 'Address Must Be A String'
     });
     var { error: addressError } = address.validate(req.body.address);
     if (addressError) {
@@ -202,24 +196,41 @@ exports.quantity = function (req, res, next) {
         next();
     }
 }
-const validateSchema = (schema) => (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    if (error) {
+
+exports.password = function (req, res, next) {
+    var password = Joi.string().empty().required().messages({
+        'string.empty': 'password Cannot Be Empty',
+        'any.required': 'required field : password',
+       
+    });
+    var { error: passwordError } = password.validate(req.body.password);
+    if (passwordError) {
         return res.status(400).json({
-            status: 'Fail',
-            message: error.details.map((detail) => detail.message).join(', '),
+            status: "fail",
+            message:  passwordError.message
         });
     }
-    next();
-};
-
-const userSchema = Joi.object({
-    login_id: Joi.string().required(),
-    password: Joi.string().min(6).max(10).required(),
-});
-
-exports.loginValidation = validateSchema(userSchema);
-
+    else {
+        next();
+    }
+}
+exports.login_id = function (req, res, next) {
+    var login_id = Joi.string().empty().required().messages({
+        'string.base': 'login Id Must Be A Number',
+        'string.empty': 'login Id Cannot Be Empty',
+        'any.required': 'required field : login Id',
+    });
+    var { error: loginidError } = login_id.validate(req.body.login_id);
+    if (loginidError) {
+        return res.status(400).json({
+            status: "fail",
+            message:  loginidError.message
+        });
+    }
+    else {
+        next();
+    }
+}
 
 
 

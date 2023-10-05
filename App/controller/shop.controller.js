@@ -5,13 +5,7 @@ var jwt = require('jsonwebtoken');
 exports.shopdetails_create = async function (req, res) {
     try {
         const { shopName, mobileNo, address } = req.body;
-        const shopdata = await shops.findOne({ shopName })
-        if (shopdata) {
-            return res.status(400).json({
-                status: "Fail",
-                message: "Shop Name Already Exist"
-            })
-        }
+      
         const shopmobileno = await shops.findOne({ mobileNo })
         if (shopmobileno) {
             return res.status(400).json({
@@ -35,7 +29,7 @@ exports.shopdetails_create = async function (req, res) {
 
         res.status(200).json({
             status: "Success",
-            message: "Shop Data Create Successfully",
+            message: "Shop Create Successfully",
             data: shopData,
             token: token
         })
@@ -110,7 +104,7 @@ exports.shopdetails_viewdata = async function (req, res) {
         }
         res.status(201).json({
             status: "Sucess",
-            message: "Shop Fetch Data sucessfully",
+            message: "Shop Fetch Sucessfully",
             data: shopviewdata
         });
     } catch (error) {
@@ -146,7 +140,7 @@ exports.shopsdetails_searchdata = async function (req, res) {
         const searchdata = await shops.find({shopName:{$regex:nameField,$options: 'i' }})
         res.status(200).json({
             status: "Success",
-            message: "fetch data successfully",
+            message: "Fetch Data Successfully",
             data: searchdata
         })
     } catch (error) {

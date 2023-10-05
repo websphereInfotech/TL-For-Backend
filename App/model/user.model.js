@@ -12,12 +12,12 @@ const Schema = mongoose.Schema;
         unique:true
     },
     address:{
-        type:String,
-        require:true
+        type:String
     },
     serialNumber:{
         type:Number,
-        require:true
+        require:true,
+        unique:true
     },
     rate:{
         type:Number,

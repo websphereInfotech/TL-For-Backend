@@ -12,8 +12,7 @@ const Schema = mongoose.Schema;
         unique: true
     },
     address:{
-        type:String,
-        require:true
+        type:String
     }
  });
  const carpenter = mongoose.model('carpenter',carpenterschema)

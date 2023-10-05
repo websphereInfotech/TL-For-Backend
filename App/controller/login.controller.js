@@ -9,7 +9,7 @@ exports.login_page = async function(req,res){
         if(!loginIdFind){
             return res.status(404).json({
                 status:"Fail",
-                message:"Enter valid login_id"
+                message:"Enter valid loginid"
             })
         }
         if(loginIdFind.password !== password){
