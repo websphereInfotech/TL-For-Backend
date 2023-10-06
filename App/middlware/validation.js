@@ -127,7 +127,7 @@ exports.userName = function (req, res, next) {
 
 exports.serialNumber = function (req, res, next) {
     var serialNumber = Joi.string().empty().required().regex(/^\d+$/).messages({
-        'number.base': 'Serial Numbner Must Be A Number',
+        'string.base': 'Serial Numbner Must Be A Number',
         'string.empty': 'Serial Number Cannot Be Empty',
         'any.required': 'required field : Serial Number',
         'string.pattern.base': 'Serial Number Must Contain Only Numeric Characters',
@@ -166,7 +166,7 @@ exports.description = function (req, res, next) {
     var description = Joi.string().empty().required().messages({
         'string.base': 'Description Must Be A String',
         'string.empty': 'Description Cannot Be Empty',
-        'any.requireD': 'required field : Description',
+        'any.required': 'required field : Description',
     });
     var { error: descriptionError } = description.validate(req.body.description);
     if (descriptionError) {
@@ -181,7 +181,7 @@ exports.description = function (req, res, next) {
 }
 exports.quantity = function (req, res, next) {
     var quantity = Joi.string().empty().regex(/^\d+$/).required().messages({
-        'number.base': 'Quantity Must Be A Number',
+        'string.base': 'Quantity Must Be A Number',
         'string.empty': 'Quantity Cannot Be Empty',
         'any.required': 'required field : Quantity',
         'string.pattern.base': 'Quantity Must Contain Only Numeric Characters',

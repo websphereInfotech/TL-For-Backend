@@ -52,7 +52,7 @@ exports.validate = function (method) {
                 rate,
                 quantity,
                 description
-            ];
+                        ];
         case 'login':return[
             login_id,
             password
