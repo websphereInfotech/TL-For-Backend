@@ -92,7 +92,8 @@ exports.mobileNo = function (req, res, next) {
 
 exports.address = function (req, res, next) {
     var address = Joi.string().messages({
-        'string.base': 'Address Must Be A String'
+        'string.base': 'Address Must Be A String',
+        'string.empty':'Address Can Not Be Empty'
     });
     var { error: addressError } = address.validate(req.body.address);
     if (addressError) {
