@@ -41,18 +41,18 @@ const Schema = mongoose.Schema;
     shop_id:{
        type:String
     },
-    architecture:{
+    architecture:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'architectuer'
-    },
-    shop:{
+    }],
+    shop:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'shop'
-    },
-    carpenter:{
+    }],
+    carpenter:[{
         type:mongoose.Schema.Types.ObjectId,    
         ref:'carpenter'
-    }
+    }]
 
  },{ strictPopulate: false });
  const user = mongoose.model('user',userschema)
