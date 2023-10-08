@@ -1,3 +1,4 @@
+const { string } = require('joi');
 const mongoose= require('mongoose')
 const Schema = mongoose.Schema;
 
@@ -32,15 +33,28 @@ const Schema = mongoose.Schema;
         require:true
     },
     architecture_id:{
-        type:String
+       type:String
     },
     carpenter_id:{
-        type:String
+      type:String 
     },
     shop_id:{
-        type:String
+       type:String
+    },
+    architecture:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'architectuer'
+    },
+    shop:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'shop'
+    },
+    carpenter:{
+        type:mongoose.Schema.Types.ObjectId,    
+        ref:'carpenter'
     }
- });
+
+ },{ strictPopulate: false });
  const user = mongoose.model('user',userschema)
 
  module.exports=user;

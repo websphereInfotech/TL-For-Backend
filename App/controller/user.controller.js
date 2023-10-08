@@ -1,6 +1,8 @@
 var jwt = require('jsonwebtoken');
 const user = require('../model/user.model');
-
+const shops=require('../model/shop.model');
+const carpenter = require('../model/carpenter.model');
+const architec = require('../model/architec.model');
 
 exports.userdetails_create = async function (req, res) {
     try {
@@ -19,6 +21,10 @@ exports.userdetails_create = async function (req, res) {
                 message:"Serial Number Already Exist"
             })
         }
+        const shop = await shops.findOne({ shopName: shop_id });
+        const carpenterfind=await carpenter.findOne({carpentersName:carpenter_id})
+        const  architecfind=await architec.findOne({architecsName:architecture_id})
+        
         const userData = await user.create({
             userName,
             mobileNo,
@@ -29,8 +35,13 @@ exports.userdetails_create = async function (req, res) {
             quantity,
             architecture_id,
             carpenter_id,
-            shop_id
+            shop_id,
+            shop:shop._id,
+            carpenter:carpenterfind._id,
+            architecture:architecfind._id
         })
+        await userData.save();
+
         const payload = {
             id: userData._id,
             userName: userName,
@@ -141,13 +152,17 @@ exports.userdetails_viewdata = async function (req, res) {
 // //========================================================================LIST DATA=========================================================
 exports.userdetails_listdata = async function (req, res) {
     try {
-        const listdata = await user.find()
-        var Datacount=listdata.length
+        // const listdata = await user.find()
+        const users = await user.find()
+        .populate('shop')
+        .populate('carpenter')
+        .populate('architecture');
+        var Datacount=users.length
         res.status(200).json({
             status: "Success",
             message: "get all data",
             count: Datacount,
-            data: listdata
+            data: users
         })
     } catch (error) {
         res.status(404).json({

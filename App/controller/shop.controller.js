@@ -19,6 +19,7 @@ exports.shopdetails_create = async function (req, res) {
             address: address
 
         })
+        console.log(shopData);
         const payload = {
             id: shopData._id,
             shopName: shopName,
@@ -49,7 +50,6 @@ exports.shopdetails_update = async function (req, res, next) {
             mobileNo: mobileNo,
             ddress: address
         }
-        
         const shopdata = await shops.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateshopdata }, { new: true })
         if (!shopdata) {
             return res.status(400).json({
