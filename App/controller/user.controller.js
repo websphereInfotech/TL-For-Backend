@@ -148,26 +148,49 @@ exports.userdetails_viewdata = async function (req, res) {
 // //========================================================================LIST DATA=========================================================
 exports.userdetails_listdata = async function (req, res) {
     try {
-        // const listdata = await user.find()
-        const users = await user.find()
-        .populate('shop')
-        .populate('carpenter')
-        .populate('architecture');
-        console.log(users);
-        var Datacount=users.length
+        const users = await user.aggregate([
+            {
+                $lookup: {
+                    from: 'shops',
+                    localField: 'shop_id',
+                    foreignField: '_id',
+                    as: 'shop'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'carpenters',
+                    localField: 'carpenter_id',
+                    foreignField: '_id',
+                    as: 'carpenter'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'architectuers',
+                    localField: 'architecture_id',
+                    foreignField: '_id',
+                    as: 'architecture'
+                }
+            },
+        ]);
+        // console.log(users);
+        var Datacount = users.length;
+
         res.status(200).json({
             status: "Success",
             message: "get all data",
             count: Datacount,
             data: users
-        })
+        });
     } catch (error) {
         res.status(404).json({
             status: "Fail",
             message: error.message
-        })
+        });
     }
 }
+    
 //============================================================================SERCH DATA=========================================================
 exports.userdetails_searchdata = async function (req, res) {
     try {
