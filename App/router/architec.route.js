@@ -12,7 +12,7 @@ router.delete('/architec/data/delete/:id',verifytoken,architec_delete)
 
 router.get('/architec/viewdata/:id',verifytoken,architec_viewdata)
 
-router.get('/architec/listdata',verifytoken,architec_listdata)
+router.get('/architec/listdata/:id',verifytoken,architec_listdata)
 
 router.get('/architec/searchdata',verifytoken,architecdetails_searchdata)
 

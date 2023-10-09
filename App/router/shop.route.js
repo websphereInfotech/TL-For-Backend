@@ -12,7 +12,7 @@ router.delete('/shop/data/delete/:id',verifytoken,shopdetails_delete)
 
 router.get('/shop/viewdata/:id',verifytoken,shopdetails_viewdata)
 
-router.get('/shop/listdata',verifytoken,shopdetails_listdata)
+router.get('/shop/listdata/:id',verifytoken,shopdetails_listdata)
 
 router.get('/shop/searchdata',verifytoken,shopsdetails_searchdata)
 

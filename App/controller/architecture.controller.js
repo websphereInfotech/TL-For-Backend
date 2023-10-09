@@ -1,5 +1,7 @@
 var architec = require('../model/architec.model')
+const user = require('../model/user.model')
 var jwt = require('jsonwebtoken');
+const { default: mongoose } = require('mongoose');
 
 exports.architec_create = async function (req, res) {
     try {
@@ -114,13 +116,44 @@ exports.architec_viewdata = async function (req, res) {
 //========================================================================LIST DATA=========================================================
 exports.architec_listdata = async function (req, res) {
     try {
+        const architecherId = req.params.id;
         const listdata = await architec.find()
         dataCount=listdata.length
+
+        const usersConnectedToarchitecher = await user.aggregate([
+            {
+                $match: {
+                    'architecture_id': new mongoose.Types.ObjectId(architecherId)
+                }
+            },
+            // {
+            //     $lookup: {
+            //         from: 'carpenters',
+            //         localField: 'carpenter_id',
+            //         foreignField: '_id',
+            //         as: 'carpenterDetails'
+            //     },
+            // },
+            {
+                $project:{
+                    __v: 0,
+                }
+            }
+        ]);
+
+        if (usersConnectedToarchitecher.length === 0) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "No users connected to the architecher"
+            });
+        }
+
+
         res.status(200).json({
             status: "Success",
             message: "get all data",
             count:dataCount,
-            data: listdata
+            data: usersConnectedToarchitecher
         })
     } catch (error) {
         res.status(404).json({

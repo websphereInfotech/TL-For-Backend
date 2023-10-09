@@ -125,7 +125,7 @@ exports.userdetails_delete = async function (req, res) {
 // //========================================================================VIEW DATA=========================================================
 exports.userdetails_viewdata = async function (req, res) {
     try {
-        const userviewdata = await user.findById({ "_id": req.params.id });
+        const userviewdata = await user.findById({ "_id": req.params.id }).populate('architecture_id carpenter_id shop_id');;
         if (!userviewdata) {
             return res.status(400).json({
                 status: "Fail",
@@ -173,6 +173,15 @@ exports.userdetails_listdata = async function (req, res) {
                     as: 'architecture'
                 }
             },
+            {
+                $project:{
+                    __v: 0,
+                    "shop.__v": 0,
+                    "carpenter.__v": 0,
+                    "architecture.__v": 0   
+                }
+            }
+            
         ]);
         // console.log(users);
         var Datacount = users.length;

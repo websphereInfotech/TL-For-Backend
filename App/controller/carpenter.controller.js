@@ -1,6 +1,7 @@
 const carpenter = require('../model/carpenter.model');
+const user = require('../model/user.model')
 var jwt = require('jsonwebtoken');
-
+const { default: mongoose } = require('mongoose');
 
 exports.carpenters_create = async function(req,res){
     try {
@@ -114,13 +115,42 @@ exports.carpenters_viewdata = async function (req, res) {
 // //========================================================================LIST DATA=========================================================
 exports.carpenters_listdata = async function (req, res) {
     try {
+        const carpenterId = req.params.id;
         const carpenterlistdata = await carpenter.find()
         dataCount=carpenterlistdata.length
+        const usersConnectedTocarpenter = await user.aggregate([
+            {
+                $match: {
+                    'carpenter_id': new mongoose.Types.ObjectId(carpenterId)
+                }
+            },
+            // {
+            //     $lookup: {
+            //         from: 'carpenters',
+            //         localField: 'carpenter_id',
+            //         foreignField: '_id',
+            //         as: 'carpenterDetails'
+            //     },
+            // },
+            {
+                $project:{
+                    __v: 0,
+                }
+            }
+        ]);
+
+        if (usersConnectedTocarpenter.length === 0) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "No users connected to the carpenter"
+            });
+        }
+
         res.status(200).json({
             status: "Success",
             message: "get all data",
             count:dataCount,
-            data: carpenterlistdata
+            data: usersConnectedTocarpenter
         })
     } catch (error) {
         res.status(404).json({

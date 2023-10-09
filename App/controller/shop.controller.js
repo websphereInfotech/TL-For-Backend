@@ -1,5 +1,7 @@
 var shops = require('../model/shop.model')
 var jwt = require('jsonwebtoken');
+const user = require('../model/user.model');
+const { default: mongoose } = require('mongoose');
 
 
 exports.shopdetails_create = async function (req, res) {
@@ -118,14 +120,49 @@ exports.shopdetails_viewdata = async function (req, res) {
 //========================================================================LIST DATA=========================================================
 exports.shopdetails_listdata = async function (req, res) {
     try {
+        const shopId = req.params.id;
+        const listdata = await shops.find();
+        var Datacount= listdata.length;
+// // console.log(shopId);
+        const usersConnectedToShop = await user.aggregate([
+            {
+                $match: {
+                    'shop_id': new mongoose.Types.ObjectId(shopId)
+                }
+            },
+            // {
+            //     $lookup: {
+            //         from: 'shops',
+            //         localField: 'shop_id',
+            //         foreignField: '_id',
+            //         as: 'shopDetails'652391fea31b4210a0128e83
+            //     },
+            // },
+            {
+                $project:{
+                    __v: 0,
+                }
+            }
+        ]);
+
+        // const usersConnectedToShop = await user
+        // .find({ shop_id: shopId })
+        // .populate('_id'); 
+
+        // console.log(usersConnectedToShop);
+        if (usersConnectedToShop.length === 0) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "No users connected to the shop"
+            });
+        }
+
         
-        const listdata = await shops.find()
-        var Datacount=listdata.length
         res.status(200).json({
             status: "Success",
             message: "get all data",
             count:Datacount,
-            data: listdata
+            data: usersConnectedToShop
         })
     } catch (error) {
         res.status(404).json({
@@ -134,6 +171,7 @@ exports.shopdetails_listdata = async function (req, res) {
         })
     }
 }
+
 //================================================================SHOP SEARCH DATA==========================================================
 exports.shopsdetails_searchdata = async function (req, res) {
     try {

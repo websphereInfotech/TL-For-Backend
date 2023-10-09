@@ -12,7 +12,7 @@ router.delete('/carpenter/data/delete/:id',verifytoken,carpenters_delete)
 
 router.get('/carpenter/viewdata/:id',verifytoken,carpenters_viewdata)
 
-router.get('/carpenter/listdata',verifytoken,carpenters_listdata)
+router.get('/carpenter/listdata/:id',verifytoken,carpenters_listdata)
 
 router.get('/carpenter/searchdata',verifytoken,carpentersdetails_searchdata)
 
