@@ -118,7 +118,7 @@ exports.shopdetails_viewdata = async function (req, res) {
 //========================================================================LIST DATA=========================================================
 exports.shopdetails_listdata = async function (req, res) {
     try {
-        const listdata = await shops.find()
+        const listdata = await shops.find().populate('user')
         var Datacount=listdata.length
         res.status(200).json({
             status: "Success",

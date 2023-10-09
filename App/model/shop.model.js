@@ -14,6 +14,7 @@ const Schema = mongoose.Schema;
     address:{
         type:String
     }
+    
  });
  const shops = mongoose.model('shop',shopschema)
 
