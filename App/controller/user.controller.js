@@ -21,10 +21,62 @@ exports.userdetails_create = async function (req, res) {
                 message:"Serial Number Already Exist"
             })
         }
-        const shop = await shops.findOne({ shopName: shop_id });
-        const carpenterfind=await carpenter.findOne({carpentersName:carpenter_id})
-        const  architecfind=await architec.findOne({architecsName:architecture_id})
+        const storeshopid = [];
+       
+        for (const shopName of (Array.isArray(shop_id) ? shop_id : [shop_id])) {
+            const shop = await shops.findOne({ shopName });
+            if (shop) {
+                storeshopid.push({
+                    _id: shop._id,
+                    shopName: shop.shopName,
+                    mobileNo:shop.mobileNo,
+                    address:shop.address
+                });
+            }
+        }
+
+        const storecarpenterid=[]
+        for (const carpentersName of (Array.isArray(carpenter_id) ? carpenter_id : [carpenter_id])) {
+            const carpenterfind=await carpenter.findOne({carpentersName})
+            if (carpenterfind) {
+                storecarpenterid.push({
+                    _id:carpenterfind._id,
+                    carpentersName:carpenterfind.carpentersName,
+                    mobileNo:carpenterfind.mobileNo,
+                    address:carpenterfind.address
+                })
+            }
+            
+        }
+
+//         const storearchitectureid = [];
+
+// for (const architecsName of (Array.isArray(architecture_id) ? architecture_id : [architecture_id])) {
+//     const architecfindArray = await architec.find({ architecsName }); // Use find instead of findOne
+//     if (architecfindArray && architecfindArray.length > 0) {
+//         for (const architecfind of architecfindArray) {
+//             storearchitectureid.push({
+//                 architecsName: architecsName,
+//                 _id: architecfind._id
+//             });
+//         }
+//     }
+// }
         
+        const storearchitectureid=[]
+        for (const architecsName of (Array.isArray(architecture_id) ? architecture_id : [architecture_id])) {
+            const architecfind=await architec.findOne({architecsName})
+            if (architecfind) {
+                storearchitectureid.push({
+                    _id:architecfind._id,
+                    architecsName:architecfind.architecsName,
+                    mobileNo:architecfind.mobileNo,
+                    address:architecfind.address
+                })
+            }
+            
+        }
+     
         const userData = await user.create({
             userName,
             mobileNo,
@@ -36,9 +88,9 @@ exports.userdetails_create = async function (req, res) {
             architecture_id,
             carpenter_id,
             shop_id,
-            shop:shop._id,
-            carpenter:carpenterfind._id,
-            architecture:architecfind._id
+            shop:storeshopid ,
+            carpenter:storecarpenterid,
+            architecture:storearchitectureid
         })
         await userData.save();
 
@@ -157,6 +209,7 @@ exports.userdetails_listdata = async function (req, res) {
         .populate('shop')
         .populate('carpenter')
         .populate('architecture');
+        console.log(users);
         var Datacount=users.length
         res.status(200).json({
             status: "Success",

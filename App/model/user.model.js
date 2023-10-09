@@ -1,4 +1,4 @@
-const { string } = require('joi');
+const { string, array } = require('joi');
 const mongoose= require('mongoose')
 const Schema = mongoose.Schema;
 
@@ -32,27 +32,66 @@ const Schema = mongoose.Schema;
         type:Number,
         require:true
     },
-    architecture_id:{
+    architecture_id:[{
        type:String
-    },
-    carpenter_id:{
-      type:String 
-    },
-    shop_id:{
+    }],
+    carpenter_id:[{
+        type:String
+     }],
+    shop_id:[{
        type:String
-    },
+    }],
     architecture:[{
+       _id:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'architectuer'
+       },
+       architecsName:{
+         type:String
+       },
+       mobileNo:{
+        type:Number,
+        require:true,
+        unique: true
+    },
+    address:{
+        type:String
+    }
     }],
-    shop:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'shop'
-    }],
+    shop: [{
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'shop'
+        },
+        shopName:{
+            type:String
+        } ,
+        mobileNo:{
+            type:Number,
+            require:true,
+            unique: true
+        },
+        address:{
+            type:String
+        }
+ }],
     carpenter:[{
-        type:mongoose.Schema.Types.ObjectId,    
-        ref:'carpenter'
-    }]
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'carpenter'
+        },
+        carpentersName:{
+            type:String
+        } ,
+        mobileNo:{
+            type:Number,
+            require:true,
+            unique: true
+        },
+        address:{
+            type:String
+        }
+ }]
 
  },{ strictPopulate: false });
  const user = mongoose.model('user',userschema)
