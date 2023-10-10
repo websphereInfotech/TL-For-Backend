@@ -214,3 +214,19 @@ exports.architecdetails_searchdata = async function (req, res) {
         })
     }
 }
+//========================================================================list=========================================================
+exports.architeclist = async function (req, res, next) {
+    try {
+        const architecturelist = await architec.find()
+        res.status(200).json({
+            status: "Success",
+            message: "get all data",
+            data: architecturelist
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: "Fail",
+            message: error.message
+        })
+    }
+}

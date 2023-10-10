@@ -204,7 +204,14 @@ exports.userdetails_listdata = async function (req, res) {
 exports.userdetails_searchdata = async function (req, res) {
     try {
         const nameFeild=req.query.userName
-        const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }},'_id')
+        if (!nameFeild) {
+            return res.status(400).json({
+                status: "Fail",
+                message: "Please provide a userName parameter in the URL."
+            });
+        }
+        const searchdata = await user.findOne({userName:{$regex:nameFeild,$options: 'i' }})
+
         
         if (!searchdata) {
             return res.status(404).json({
@@ -212,6 +219,7 @@ exports.userdetails_searchdata = async function (req, res) {
                 message: "user not found"
             });
         }
+       
         const userData = await user.aggregate([
             {
                 $lookup: {

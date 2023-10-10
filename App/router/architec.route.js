@@ -1,6 +1,6 @@
 var express = require("express")
 var router = express.Router();
-const{architec_create,architec_update,architec_delete,architec_viewdata,architec_listdata,architecdetails_searchdata}=require('../controller/architecture.controller')
+const{architec_create,architec_update,architec_delete,architeclist,architec_viewdata,architec_listdata,architecdetails_searchdata}=require('../controller/architecture.controller')
 const{validate}=require('../../constant/validate');
 const { verifytoken } = require("../middlware/auth");
 
@@ -13,6 +13,8 @@ router.delete('/architec/data/delete/:id',verifytoken,architec_delete)
 router.get('/architec/viewdata/:id',verifytoken,architec_viewdata)
 
 router.get('/architec/listdata/:id',verifytoken,architec_listdata)
+
+router.get('/architec/list',verifytoken,architeclist)
 
 router.get('/architec/searchdata',verifytoken,architecdetails_searchdata)
 

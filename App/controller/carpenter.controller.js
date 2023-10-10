@@ -218,3 +218,20 @@ exports.carpentersdetails_searchdata = async function (req, res) {
         })
     }
 }
+
+//=========================================================================list=========================================================
+exports.carpenterlist = async function (req, res, next) {
+    try {
+        const carpenterData = await carpenter.find()
+        res.status(200).json({
+            status: "Success",
+            message: "get all data",
+            data: carpenterData
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: "Fail",
+            message: error.message
+        })
+    }
+}

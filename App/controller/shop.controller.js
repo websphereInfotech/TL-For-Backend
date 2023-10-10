@@ -224,3 +224,19 @@ exports.shopsdetails_searchdata = async function (req, res) {
         })
     }
 }
+//=====================================================================list============================================================
+exports.shoplist = async function (req, res, next) {
+    try {
+        const shoplist = await shops.find()
+        res.status(200).json({
+            status: "Success",
+            message: "get all data",
+            data: shoplist
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: "Fail",
+            message: error.message
+        })
+    }
+}
