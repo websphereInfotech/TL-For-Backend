@@ -121,8 +121,7 @@ exports.shopdetails_viewdata = async function (req, res) {
 exports.shopdetails_listdata = async function (req, res) {
     try {
         const shopId = req.params.id;
-        const listdata = await shops.find();
-        var Datacount= listdata.length;
+        
 // // console.log(shopId);
         const usersConnectedToShop = await user.aggregate([
             {
@@ -228,9 +227,12 @@ exports.shopsdetails_searchdata = async function (req, res) {
 exports.shoplist = async function (req, res, next) {
     try {
         const shoplist = await shops.find()
+        const listdata = await shops.find();
+        var Datacount= listdata.length;
         res.status(200).json({
             status: "Success",
             message: "get all data",
+            count:Datacount,
             data: shoplist
         })
     } catch (error) {

@@ -116,8 +116,7 @@ exports.carpenters_viewdata = async function (req, res) {
 exports.carpenters_listdata = async function (req, res) {
     try {
         const carpenterId = req.params.id;
-        const carpenterlistdata = await carpenter.find()
-        dataCount=carpenterlistdata.length
+        
         const usersConnectedTocarpenter = await user.aggregate([
             {
                 $match: {
@@ -223,9 +222,11 @@ exports.carpentersdetails_searchdata = async function (req, res) {
 exports.carpenterlist = async function (req, res, next) {
     try {
         const carpenterData = await carpenter.find()
+        dataCount=carpenterData.length
         res.status(200).json({
             status: "Success",
             message: "get all data",
+            count:dataCount,
             data: carpenterData
         })
     } catch (error) {

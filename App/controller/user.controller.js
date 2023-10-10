@@ -203,24 +203,30 @@ exports.userdetails_listdata = async function (req, res) {
 //============================================================================SERCH DATA=========================================================
 exports.userdetails_searchdata = async function (req, res) {
     try {
-        const nameFeild=req.query.userName
-        if (!nameFeild) {
-            return res.status(400).json({
-                status: "Fail",
-                message: "Please provide a userName parameter in the URL."
-            });
-        }
-        const searchdata = await user.findOne({userName:{$regex:nameFeild,$options: 'i' }})
-
-        
-        if (!searchdata) {
-            return res.status(404).json({
-                status: "Fail",
-                message: "user not found"
-            });
-        }
-       
+        // if (!nameFeild) {
+            //     return res.status(400).json({
+                //         status: "Fail",
+                //         message: "Please provide a userName parameter in the URL."
+                //     });
+                // }
+                // const searchdata = await user.findOne({userName:{$regex:nameFeild,$options: 'i' }})
+                
+                // console.log(searchdata)
+                
+        // if (!searchdata) {
+        //     return res.status(404).json({
+        //         status: "Fail",
+        //         message: "user not found"
+        //     });
+        // }
+        // const userIds = searchdata.map(user => user._id);
+        const nameField=req.query.userName
         const userData = await user.aggregate([
+            {
+                $match: {
+                    userName: { $regex: nameField, $options: 'i' }
+                }
+            },
             {
                 $lookup: {
                     from: 'shops',

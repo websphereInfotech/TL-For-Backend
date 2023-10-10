@@ -117,9 +117,7 @@ exports.architec_viewdata = async function (req, res) {
 exports.architec_listdata = async function (req, res) {
     try {
         const architecherId = req.params.id;
-        const listdata = await architec.find()
-        dataCount=listdata.length
-
+       
         const usersConnectedToarchitecher = await user.aggregate([
             {
                 $match: {
@@ -218,9 +216,12 @@ exports.architecdetails_searchdata = async function (req, res) {
 exports.architeclist = async function (req, res, next) {
     try {
         const architecturelist = await architec.find()
+        dataCount=architecturelist.length
+
         res.status(200).json({
             status: "Success",
             message: "get all data",
+            count:dataCount,
             data: architecturelist
         })
     } catch (error) {
