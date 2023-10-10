@@ -124,14 +124,14 @@ exports.carpenters_listdata = async function (req, res) {
                     'carpenter_id': new mongoose.Types.ObjectId(carpenterId)
                 }
             },
-            // {
-            //     $lookup: {
-            //         from: 'carpenters',
-            //         localField: 'carpenter_id',
-            //         foreignField: '_id',
-            //         as: 'carpenterDetails'
-            //     },
-            // },
+            {
+                $lookup: {
+                    from: 'carpenters',
+                    localField: 'carpenter_id',
+                    foreignField: '_id',
+                    as: 'carpenterDetails'
+                },
+            },
             {
                 $project:{
                     __v: 0,
@@ -162,13 +162,54 @@ exports.carpenters_listdata = async function (req, res) {
 //==============================================================SEARCH DATA==================================================================
 exports.carpentersdetails_searchdata = async function (req, res) {
     try {
-        const nameField=req.query.carpentersName
-        const searchdata = await carpenter.find({carpentersName:{$regex:nameField,$options: 'i' }})
-      
+        const nameField = req.query.carpentersName;
+
+        console.log("Searching for carpenters with name: " + nameField);
+
+        // Step 1: Find the carpenter by name
+        const carpenterfind = await carpenter.findOne({ carpentersName: { $regex: nameField, $options: 'i' } }, '_id');
+
+        console.log("Found carpenter: " + carpenterfind);
+
+        if (!carpenterfind) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "Carpenter not found"
+            });
+        }
+
+        const carpenterdata = await user.aggregate([
+            {
+                $match: { 'carpenter_id': carpenterfind._id }
+            },
+            {
+                $lookup: {
+                    from: "carpenters",
+                    localField: "carpenter_id",
+                    foreignField: "_id",
+                    as: "carpenterData"
+                }
+            },
+                {
+            $project: {
+                __v: 0,
+                "carpenterData.__v": 0,
+            }
+           }
+        ]).exec();
+
+        console.log("Carpenter data: " + carpenterdata);
+
+        if (!carpenterdata || carpenterdata.length === 0) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "Data not found"
+            });
+        }
         res.status(200).json({
             status: "Success",
             message: "Fetch Data Successfully",
-            data: searchdata
+            data: carpenterdata
         })
     } catch (error) {
         res.status(404).json({

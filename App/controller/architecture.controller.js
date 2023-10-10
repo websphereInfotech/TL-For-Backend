@@ -126,14 +126,14 @@ exports.architec_listdata = async function (req, res) {
                     'architecture_id': new mongoose.Types.ObjectId(architecherId)
                 }
             },
-            // {
-            //     $lookup: {
-            //         from: 'carpenters',
-            //         localField: 'carpenter_id',
-            //         foreignField: '_id',
-            //         as: 'carpenterDetails'
-            //     },
-            // },
+            {
+                $lookup: {
+                    from: 'carpenters',
+                    localField: 'carpenter_id',
+                    foreignField: '_id',
+                    as: 'carpenterDetails'
+                },
+            },
             {
                 $project:{
                     __v: 0,
@@ -165,18 +165,47 @@ exports.architec_listdata = async function (req, res) {
 //================================================================SEARCH DATA===================================================================
 exports.architecdetails_searchdata = async function (req, res) {
     try {
-        const name = req.query.architecName
-        if (!name) {
-            return res.status(400).json({
-                status:"Fail",
-                message:"architecsname is not found"
-            })
+        const nameField = req.query.architecName;
+
+        const architecData = await architec.findOne({ architecsName: { $regex: nameField, $options: 'i' } }, '_id');
+
+        if (!architecData) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "architecture not found"
+            });
         }
-        const searchdata = await architec.find({architecsName: { $regex: name,$options:'i'} })
+
+        const searchData = await user.aggregate([
+            {
+                $match: { 'architecture_id': architecData._id }
+            },
+            {
+                $lookup: {
+                    from: "architectuers",
+                    localField: "architecture_id",
+                    foreignField: "_id",
+                    as: "architectureData"
+                }
+            },
+                {
+            $project: {
+                __v: 0,
+                "architectureData.__v": 0         
+            }
+           }
+        ]).exec();
+
+        if (!searchData || searchData.length === 0) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "Data not found"
+            });
+        }
         res.status(200).json({
             status: "Success",
             message: "Architecture fetch successfully",
-            data: searchdata
+            data: searchData
         })
     } catch (error) {
         res.status(404).json({

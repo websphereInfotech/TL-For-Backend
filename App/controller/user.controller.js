@@ -183,8 +183,8 @@ exports.userdetails_listdata = async function (req, res) {
             }
             
         ]);
-        // console.log(users);
-        var Datacount = users.length;
+        const listdata= await user.find()
+        var Datacount = listdata.length;
 
         res.status(200).json({
             status: "Success",
@@ -204,11 +204,53 @@ exports.userdetails_listdata = async function (req, res) {
 exports.userdetails_searchdata = async function (req, res) {
     try {
         const nameFeild=req.query.userName
-        const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }})
+        const searchdata = await user.find({userName:{$regex:nameFeild,$options: 'i' }},'_id')
+        
+        if (!searchdata) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "user not found"
+            });
+        }
+        const userData = await user.aggregate([
+            {
+                $lookup: {
+                    from: 'shops',
+                    localField: 'shop_id',
+                    foreignField: '_id',
+                    as: 'shop'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'carpenters',
+                    localField: 'carpenter_id',
+                    foreignField: '_id',
+                    as: 'carpenter'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'architectuers',
+                    localField: 'architecture_id',
+                    foreignField: '_id',
+                    as: 'architecture'
+                }
+            },
+            {
+                $project:{
+                    __v: 0,
+                    "shop.__v": 0,
+                    "carpenter.__v": 0,
+                    "architecture.__v": 0   
+                }
+            }
+            
+        ]);
         res.status(200).json({
             status: "Success",
             message: "Fetch Successfully",
-            data: searchdata
+            data: userData
         })
     } catch (error) {
         res.status(404).json({

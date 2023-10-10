@@ -130,14 +130,14 @@ exports.shopdetails_listdata = async function (req, res) {
                     'shop_id': new mongoose.Types.ObjectId(shopId)
                 }
             },
-            // {
-            //     $lookup: {
-            //         from: 'shops',
-            //         localField: 'shop_id',
-            //         foreignField: '_id',
-            //         as: 'shopDetails'652391fea31b4210a0128e83
-            //     },
-            // },
+            {
+                $lookup: {
+                    from: 'shops',
+                    localField: 'shop_id',
+                    foreignField: '_id',
+                    as: 'shopDetails'
+                },
+            },
             {
                 $project:{
                     __v: 0,
@@ -175,12 +175,47 @@ exports.shopdetails_listdata = async function (req, res) {
 //================================================================SHOP SEARCH DATA==========================================================
 exports.shopsdetails_searchdata = async function (req, res) {
     try {
-        const nameField=req.query.shopName
-        const searchdata = await shops.find({shopName:{$regex:nameField,$options: 'i' }})
+        const nameField = req.query.shopName;
+
+        const shopData = await shops.findOne({ shopName: { $regex: nameField, $options: 'i' } }, '_id');
+
+        if (!shopData) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "Shop not found"
+            });
+        }
+
+        const searchData = await user.aggregate([
+            {
+                $match: { 'shop_id': shopData._id }
+            },
+            {
+                $lookup: {
+                    from: "shops",
+                    localField: "shop_id",
+                    foreignField: "_id",
+                    as: "shopData"
+                }
+            },
+           {
+            $project: {
+                __v: 0,
+                "shopData.__v": 0,       
+            }
+           }
+        ]).exec();
+
+        if (!searchData || searchData.length === 0) {
+            return res.status(404).json({
+                status: "Fail",
+                message: "Data not found"
+            });
+        }
         res.status(200).json({
             status: "Success",
             message: "Fetch Data Successfully",
-            data: searchdata
+            data: searchData
         })
     } catch (error) {
         res.status(404).json({
