@@ -1,29 +1,22 @@
 var jwt = require('jsonwebtoken');
 const user = require('../model/user.model');
-const shops=require('../model/shop.model');
+const shops = require('../model/shop.model');
 const carpenter = require('../model/carpenter.model');
 const architec = require('../model/architec.model');
 
 exports.userdetails_create = async function (req, res) {
     try {
-        const { userName, mobileNo, address, serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
-        const checkmobilno = await user.findOne({ mobileNo })
-        if ( checkmobilno ) {
+        const { userName, mobileNo, address, serialNumber, rate, description, quantity, architecture, carpenter, shop } = req.body;
+        console.log(shop)
+      
+        const checkserialno = await user.findOne({ serialNumber })
+        if (checkserialno) {
             return res.status(400).json({
-                status:"Fail",
-                message:"Mobile Number Already Exist"
+                status: "Fail",
+                message: "Serial Number Already Exist"
             })
         }
-        const checkserialno = await user.findOne({ serialNumber})
-        if ( checkserialno ) {
-            return res.status(400).json({
-                status:"Fail",
-                message:"Serial Number Already Exist"
-            })
-        }
-     
-    
-     
+       
         const userData = await user.create({
             userName,
             mobileNo,
@@ -32,9 +25,9 @@ exports.userdetails_create = async function (req, res) {
             rate,
             description,
             quantity,
-            architecture_id,
-            carpenter_id,
-            shop_id,
+            architecture,
+            carpenter,
+            shop
         })
         await userData.save();
 
@@ -43,13 +36,13 @@ exports.userdetails_create = async function (req, res) {
             userName: userName,
             mobileNo: mobileNo,
             address: address,
-            serialNumber:serialNumber,
-            rate:rate,
-            description:description,
-            quantity:quantity,
-            architectureId: architecture_id,
-            carpenterId: carpenter_id,
-            shopId: shop_id
+            serialNumber: serialNumber,
+            rate: rate,
+            description: description,
+            quantity: quantity,
+            architectureId: architecture,
+            carpenterId: carpenter,
+            shopId: shop
         };
         let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
         res.status(200).json({
@@ -68,15 +61,15 @@ exports.userdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res) {
     try {
-        const { userName, mobileNo, address,serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
+        const { userName, mobileNo, address, serialNumber, rate, description, quantity, architecture_id, carpenter_id, shop_id } = req.body;
         const updateuserdata = {
             userName: userName,
             mobileNo: mobileNo,
             address: address,
-            serialNumber:serialNumber,
-            rate:rate,
-            description:description,
-            quantity:quantity,
+            serialNumber: serialNumber,
+            rate: rate,
+            description: description,
+            quantity: quantity,
             architecture_id: architecture_id,
             carpenter_id: carpenter_id,
             shop_id: shop_id
@@ -100,7 +93,7 @@ exports.userdetails_update = async function (req, res) {
         })
     }
 }
- //===============================================================DELETE DATA====================================================================
+//===============================================================DELETE DATA====================================================================
 exports.userdetails_delete = async function (req, res) {
     try {
         const userdatadelete = await user.findByIdAndDelete({ "_id": req.params.id });
@@ -174,16 +167,16 @@ exports.userdetails_listdata = async function (req, res) {
                 }
             },
             {
-                $project:{
+                $project: {
                     __v: 0,
                     "shop.__v": 0,
                     "carpenter.__v": 0,
-                    "architecture.__v": 0   
+                    "architecture.__v": 0
                 }
             }
-            
+
         ]);
-        const listdata= await user.find()
+        const listdata = await user.find()
         var Datacount = listdata.length;
 
         res.status(200).json({
@@ -199,12 +192,12 @@ exports.userdetails_listdata = async function (req, res) {
         });
     }
 }
-    
+
 //============================================================================SERCH DATA=========================================================
 exports.userdetails_searchdata = async function (req, res) {
     try {
-    
-        const nameField=req.query.userName
+
+        const nameField = req.query.userName
         const userData = await user.aggregate([
             {
                 $match: {
@@ -236,14 +229,14 @@ exports.userdetails_searchdata = async function (req, res) {
                 }
             },
             {
-                $project:{
+                $project: {
                     __v: 0,
                     "shop.__v": 0,
                     "carpenter.__v": 0,
-                    "architecture.__v": 0   
+                    "architecture.__v": 0
                 }
             }
-            
+
         ]);
         res.status(200).json({
             status: "Success",
