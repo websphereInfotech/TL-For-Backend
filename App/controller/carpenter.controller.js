@@ -165,7 +165,6 @@ exports.carpentersdetails_searchdata = async function (req, res) {
 
         console.log("Searching for carpenters with name: " + nameField);
 
-        // Step 1: Find the carpenter by name
         const carpenterfind = await carpenter.findOne({ carpentersName: { $regex: nameField, $options: 'i' } }, '_id');
 
         console.log("Found carpenter: " + carpenterfind);
