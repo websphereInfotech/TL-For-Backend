@@ -32,6 +32,15 @@ const Schema = mongoose.Schema;
         type:Number,
         require:true
     },
+    architecture:{
+        type:String
+    },
+    carpenter:{
+        type:String
+    },
+    shop:{
+        type:String
+    },
     architecture_id:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'architectuer'
