@@ -122,7 +122,6 @@ exports.shopdetails_listdata = async function (req, res) {
     try {
         const shopId = req.params.id;
         
-// // console.log(shopId);
         const usersConnectedToShop = await user.aggregate([
             {
                 $match: {
@@ -144,11 +143,6 @@ exports.shopdetails_listdata = async function (req, res) {
             }
         ]);
 
-        // const usersConnectedToShop = await user
-        // .find({ shop_id: shopId })
-        // .populate('_id'); 
-
-        // console.log(usersConnectedToShop);
         if (usersConnectedToShop.length === 0) {
             return res.status(404).json({
                 status: "Fail",
