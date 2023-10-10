@@ -160,7 +160,6 @@ exports.shopdetails_listdata = async function (req, res) {
         res.status(200).json({
             status: "Success",
             message: "get all data",
-            count:Datacount,
             data: usersConnectedToShop
         })
     } catch (error) {

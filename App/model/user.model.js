@@ -32,7 +32,6 @@ const Schema = mongoose.Schema;
         type:Number,
         require:true
     },
-   
     architecture_id:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'architectuer'
@@ -45,6 +44,7 @@ const Schema = mongoose.Schema;
        type:mongoose.Schema.Types.ObjectId,
        ref:'shop'
     }],
+
  },{ strictPopulate: false });
  const user = mongoose.model('user',userschema)
 
