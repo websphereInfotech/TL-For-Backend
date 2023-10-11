@@ -6,7 +6,7 @@ const architec = require('../model/architec.model');
 
 exports.userdetails_create = async function (req, res) {
     try {
-        const { userName, mobileNo, address, serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
+        const { userName, mobileNo, address, serialNumber,rate,description,quantity,architec, carpenter, shop } = req.body;
       
         const checkserialno = await user.findOne({ serialNumber})
         if ( checkserialno ) {
@@ -23,9 +23,9 @@ exports.userdetails_create = async function (req, res) {
             rate,
             description,
             quantity,
-            architecture_id,
-            carpenter_id,
-            shop_id,
+            architec,
+            carpenter,
+            shop,
         })
         await userData.save();
 
@@ -38,9 +38,9 @@ exports.userdetails_create = async function (req, res) {
             rate:rate,
             description:description,
             quantity:quantity,
-            architectureId: architecture_id,
-            carpenterId: carpenter_id,
-            shopId: shop_id
+            architectureId: architec,
+            carpenterId: carpenter,
+            shopId: shop
         };
         let token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' })
         res.status(200).json({
@@ -59,7 +59,7 @@ exports.userdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res) {
     try {
-        const { userName, mobileNo, address,serialNumber,rate,description,quantity,architecture_id, carpenter_id, shop_id } = req.body;
+        const { userName, mobileNo, address,serialNumber,rate,description,quantity,architec, carpenter, shop} = req.body;
         const updateuserdata = {
             userName: userName,
             mobileNo: mobileNo,
@@ -68,9 +68,9 @@ exports.userdetails_update = async function (req, res) {
             rate:rate,
             description:description,
             quantity:quantity,
-            architecture_id: architecture_id,
-            carpenter_id: carpenter_id,
-            shop_id: shop_id
+            architecture_id: architec,
+            carpenter_id: carpenter,
+            shop_id: shop
         }
         const userdata = await user.findByIdAndUpdate({ "_id": req.params.id }, { $set: updateuserdata }, { new: true })
         if (!userdata) {
@@ -143,7 +143,7 @@ exports.userdetails_listdata = async function (req, res) {
             {
                 $lookup: {
                     from: 'shops',
-                    localField: 'shop_id',
+                    localField: 'shop',
                     foreignField: '_id',
                     as: 'shop'
                 }
@@ -151,7 +151,7 @@ exports.userdetails_listdata = async function (req, res) {
             {
                 $lookup: {
                     from: 'carpenters',
-                    localField: 'carpenter_id',
+                    localField: 'carpenter',
                     foreignField: '_id',
                     as: 'carpenter'
                 }
@@ -159,7 +159,7 @@ exports.userdetails_listdata = async function (req, res) {
             {
                 $lookup: {
                     from: 'architectuers',
-                    localField: 'architecture_id',
+                    localField: 'architec',
                     foreignField: '_id',
                     as: 'architecture'
                 }
@@ -205,7 +205,7 @@ exports.userdetails_searchdata = async function (req, res) {
             {
                 $lookup: {
                     from: 'shops',
-                    localField: 'shop_id',
+                    localField: 'shop',
                     foreignField: '_id',
                     as: 'shop'
                 }
@@ -213,7 +213,7 @@ exports.userdetails_searchdata = async function (req, res) {
             {
                 $lookup: {
                     from: 'carpenters',
-                    localField: 'carpenter_id',
+                    localField: 'carpenter',
                     foreignField: '_id',
                     as: 'carpenter'
                 }
@@ -221,7 +221,7 @@ exports.userdetails_searchdata = async function (req, res) {
             {
                 $lookup: {
                     from: 'architectuers',
-                    localField: 'architecture_id',
+                    localField: 'architec',
                     foreignField: '_id',
                     as: 'architecture'
                 }

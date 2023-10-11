@@ -32,15 +32,15 @@ const Schema = mongoose.Schema;
         type:Number,
         require:true
     },
-    architecture_id:[{
+    architec:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'architectuer'
     }],
-    carpenter_id:[{
+    carpenter:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'carpenter'
      }],
-    shop_id:[{
+    shop:[{
        type:mongoose.Schema.Types.ObjectId,
        ref:'shop'
     }],
