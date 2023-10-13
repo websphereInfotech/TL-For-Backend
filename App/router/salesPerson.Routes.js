@@ -13,24 +13,24 @@ const {
 } = require("../controller/salesPerson.controllar");
 
 //craete
-router.post("/salesPerson/data/create", verifytoken, validate("salesPersonCreate"), personCreate );
+router.post("/salesPerson/create", verifytoken, validate("salesPersonCreate"), personCreate );
 
 //update
-router.put("/salesPerson/data/update/:id", verifytoken, validate("salesPersonCreate"), personUpdate );
+router.put("/salesPerson/update/:id", verifytoken, validate("salesPersonCreate"), personUpdate );
 
 //delete
-router.delete("/salesPerson/data/delete/:id", verifytoken, PersonDelete);
+router.delete("/salesPerson/delete/:id", verifytoken, PersonDelete);
 
 //view
-router.get("/salesPerson/data/view/:id", verifytoken, salesPersonView);
+router.get("/salesPerson/view/:id", verifytoken, salesPersonView);
 
 // search
-router.get("/salesPerson/data/search", verifytoken, salesPersonSearch);
+router.get("/salesPerson/search", verifytoken, salesPersonSearch);
 
 // list Date wise
-router.get("/salesPerson/data/list", verifytoken, salesPersonList);
+router.get("/salesPerson/list", verifytoken, salesPersonList);
 
 // PersonListData
-router.get("/salesPerson/data", verifytoken, salesPersonListData);
+router.get("/salesPerson/AllList", verifytoken, salesPersonListData);
 
 module.exports = router;

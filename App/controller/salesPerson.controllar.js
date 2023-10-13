@@ -134,7 +134,7 @@ exports.salesPersonList = async (req, res) => {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
 
-    console.log(startDate, endDate, ">>>>>>>>>>>");
+    console.log(startDate, endDate, "??????????>>>>>>>>>>>");
     const usersConnectedToSales = await user.aggregate([
       {
         $match: {
@@ -237,6 +237,7 @@ exports.salesPersonSearch = async (req, res) => {
   }
 };
 
+// PersonListData
 exports.salesPersonListData = async (req,res)=>{
    try {
      const personList = await salesPerson.find();
