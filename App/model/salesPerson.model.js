@@ -9,7 +9,7 @@ const salesPersonSchemas = Schema({
   mobileNo: {
     type: Number,
     require: true,
-    unique:true
+    unique: true,
   },
 });
 

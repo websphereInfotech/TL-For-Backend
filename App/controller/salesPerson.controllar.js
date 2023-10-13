@@ -128,27 +128,44 @@ exports.salesPersonView = async (req, res) => {
   }
 };
 
+// PersonListData
+exports.salesPersonListData = async (req,res)=>{
+   try {
+     const personList = await salesPerson.find();
+     const personListData = await salesPerson.find();
+     var Datacount = personListData.length;
+     res.status(200).json({
+       status: "Success",
+       message: "get all data",
+       count: Datacount,
+       data: personList,
+     });
+   } catch (error) {
+     res.status(404).json({
+       status: "Fail",
+       message: error.message,
+     });
+   }
+}
+
 // salesPersonList date wise
 exports.salesPersonList = async (req, res) => {
   try {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
 
-    console.log(startDate, endDate, "??????????>>>>>>>>>>>");
     const usersConnectedToSales = await user.aggregate([
       {
         $match: {
-          startDate: {
-            $gte: new Date("05-01-2023"),
-          },
-          endDate: {
-            $lte: new Date("12-08-2023"),
+          Date: {
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },
       {
         $lookup: {
-          from: "SalesPerson",
+          from: "salespeople",
           localField: "sales",
           foreignField: "_id",
           as: "salesPersonDetails",
@@ -160,7 +177,7 @@ exports.salesPersonList = async (req, res) => {
         },
       },
     ]);
-    console.log(usersConnectedToSales);
+
     if (usersConnectedToSales.length === 0) {
       return res.status(404).json({
         status: "Fail",
@@ -184,29 +201,24 @@ exports.salesPersonList = async (req, res) => {
 // salesPersonSearch
 exports.salesPersonSearch = async (req, res) => {
   try {
-    const nameField = req.query.SalesPersonName;
 
-    const salesData = await salesPerson.find({
-      Name: { $regex: nameField, $options: "i" },
-    });
-    if (!salesData) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "SalesPerson not found",
-      });
+    let matchField = {};
+
+    if (req.query.SalesPersonName) {
+      matchField.Name = new RegExp(req.query.SalesPersonName, "i");
     }
 
-    const searchData = await user
+    const searchData = await salesPerson
       .aggregate([
         {
-          $match: { sales: salesData._id },
+          $match: matchField,
         },
         {
           $lookup: {
-            from: "SalesPerson",
-            localField: "sales",
-            foreignField: "_id",
-            as: "SalesPersonData",
+            from: "users",
+            localField: "_id",
+            foreignField: "sales",
+            as: "user",
           },
         },
         {
@@ -237,22 +249,48 @@ exports.salesPersonSearch = async (req, res) => {
   }
 };
 
-// PersonListData
-exports.salesPersonListData = async (req,res)=>{
-   try {
-     const personList = await salesPerson.find();
-     const personListData = await salesPerson.find();
-     var Datacount = personListData.length;
-     res.status(200).json({
-       status: "Success",
-       message: "get all data",
-       count: Datacount,
-       data: personList,
-     });
-   } catch (error) {
-     res.status(404).json({
-       status: "Fail",
-       message: error.message,
-     });
-   }
-}
+// using id salesPersonListWithUser
+exports.salesPersonListWithUser = async function (req, res) {
+  try {
+    const personId = req.params.id;
+
+    const usersConnectedToPerson = await user.aggregate([
+      {
+        $match: {
+          sales: new mongoose.Types.ObjectId(personId),
+        },
+      },
+      {
+        $lookup: {
+          from: "salespeople",
+          localField: "sales",
+          foreignField: "_id",
+          as: "salesPersonDetails",
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+        },
+      },
+    ]);
+
+    if (usersConnectedToPerson.length === 0) {
+      return res.status(404).json({
+        status: "Fail",
+        message: "No users connected to the SalesPerson",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      message: "get all data",
+      data: usersConnectedToPerson,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "Fail",
+      message: error.message,
+    });
+  }
+};

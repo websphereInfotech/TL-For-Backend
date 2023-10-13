@@ -34,7 +34,7 @@ const userschema = Schema(
       require: true,
     },
     Date: {
-      type: Date,
+      type: String,
       require: true,
     },
     area: {

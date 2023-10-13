@@ -10,6 +10,7 @@ const {
   salesPersonSearch,
   salesPersonList,
   salesPersonListData,
+  salesPersonListWithUser,
 } = require("../controller/salesPerson.controllar");
 
 //craete
@@ -32,5 +33,8 @@ router.get("/salesPerson/list", verifytoken, salesPersonList);
 
 // PersonListData
 router.get("/salesPerson/AllList", verifytoken, salesPersonListData);
+
+// salesPersonListData
+router.get("/salesPersonListWithUser/:id", verifytoken , salesPersonListWithUser);
 
 module.exports = router;

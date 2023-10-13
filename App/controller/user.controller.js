@@ -16,7 +16,7 @@ exports.userdetails_create = async function (req, res) {
       rate,
       description,
       quantity,
-      Date: dateStr,
+      Date,
       area,
       size,
       total,
@@ -26,8 +26,6 @@ exports.userdetails_create = async function (req, res) {
       shop,
     } = req.body;
 
-    const formattedDate = moment(dateStr, "DD-MM-YYYY").toDate();
-    console.log(formattedDate);
     const checkserialno = await user.findOne({ serialNumber });
     if (checkserialno) {
       return res.status(400).json({
@@ -44,7 +42,7 @@ exports.userdetails_create = async function (req, res) {
       rate,
       description,
       quantity,
-      Date: formattedDate,
+      Date,
       area,
       size,
       total,
