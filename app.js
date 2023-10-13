@@ -14,6 +14,7 @@ const {
   userRoute,
   salesPersonRouter,
   followRoutes,
+  totalRoutes,
 } = require("./App/router/timberland.Routes");
 var port = process.env.PORT || 3000;
 
@@ -29,8 +30,9 @@ app.use("/api", shopRoute);
 app.use("/api", architectureRoute);
 app.use("/api", carpenterRoute);
 app.use("/api", userRoute);
-app.use('/api', salesPersonRouter)
-app.use('/api', followRoutes)
+app.use("/api", salesPersonRouter);
+app.use("/api", followRoutes);
+app.use("/api", totalRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running to port ${port}`);
