@@ -4,8 +4,12 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/mongodb");
 const morgan = require("morgan");
 var cors = require("cors");
-
+const path = require('path')
 const app = express();
+
+app.set('view engine', 'ejs')
+app.set("views", path.join(__dirname, "App", "views"));
+
 const {
   loginRoute,
   shopRoute,
@@ -15,6 +19,7 @@ const {
   salesPersonRouter,
   followRoutes,
   totalRoutes,
+  viewRoutes,
 } = require("./App/router/timberland.Routes");
 var port = process.env.PORT || 3000;
 
@@ -33,6 +38,7 @@ app.use("/api", userRoute);
 app.use("/api", salesPersonRouter);
 app.use("/api", followRoutes);
 app.use("/api", totalRoutes);
+app.use('/api', viewRoutes)
 
 app.listen(port, () => {
   console.log(`Server is running to port ${port}`);

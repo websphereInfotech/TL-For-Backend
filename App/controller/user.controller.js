@@ -5,6 +5,8 @@ const carpenter = require("../model/carpenter.model");
 const architec = require("../model/architec.model");
 const Follow = require("../model/follow.model");
 const Total = require("../model/total.model");
+const { default: mongoose } = require("mongoose");
+
 // =========================================================CREATE DATA==================================================================
 exports.userdetails_create = async function (req, res) {
   try {
@@ -159,20 +161,49 @@ exports.userdetails_delete = async function (req, res) {
 // //========================================================================VIEW DATA=========================================================
 exports.userdetails_viewdata = async function (req, res) {
   try {
-    const userviewdata = await user
-      .findById({ _id: req.params.id })
-      .populate("architecture_id carpenter_id shop_id");
+    const userviewdata = await user.findById({ _id: req.params.id })
     if (!userviewdata) {
       return res.status(400).json({
         status: "Fail",
         message: "user not found",
       });
     }
-    res.status(201).json({
-      status: "Sucess",
-      message: "User Fetch Sucessfully",
-      data: userviewdata,
+
+    const usersConnectedToTotal = await Total.aggregate([
+      {
+        $match: {
+          user_id: new mongoose.Types.ObjectId(userviewdata),
+        },
+      },  
+      {
+        $lookup: {
+          from: "user",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "totalShow",
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+        },
+      },
+    ]);
+
+    if (usersConnectedToPerson.length === 0) {
+      return res.status(404).json({
+        status: "Fail",
+        message: "No total connected to the user",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      message: "get all data",
+      data1: userviewdata,
+      data: usersConnectedToTotal,
     });
+
   } catch (error) {
     res.status(404).json({
       status: "Fail",

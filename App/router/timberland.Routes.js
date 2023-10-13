@@ -6,6 +6,7 @@ const userRoute = require("./user.Routes");
 const salesPersonRouter = require('./salesPerson.Routes')
 const followRoutes =require('./follow.Routes')
 const totalRoutes = require('./total.Routes')
+const viewRoutes = require('../router/view.Routes');
 module.exports = {
   loginRoute,
   shopRoute,
@@ -14,5 +15,6 @@ module.exports = {
   userRoute,
   salesPersonRouter,
   followRoutes,
-  totalRoutes
+  totalRoutes,
+  viewRoutes
 };

@@ -142,7 +142,7 @@ exports.architec_listdata = async function (req, res) {
         },
       },
     ]);
-    console.log(usersConnectedToarchitecher);
+    
     if (usersConnectedToarchitecher.length === 0) {
       return res.status(404).json({
         status: "Fail",
