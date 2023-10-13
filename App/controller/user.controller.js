@@ -190,7 +190,7 @@ exports.userdetails_viewdata = async function (req, res) {
       },
     ]);
 
-    if (usersConnectedToPerson.length === 0) {
+    if (usersConnectedToTotal.length === 0) {
       return res.status(404).json({
         status: "Fail",
         message: "No total connected to the user",
