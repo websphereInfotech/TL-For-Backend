@@ -152,7 +152,6 @@ exports.carpenters_listdata = async function (req, res) {
     res.status(200).json({
       status: "Success",
       message: "get all data",
-      count: dataCount,
       data: usersConnectedTocarpenter,
     });
   } catch (error) {

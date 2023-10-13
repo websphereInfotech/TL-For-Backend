@@ -125,15 +125,15 @@ exports.architec_listdata = async function (req, res) {
     const usersConnectedToarchitecher = await user.aggregate([
       {
         $match: {
-          architecture_id: new mongoose.Types.ObjectId(architecherId),
+          architec: new mongoose.Types.ObjectId(architecherId),
         },
       },
       {
         $lookup: {
-          from: "carpenters",
-          localField: "carpenter_id",
+          from: "architectuers",
+          localField: "architec",
           foreignField: "_id",
-          as: "carpenterDetails",
+          as: "architecDetails",
         },
       },
       {
@@ -142,7 +142,7 @@ exports.architec_listdata = async function (req, res) {
         },
       },
     ]);
-
+    console.log(usersConnectedToarchitecher);
     if (usersConnectedToarchitecher.length === 0) {
       return res.status(404).json({
         status: "Fail",
@@ -153,7 +153,6 @@ exports.architec_listdata = async function (req, res) {
     res.status(200).json({
       status: "Success",
       message: "get all data",
-      count: dataCount,
       data: usersConnectedToarchitecher,
     });
   } catch (error) {
