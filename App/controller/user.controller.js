@@ -3,8 +3,8 @@ const user = require("../model/user.model");
 const shops = require("../model/shop.model");
 const carpenter = require("../model/carpenter.model");
 const architec = require("../model/architec.model");
-const moment = require("moment");
 const Follow = require("../model/follow.model");
+const Total = require("../model/total.model");
 // =========================================================CREATE DATA==================================================================
 exports.userdetails_create = async function (req, res) {
   try {
@@ -54,7 +54,7 @@ exports.userdetails_create = async function (req, res) {
     const newQutationId = new Follow({
       quatationId: userData._id,
     });
-
+    
     await newQutationId.save();
 
     await userData.save();
@@ -294,6 +294,14 @@ exports.userdetails_searchdata = async function (req, res) {
           localField: "architec",
           foreignField: "_id",
           as: "architecture",
+        },
+      },
+      {
+        $lookup: {
+          from: "salespeople",
+          localField: "sales",
+          foreignField: "_id",
+          as: "salesPersonDetails",
         },
       },
       {

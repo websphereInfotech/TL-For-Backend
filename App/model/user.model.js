@@ -21,32 +21,8 @@ const userschema = Schema(
       require: true,
       unique: true,
     },
-    rate: {
-      type: Number,
-      require: true,
-    },
-    description: {
-      type: String,
-      require: true,
-    },
-    quantity: {
-      type: Number,
-      require: true,
-    },
     Date: {
       type: String,
-      require: true,
-    },
-    area: {
-      type: String,
-      require: true,
-    },
-    size: {
-      type: Number,
-      require: true,
-    },
-    total: {
-      type: Number,
       require: true,
     },
     sales: {
