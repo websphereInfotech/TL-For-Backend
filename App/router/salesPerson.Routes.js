@@ -11,7 +11,7 @@ const {
   salesPersonList,
   salesPersonListData,
   salesPersonListWithUser,
-} = require("../controller/salesPerson.controllar");
+} = require("../controller/salesPerson.controller");
 
 //craete
 router.post("/salesPerson/create", verifytoken, validate("salesPersonCreate"), personCreate );

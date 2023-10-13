@@ -14,7 +14,7 @@ const {
   userRoute,
   salesPersonRouter,
   followRoutes,
-} = require("./App/router/timberland.route");
+} = require("./App/router/timberland.Routes");
 var port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
