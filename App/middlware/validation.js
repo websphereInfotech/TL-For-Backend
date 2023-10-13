@@ -143,60 +143,60 @@ exports.serialNumber = function (req, res, next) {
         next();
     }
 }
-// exports. rate = function (req, res, next) {
-//     var rate = Joi.string().empty().required().regex(/^\d+$/).messages({
-//         'number.base': 'Rate Must Be A Number',
-//         'string.empty': 'Rate Cannot Be Empty',
-//         'any.required': 'required field : Rate',
-//         'string.pattern.base': 'Rate  Must Contain Only Numeric Characters',
+exports. rate = function (req, res, next) {
+    var rate = Joi.string().empty().required().regex(/^\d+$/).messages({
+        'number.base': 'Rate Must Be A Number',
+        'string.empty': 'Rate Cannot Be Empty',
+        'any.required': 'required field : Rate',
+        'string.pattern.base': 'Rate  Must Contain Only Numeric Characters',
 
-//     });
-//     var { error: rateError } = rate.validate(req.body.rate);
-//     if (rateError) {
-//         return res.status(400).json({
-//             status: "fail",
-//             message: rateError.message
-//         });
-//     }
-//     else {
-//         next();
-//     }
-// }
-// exports.description = function (req, res, next) {
-//     var description = Joi.string().empty().required().messages({
-//         'string.base': 'Description Must Be A String',
-//         'string.empty': 'Description Cannot Be Empty',
-//         'any.required': 'required field : Description',
-//     });
-//     var { error: descriptionError } = description.validate(req.body.description);
-//     if (descriptionError) {
-//         return res.status(400).json({
-//             status: "fail",
-//             message:  descriptionError.message
-//         });
-//     }
-//     else {
-//         next();
-//     }
-// }
-// exports.quantity = function (req, res, next) {
-//     var quantity = Joi.string().empty().regex(/^\d+$/).required().messages({
-//         'string.base': 'Quantity Must Be A Number',
-//         'string.empty': 'Quantity Cannot Be Empty',
-//         'any.required': 'required field : Quantity',
-//         'string.pattern.base': 'Quantity Must Contain Only Numeric Characters',
-//     });
-//     var { error: quantityError } = quantity.validate(req.body.quantity);
-//     if (quantityError) {
-//         return res.status(400).json({
-//             status: "fail",
-//             message:  quantityError.message
-//         });
-//     }
-//     else {
-//         next();
-//     }
-// }
+    });
+    var { error: rateError } = rate.validate(req.body.rate);
+    if (rateError) {
+        return res.status(400).json({
+            status: "fail",
+            message: rateError.message
+        });
+    }
+    else {
+        next();
+    }
+}
+exports.description = function (req, res, next) {
+    var description = Joi.string().empty().required().messages({
+        'string.base': 'Description Must Be A String',
+        'string.empty': 'Description Cannot Be Empty',
+        'any.required': 'required field : Description',
+    });
+    var { error: descriptionError } = description.validate(req.body.description);
+    if (descriptionError) {
+        return res.status(400).json({
+            status: "fail",
+            message:  descriptionError.message
+        });
+    }
+    else {
+        next();
+    }
+}
+exports.quantity = function (req, res, next) {
+    var quantity = Joi.string().empty().regex(/^\d+$/).required().messages({
+        'string.base': 'Quantity Must Be A Number',
+        'string.empty': 'Quantity Cannot Be Empty',
+        'any.required': 'required field : Quantity',
+        'string.pattern.base': 'Quantity Must Contain Only Numeric Characters',
+    });
+    var { error: quantityError } = quantity.validate(req.body.quantity);
+    if (quantityError) {
+        return res.status(400).json({
+            status: "fail",
+            message:  quantityError.message
+        });
+    }
+    else {
+        next();
+    }
+}
 
 exports.password = function (req, res, next) {
     var password = Joi.string().empty().required().messages({
