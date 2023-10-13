@@ -6,9 +6,6 @@ const {
   address,
   userName,
   serialNumber,
-  rate,
-  quantity,
-  description,
   password,
   login_id,
 } = require("../App/middlware/validation");
@@ -31,10 +28,7 @@ exports.validate = function (method) {
         userName,
         mobileNo,
         address,
-        serialNumber,
-        rate,
-        quantity,
-        description,
+        serialNumber
       ];
     case "userupdate":
       return [
@@ -42,9 +36,6 @@ exports.validate = function (method) {
         mobileNo,
         serialNumber,
         address,
-        rate,
-        quantity,
-        description,
       ];
     case "login":
       return [login_id, password];
