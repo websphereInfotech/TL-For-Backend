@@ -128,12 +128,12 @@ exports.salesPersonView = async (req, res) => {
   }
 };
 
-// salesPersonList
+// salesPersonList date wise
 exports.salesPersonList = async (req, res) => {
   try {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-    
+
     console.log(startDate, endDate, ">>>>>>>>>>>");
     const usersConnectedToSales = await user.aggregate([
       {
@@ -236,3 +236,22 @@ exports.salesPersonSearch = async (req, res) => {
     });
   }
 };
+
+exports.salesPersonListData = async (req,res)=>{
+   try {
+     const personList = await salesPerson.find();
+     const personListData = await salesPerson.find();
+     var Datacount = personListData.length;
+     res.status(200).json({
+       status: "Success",
+       message: "get all data",
+       count: Datacount,
+       data: personList,
+     });
+   } catch (error) {
+     res.status(404).json({
+       status: "Fail",
+       message: error.message,
+     });
+   }
+}

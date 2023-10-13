@@ -9,6 +9,7 @@ const {
   salesPersonView,
   salesPersonSearch,
   salesPersonList,
+  salesPersonListData,
 } = require("../controller/salesPerson.controllar");
 
 //craete
@@ -26,7 +27,10 @@ router.get("/salesPerson/data/view/:id", verifytoken, salesPersonView);
 // search
 router.get("/salesPerson/data/search", verifytoken, salesPersonSearch);
 
-// list
+// list Date wise
 router.get("/salesPerson/data/list", verifytoken, salesPersonList);
+
+// PersonListData
+router.get("/salesPerson/data", verifytoken, salesPersonListData);
 
 module.exports = router;
