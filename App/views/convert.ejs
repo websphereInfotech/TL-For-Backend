@@ -7,14 +7,59 @@
   </head>
   <body>
     <h1>User Data</h1>
-    <table>
+    <table border="1">
       <thead>
-        <th>Qutation name</th>
-        <th>mobile No</th>
-        <th>address</th>
-        <th>Qutation name</th>
-        <th>Qutation name</th>
+        <tr>
+          <th>Qutation name</th>
+          <th>mobile No</th>
+          <th>address</th>
+          <th>Token Number</th>
+          <th>Date</th>
+          <th>sales Person</th>
+          <th>architec</th>
+          <th>carpenter</th>
+          <th>shop</th>
+        </tr>
       </thead>
+      <tbody>
+        <% users.forEach(function(item){ %>
+        <tr>
+          <td><%= item.userName %></td>
+          <td><%= item.mobileNo %></td>
+          <td><%= item.address %></td>
+          <td><%= item.serialNumber %></td>
+          <td><%= item.Date %></td>
+          <td>
+            <table>
+              <th>name</th>
+              <th>mobile No</th>
+              <tr>
+                <td><%= item.sales %></td>
+                <td><%= item.sales %></td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <th>architecsName</th>
+              <th>mobile No</th>
+              <th>address</th>
+              <tr>
+                <% users.forEach(function(item){ %>
+                <td><%= item.architec[0].architecsName %></td>
+                <td><%= item.architec[0].mobileNo %></td>
+                <td><%= item.architec[0].address %></td>
+                <% }) %>
+              </tr>
+            </table>
+
+          </td>
+          <td><%= item.carpenter %></td>
+          <td><%= item.shop %></td>
+        </tr>
+
+        <% }) %>
+      </tbody>
     </table>
   </body>
 </html>

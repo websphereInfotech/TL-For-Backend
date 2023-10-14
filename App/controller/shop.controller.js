@@ -123,11 +123,11 @@ exports.shopdetails_viewdata = async function (req, res) {
 exports.shopdetails_listdata = async function (req, res) {
   try {
     const shopId = req.params.id;
-
+    
     const usersConnectedToShop = await user.aggregate([
       {
         $match: {
-          shop_id: new mongoose.Types.ObjectId(shopId),
+          shop: new mongoose.Types.ObjectId(shopId),
         },
       },
       {

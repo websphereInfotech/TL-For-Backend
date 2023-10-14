@@ -29,7 +29,7 @@ router.get("/salesPerson/view/:id", verifytoken, salesPersonView);
 router.get("/salesPerson/search", verifytoken, salesPersonSearch);
 
 // list Date wise
-router.get("/salesPerson/list", verifytoken, salesPersonList);
+router.get("/salesPerson/salespersonid/:id", verifytoken, salesPersonList);
 
 // PersonListData
 router.get("/salesPerson/AllList", verifytoken, salesPersonListData);
