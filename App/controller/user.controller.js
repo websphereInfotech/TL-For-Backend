@@ -161,7 +161,11 @@ exports.userdetails_delete = async function (req, res) {
 // //========================================================================VIEW DATA=========================================================
 exports.userdetails_viewdata = async function (req, res) {
   try {
-    const userviewdata = await user.findById({ _id: req.params.id })
+    const userviewdata = await user
+      .findById({ _id: req.params.id })
+      .populate("shop")
+      .populate("carpenter")
+      .populate("architec");
     if (!userviewdata) {
       return res.status(400).json({
         status: "Fail",
@@ -190,12 +194,12 @@ exports.userdetails_viewdata = async function (req, res) {
       },
     ]);
 
-    if (usersConnectedToTotal.length === 0) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "No total connected to the user",
-      });
-    }
+    // if (usersConnectedToTotal.length === 0) {
+    //   return res.status(404).json({
+    //     status: "Fail",
+    //     message: "No total connected to the user",
+    //   });
+    // }
 
     res.status(200).json({
       status: "Success",
