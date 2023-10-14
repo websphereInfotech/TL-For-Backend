@@ -4,14 +4,17 @@ const pdf = require('html-pdf')
 const Total = require('../model/total.model')
 const path = require('path')
 exports.AllFiles = async (req, res) => {
+  const id = req.params.id;
+  console.log(id)
   const users = await user
-    .findById("652a55e731cf11c83f801154")
+    .findById(id)
     .populate("sales")
     .populate("architec")
     .populate("carpenter")
     .populate("shop");
+
   // console.log(users);
-  const Totalwithuser = await Total.find({ user_id: "652a55e731cf11c83f801154"});
+  const Totalwithuser = await Total.find({ user_id: id});
   // console.log(users);
   // res.render(path.join(__dirname, '../views/convert.ejs'), { users , Totalwithuser});
   // let base64 = ''

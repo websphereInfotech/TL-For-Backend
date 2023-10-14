@@ -157,6 +157,7 @@ exports.salesPersonList = async (req, res) => {
 
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
+    const status = req.query.status;
 
     // if(startDate && endDate){
     //     matchField.$match = {
