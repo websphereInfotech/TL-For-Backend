@@ -165,7 +165,8 @@ exports.userdetails_viewdata = async function (req, res) {
       .findById({ _id: req.params.id })
       .populate("shop")
       .populate("carpenter")
-      .populate("architec");
+      .populate("architec")
+      .populate('sales');
     if (!userviewdata) {
       return res.status(400).json({
         status: "Fail",
