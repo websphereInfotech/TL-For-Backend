@@ -221,16 +221,24 @@ exports.salesPersonList = async (req, res) => {
     });
 
     // Unwind the salesPersonDetails array
-    pipeline.push({
-      $unwind: "$connectedUsers",
-    });
+    // pipeline.push({
+    //   $unwind: "$connectedUsers",
+    // });
 
     if (startDate && endDate) {
       pipeline.push({
-        $match: {
-          "connectedUsers.Date": {
-            $gte: startDate,
-            $lte: endDate,
+        $addFields: {
+          connectedUsers: {
+            $filter: {
+              input: "$connectedUsers",
+              as: "connectedUser",
+              cond: {
+                $and: [
+                  { $gte: ["$$connectedUser.Date", startDate] },
+                  { $lte: ["$$connectedUser.Date", endDate] },
+                ],
+              },
+            },
           },
         },
       });

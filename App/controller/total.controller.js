@@ -6,7 +6,7 @@ exports.totalCreate = async (req, res) => {
     const { user_id, description, area, size, rate, quantity, total } =
       req.body;
 
-    const totalOfAll = await Total.create({
+    const totalOfAll = await Total.createMany({
       user_id,
       description,
       area,
