@@ -221,11 +221,6 @@ exports.salesPersonList = async (req, res) => {
       },
     });
 
-    // Unwind the salesPersonDetails array
-    // pipeline.push({
-    //   $unwind: "$connectedUsers",
-    // });
-
     if (startDate && endDate) {
       pipeline.push({
         $addFields: {
@@ -245,8 +240,46 @@ exports.salesPersonList = async (req, res) => {
       });
     }
 
-    const usersConnectedToSales = await salesPerson.aggregate(pipeline) ;
+    // Unwind the salesPersonDetails array
+    pipeline.push({
+      $unwind: "$connectedUsers",
+    });
 
+    pipeline.push({
+      $lookup: {
+        from: "follows",
+        localField: "connectedUsers._id",
+        foreignField: "quatationId",
+        as: "connectedUsers.followDetails",
+      },
+    });
+    
+
+     if (status) {
+       let statusFilter = {};
+       if (status === "approve") {
+         statusFilter = {
+           "connectedUsers.followDetails.Approve": true,
+         };
+       } else if (status === "reject") {
+         statusFilter = {
+           "connectedUsers.followDetails.Reject": true,
+         };
+       } else if (status === "followup") {
+         statusFilter = {
+           "connectedUsers.followDetails.followup": true,
+         };
+       }
+
+       pipeline.push({
+         $match: statusFilter,
+       });
+       console.log(statusFilter);
+     }
+
+
+    const usersConnectedToSales = await salesPerson.aggregate(pipeline);
+    //  console.log(usersConnectedToSales); 
     if (usersConnectedToSales.length === 0) {
       return res.status(404).json({
         status: "Fail",

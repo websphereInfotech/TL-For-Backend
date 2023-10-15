@@ -1,21 +1,14 @@
 const Total = require("../model/total.model");
 const user = require("../model/user.model");
 
+
+// totalCreate
 exports.totalCreate = async (req, res) => {
   try {
-    const { user_id, description, area, size, rate, quantity, total } =
-      req.body;
+    const dataToStore = req.body; // Assuming req.body is an array of data objects
 
-    const totalOfAll = await Total.insertMany({
-      user_id,
-      description,
-      area,
-      size,
-      rate,
-      quantity,
-      total,
-    });
-    await totalOfAll.save();
+    // Create multiple Total documents at once
+    const totalOfAll = await Total.create(dataToStore);
 
     res.status(200).json({
       status: "Success",
@@ -30,14 +23,14 @@ exports.totalCreate = async (req, res) => {
   }
 };
 
-// updateTotal
+// totalupdate
 exports.totalupdate = async (req, res) => {
   try {
     const { description, area, size, rate, quantity, total } = req.body;
-    const userId = req.params.id;
-    console.log(userId);
+    const totalId = req.params.id;
+
     const updatedTotal = await Total.findOneAndUpdate(
-      { user_id: userId },
+      { _id: totalId },
       {
         $set: {
           description,
@@ -70,3 +63,56 @@ exports.totalupdate = async (req, res) => {
     });
   }
 };
+
+// totalView
+exports.totalView = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Fetch Total records for the specified user_id
+    const totalRecords = await Total.find({ user_id: userId });
+
+    res.status(200).json({
+      status: "Success",
+      message: "Total Records Retrieved Successfully",
+      data: totalRecords,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+//totalDelete
+exports.totalDelete = async (req, res) => {
+  try {
+    const totalId = req.params.id;
+
+    // Find the Total record by _id and remove it
+    const deletedTotal = await Total.findByIdAndRemove(totalId);
+
+    if (!deletedTotal) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Total not found',
+      });
+    }
+
+    res.status(200).json({
+      status: 'Success',
+      message: 'Total deleted successfully',
+      data: { },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      message: error.message,
+    });
+  }
+};
+
+
+
+

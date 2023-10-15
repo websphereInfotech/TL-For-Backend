@@ -283,9 +283,14 @@ exports.userdetails_searchdata = async function (req, res) {
     }
 
     if (req.query.serialNumber) {
-      matchField.serialNumber = parseInt(req.query.serialNumber);
-    }
+         const partialSerialNumber = parseInt(req.query.serialNumber);
 
+         matchField.serialNumber = {
+           $regex: `^${partialSerialNumber}`,
+           $options: "i",
+         };
+    }
+    
     const userData = await user.aggregate([
       {
         $match: matchField,
