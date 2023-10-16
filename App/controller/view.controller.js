@@ -13,8 +13,16 @@ exports.AllFiles = async (req, res) => {
     .populate("carpenter")
     .populate("shop");
 
+    console.log(users)
   // console.log(users);
   const Totalwithuser = await Total.find({ user_id: id});
+
+  if(!users){
+    return res.status(404).json({
+      status: "Fail",
+      message: "Quatation not found",
+    });
+  }
   // console.log(users);
   // res.render(path.join(__dirname, '../views/convert.ejs'), { users , Totalwithuser});
   // let base64 = ''
