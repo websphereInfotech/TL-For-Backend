@@ -93,13 +93,6 @@ exports.totalDelete = async (req, res) => {
     // Find the Total record by _id and remove it
     const deletedTotal = await Total.findByIdAndRemove(totalId);
 
-    if (!deletedTotal) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Total not found',
-      });
-    }
-
     res.status(200).json({
       status: 'Success',
       message: 'Total deleted successfully',

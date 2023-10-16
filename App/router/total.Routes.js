@@ -10,6 +10,6 @@ router.put("/total/update/:id", verifytoken, totalupdate);
 
 router.get("/total/view/:id", verifytoken, totalView);
 
-router.get("/total/delete/:id", verifytoken, totalDelete);
+router.delete("/total/delete/:id", verifytoken, totalDelete);
 
 module.exports = router
