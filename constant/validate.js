@@ -8,6 +8,7 @@ const {
   serialNumber,
   password,
   login_id,
+  totalcreate,
 } = require("../App/middlware/validation");
 exports.validate = function (method) {
   switch (method) {
@@ -41,5 +42,7 @@ exports.validate = function (method) {
       return [login_id, password];
     case "salesPersonCreate":
       return [mobileNo];
+    case "totalcreate":
+      return [totalcreate];
   }
 };

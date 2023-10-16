@@ -1,9 +1,10 @@
 var express = require("express")
 var router = express.Router();
 const { totalCreate, totalupdate, totalView, totalDelete } = require('../controller/total.controller')
+const { validate } = require("../../constant/validate");
 const {verifytoken}=require('../middlware/auth')
 
-router.post("/total/create", verifytoken, totalCreate);
+router.post("/total/create", verifytoken, validate("totalcreate"), totalCreate);
 
 router.put("/total/update/:id", verifytoken, totalupdate);
 
