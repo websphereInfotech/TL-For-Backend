@@ -13,7 +13,6 @@ exports.AllFiles = async (req, res) => {
     .populate("carpenter")
     .populate("shop");
 
-    console.log(users)
   // console.log(users);
   const Totalwithuser = await Total.find({ user_id: id});
 
@@ -26,9 +25,9 @@ exports.AllFiles = async (req, res) => {
   // console.log(users);
   // res.render(path.join(__dirname, '../views/convert.ejs'), { users , Totalwithuser});
   // let base64 = ''
-  const html =await  ejs.renderFile(path.join(__dirname, '../views/convert.ejs'),{users, Totalwithuser});
+  const html = await  ejs.renderFile(path.join(__dirname, '../views/convert.ejs'),{users, Totalwithuser});
   // console.log(html)
-  const pdf1 =await pdf.create(html).toBuffer((err, buffer)=>{
+  const pdf1 = pdf.create(html).toBuffer((err, buffer)=>{
     // console.log(buffer)
     const base64String = buffer.toString('base64');
     // console.log(base64String)
