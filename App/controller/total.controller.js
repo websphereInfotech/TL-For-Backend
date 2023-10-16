@@ -29,10 +29,7 @@ exports.totalupdate = async (req, res) => {
     const { description, area, size, rate, quantity, total } = req.body;
     const totalId = req.params.id;
 
-    const updatedTotal = await Total.findOneAndUpdate(
-      { _id: totalId },
-      {
-        $set: {
+    const updatedTotal = await Total.findByIdAndUpdate(totalId , {
           description,
           area,
           size,
@@ -40,7 +37,6 @@ exports.totalupdate = async (req, res) => {
           quantity,
           total,
         },
-      },
       { new: true }
     );
 
