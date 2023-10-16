@@ -57,9 +57,9 @@ exports.userdetails_create = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architectureId: architec,
-      carpenterId: carpenter,
-      shopId: shop,
+      architec: architec,
+      carpenter: carpenter,
+      shop: shop,
     };
     let token = jwt.sign(payload, process.env.KEY, { expiresIn: "1d" });
 
@@ -106,9 +106,9 @@ exports.userdetails_update = async function (req, res) {
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
-    console.log(userdata)
+    // console.log(userdata)
     if (!userdata) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: "Fail",
         message: "user not found",
       });
@@ -119,8 +119,8 @@ exports.userdetails_update = async function (req, res) {
       data: userdata,
     });
   } catch (error) {
-    console.log(error)
-    res.status(404).json({
+    // console.log(error)
+    res.status(400).json({
       status: "Fail",
       message: "user not found",
     });
