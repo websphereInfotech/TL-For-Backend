@@ -35,7 +35,6 @@ exports.validate = function (method) {
       return [
         userName,
         mobileNo,
-        serialNumber,
         address,
       ];
     case "login":

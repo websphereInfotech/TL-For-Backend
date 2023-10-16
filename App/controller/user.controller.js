@@ -44,7 +44,7 @@ exports.userdetails_create = async function (req, res) {
     const newQutationId = new Follow({
       quatationId: userData._id,
     });
-    
+
     await newQutationId.save();
 
     await userData.save();
@@ -80,7 +80,7 @@ exports.userdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res) {
   try {
-    const quatationId = req.params.id
+    const quatationId = req.params.id;
     const {
       userName,
       mobileNo,
@@ -103,11 +103,10 @@ exports.userdetails_update = async function (req, res) {
       carpenter_id: carpenter,
       shop_id: shop,
     };
-    const userdata = await user.findByIdAndUpdate(
-      { _id: quatationId },
-      { $set: updateuserdata },
-      { new: true }
-    );
+    const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
+      new: true,
+    });
+    console.log(userdata)
     if (!userdata) {
       return res.status(400).json({
         status: "Fail",
@@ -120,6 +119,7 @@ exports.userdetails_update = async function (req, res) {
       data: userdata,
     });
   } catch (error) {
+    console.log(error)
     res.status(404).json({
       status: "Fail",
       message: "user not found",
@@ -155,7 +155,7 @@ exports.userdetails_viewdata = async function (req, res) {
       .populate("shop")
       .populate("carpenter")
       .populate("architec")
-      .populate('sales');
+      .populate("sales");
     if (!userviewdata) {
       return res.status(400).json({
         status: "Fail",
@@ -168,7 +168,7 @@ exports.userdetails_viewdata = async function (req, res) {
         $match: {
           user_id: new mongoose.Types.ObjectId(userviewdata),
         },
-      },  
+      },
       {
         $lookup: {
           from: "user",
@@ -197,7 +197,6 @@ exports.userdetails_viewdata = async function (req, res) {
       data1: userviewdata,
       data: usersConnectedToTotal,
     });
-
   } catch (error) {
     res.status(404).json({
       status: "Fail",
@@ -272,22 +271,22 @@ exports.userdetails_searchdata = async function (req, res) {
     }
 
     if (req.query.serialNumber) {
-        //  matchField.serialNumber = parseInt(req.query.serialNumber);
+      //  matchField.serialNumber = parseInt(req.query.serialNumber);
 
-          matchField = {
-            $expr: {
-              $regexMatch: {
-                input: { $toString: "$serialNumber" },
-                regex: req.query.serialNumber,
-              },
-            },
-          };
-        //  matchField.serialNumber =  new RegExp(req.query.serialNumber, "i")
+      matchField = {
+        $expr: {
+          $regexMatch: {
+            input: { $toString: "$serialNumber" },
+            regex: req.query.serialNumber,
+          },
+        },
+      };
+      //  matchField.serialNumber =  new RegExp(req.query.serialNumber, "i")
     }
-    
+
     const userData = await user.aggregate([
       {
-        $match: matchField
+        $match: matchField,
       },
       {
         $lookup: {
