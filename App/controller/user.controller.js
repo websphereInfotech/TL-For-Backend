@@ -80,6 +80,7 @@ exports.userdetails_create = async function (req, res) {
 //==============================================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res) {
   try {
+    const quatationId = req.params.id
     const {
       userName,
       mobileNo,
@@ -103,7 +104,7 @@ exports.userdetails_update = async function (req, res) {
       shop_id: shop,
     };
     const userdata = await user.findByIdAndUpdate(
-      { _id: req.params.id },
+      { _id: quatationId },
       { $set: updateuserdata },
       { new: true }
     );
