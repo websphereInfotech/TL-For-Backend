@@ -36,7 +36,7 @@ exports.userdetails_create = async function (req, res) {
       mobileNo,
       address,
       serialNumber,
-      Date,
+      Date: Date,
       sales,
       architec,
       carpenter,
@@ -130,25 +130,19 @@ exports.userdetails_update = async function (req, res) {
       carpenter_id: carpenter,
       shop_id: shop,
     };
-      console.log(updateuserdata);
-    const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
+      // console.log(updateuserdata);
+    const userdata = await user.findByIdAndUpdate(quatationId, { updateuserdata }, {
       new: true,
     });
+    
     console.log(userdata);
 
-    if (!userdata) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "Quotation not found",
-      });
-    }
-
-    const totalremove = await Total.findByIdAndDelete(user_id);
+      const totalRemove = await Total.deleteMany({ user_id: quatationId });
     const addTotalData = addtotal.map((item) => ({
       user_id: userdata._id,
       ...item,
     }));
-    // console.log(addTotalData);
+    console.log(addTotalData);
     const totalOfAll = await Total.create(addTotalData);
     const ResponseUserData = {
       id: userdata._id,

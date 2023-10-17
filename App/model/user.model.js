@@ -22,7 +22,7 @@ const userschema = Schema(
       unique: true,
     },
     Date: {
-      type: String,
+      type: Date,
       require: true,
     },
     sales: {

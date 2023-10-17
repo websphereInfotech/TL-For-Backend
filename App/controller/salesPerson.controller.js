@@ -157,45 +157,21 @@ exports.salesPersonList = async (req, res) => {
     const endDate = req.query.endDate;
     const status = req.query.status;
 
-    let matchField = {};
-
-    // if(startDate && endDate){
-    //     matchField.$match = {
-    //       "connectedUsers.Date": {
-    //         $gte: startDate,
-    //         $lte: endDate,
-    //       },
-    //     };
-    // }
-    // const dateMatch = {};
+    let matchField = {}; // Initialize an empty object
 
     if (startDate && endDate) {
-      matchField.$match = {
-        ["connectedUsers.Date"]: {
-          $gte: startDate,
-          $lte: endDate,
-        },
-      };
+      matchField["connectedUsers.Date"] = { $gte: startDate, $lte: endDate };
     }
-
-      if (status) {
-    //    let statusFilter = {};
-       if (status === "approve") {
-         matchField = {
-           "connectedUsers.followDetails.Approve": true,
-         };
-       } else if (status === "reject") {
-         matchField = {
-           "connectedUsers.followDetails.Reject": true,
-         };
-       } else if (status === "followup") {
-         matchField = {
-           "connectedUsers.followDetails.followup": true,
-         };
-       }
-  }
-
-// console.log(matchField);
+    console.log();
+    if (status) {
+      if (status === "approve") {
+        matchField["connectedUsers.followDetails.Approve"] = true;
+      } else if (status === "reject") {
+        matchField["connectedUsers.followDetails.Reject"] = true;
+      } else if (status === "followup") {
+        matchField["connectedUsers.followDetails.followup"] = true;
+      }
+    }
 
     const usersConnectedToSales = await salesPerson.aggregate([
       {
@@ -231,7 +207,7 @@ exports.salesPersonList = async (req, res) => {
         },
       },
       {
-        $match: matchField
+        $match: matchField, // Use the matchField object directly here
       },
       {
         $project: {
@@ -240,94 +216,20 @@ exports.salesPersonList = async (req, res) => {
       },
     ]);
 
-    // const pipeline = [];
-
-    // // Match stage to find the salesperson by ID
-    // pipeline.push({
-    //   $match: {
-    //     _id: new Types.ObjectId(id),
-    //   },
-    // });
-
-    // // Lookup stage to get the salesperson details
-    // pipeline.push({
-    //   $lookup: {
-    //     from: "users",
-    //     localField: "_id",
-    //     foreignField: "sales",
-    //     as: "connectedUsers",
-    //   },
-    // });
-
-    // if (startDate && endDate) {
-    //   pipeline.push({
-    //     $addFields: {
-    //       connectedUsers: {
-    //         $filter: {
-    //           input: "$connectedUsers",
-    //           as: "connectedUser",
-    //           cond: {
-    //             $and: [
-    //               { $gte: ["$$connectedUser.Date", startDate] },
-    //               { $lte: ["$$connectedUser.Date", endDate] },
-    //             ],
-    //           },
-    //         },
-    //       },
-    //     },
-    //   });
-    // }
-
-    // // Unwind the salesPersonDetails array
-    // pipeline.push({
-    //   $unwind: "$connectedUsers",
-    // });
-
-    // pipeline.push({
-    //   $lookup: {
-    //     from: "follows",
-    //     localField: "connectedUsers._id",
-    //     foreignField: "quatationId",
-    //     as: "connectedUsers.followDetails",
-    //   },
-    // });
-
-    //  if (status) {
-    //    let statusFilter = {};
-    //    if (status === "approve") {
-    //      statusFilter = {
-    //        "connectedUsers.followDetails.Approve": true,
-    //      };
-    //    } else if (status === "reject") {
-    //      statusFilter = {
-    //        "connectedUsers.followDetails.Reject": true,
-    //      };
-    //    } else if (status === "followup") {
-    //      statusFilter = {
-    //        "connectedUsers.followDetails.followup": true,
-    //      };
-    //    }
-
-    //    pipeline.push({
-    //      $match: statusFilter,
-    //    });
-    //    console.log(statusFilter);
-    //  }
-
-    // const usersConnectedToSales = await salesPerson.aggregate(pipeline);
-    //  console.log(usersConnectedToSales);
     if (usersConnectedToSales.length === 0) {
       return res.status(404).json({
         status: "Fail",
         message: "No users connected to the SalesPerson",
       });
     }
+
     res.status(200).json({
       status: "Success",
-      message: "get all data",
+      message: "Get all data",
       data: usersConnectedToSales,
     });
   } catch (error) {
+    console.log(error);
     res.status(404).json({
       status: "Fail",
       message: error.message,
