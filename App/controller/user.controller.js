@@ -135,14 +135,14 @@ exports.userdetails_update = async function (req, res) {
       new: true,
     });
     
-    console.log(userdata);
+    // console.log(userdata);
 
-      const totalRemove = await Total.deleteMany({ user_id: quatationId });
+    const totalRemove = await Total.deleteMany({ user_id: quatationId });
     const addTotalData = addtotal.map((item) => ({
       user_id: userdata._id,
       ...item,
     }));
-    console.log(addTotalData);
+    // console.log(addTotalData);
     const totalOfAll = await Total.create(addTotalData);
     const ResponseUserData = {
       id: userdata._id,

@@ -153,16 +153,12 @@ exports.salesPersonListData = async (req, res) => {
 exports.salesPersonList = async (req, res) => {
   try {
     const id = req.params.id;
-    const startDate = req.query.startDate;
-    const endDate = req.query.endDate;
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
     const status = req.query.status;
 
     let matchField = {}; // Initialize an empty object
 
-    if (startDate && endDate) {
-      matchField["connectedUsers.Date"] = { $gte: startDate, $lte: endDate };
-    }
-    console.log();
     if (status) {
       if (status === "approve") {
         matchField["connectedUsers.followDetails.Approve"] = true;
@@ -172,6 +168,18 @@ exports.salesPersonList = async (req, res) => {
         matchField["connectedUsers.followDetails.followup"] = true;
       }
     }
+
+    // function getFollowDetailsStatusFilter(status) {
+    //   if (status === "approve") {
+    //     return { "connectedUsers.followDetails.Approve": true };
+    //   } else if (status === "reject") {
+    //     return { "connectedUsers.followDetails.Reject": true };
+    //   } else if (status === "followup") {
+    //     return { "connectedUsers.followDetails.followup": true };
+    //   } else {
+    //     return {}; // Return an empty object if status is not provided or invalid
+    //   }
+    // }
 
     const usersConnectedToSales = await salesPerson.aggregate([
       {
@@ -199,6 +207,14 @@ exports.salesPersonList = async (req, res) => {
         },
       },
       {
+        $match: {
+          $and: [
+            { "connectedUsers.Date": { $gte: startDate } },
+            { "connectedUsers.Date": { $lte: endDate } },
+          ],
+        },
+      },
+      {
         $group: {
           _id: "$_id",
           userName: { $first: "$Name" },
@@ -207,7 +223,7 @@ exports.salesPersonList = async (req, res) => {
         },
       },
       {
-        $match: matchField, // Use the matchField object directly here
+        $match: matchField,
       },
       {
         $project: {
@@ -216,13 +232,13 @@ exports.salesPersonList = async (req, res) => {
       },
     ]);
 
-    if (usersConnectedToSales.length === 0) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "No users connected to the SalesPerson",
-      });
-    }
-
+    // console.log(usersConnectedToSales);
+    // if (usersConnectedToSales.length === 0) {
+    //   return res.status(404).json({
+    //     status: "Fail",
+    //     message: "No users connected to the SalesPerson",
+    //   });
+    // }
     res.status(200).json({
       status: "Success",
       message: "Get all data",
