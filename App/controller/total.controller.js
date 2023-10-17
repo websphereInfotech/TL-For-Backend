@@ -8,8 +8,7 @@ exports.totalCreate = async (req, res) => {
     const dataToStore = req.body; // Assuming req.body is an array of data objects
 
     // Create multiple Total documents at once
-    const totalOfAll = await Total.create(dataToStore);
-
+   
     res.status(200).json({
       status: "Success",
       message: "Total Create Successfully",

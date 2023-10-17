@@ -153,11 +153,11 @@ exports.salesPersonListData = async (req, res) => {
 exports.salesPersonList = async (req, res) => {
   try {
     const id = req.params.id;
-    // let matchField = {};
-
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
     const status = req.query.status;
+
+    let matchField = {};
 
     // if(startDate && endDate){
     //     matchField.$match = {
@@ -168,118 +168,154 @@ exports.salesPersonList = async (req, res) => {
     //     };
     // }
     // const dateMatch = {};
-    // if (startDate && endDate) {
-    //   dateMatch["connectedUsers.Date"] = {
-    //     $gte: new Date(startDate),
-    //     $lte: new Date(endDate),
-    //   };
-    // }
-
-    // const usersConnectedToSales = await salesPerson.aggregate([
-    //   {
-    //     $match: {
-    //       _id: new Types.ObjectId("6527d1f28301166df4bfc919"),
-    //     },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "users",
-    //       localField: "_id",
-    //       foreignField: "sales",
-    //       as: "connectedUsers",
-    //     },
-    //   },
-    //   {
-    //     $unwind: "$connectedUsers",
-    //   },
-    //   {
-    //     $match: dateMatch
-    //   },
-    //   // {
-    //   //   $project: {
-    //   //     __v: 0,
-    //   //   },
-    //   // },
-    // ]);
-
-    const pipeline = [];
-
-    // Match stage to find the salesperson by ID
-    pipeline.push({
-      $match: {
-        _id: new Types.ObjectId(id),
-      },
-    });
-
-    // Lookup stage to get the salesperson details
-    pipeline.push({
-      $lookup: {
-        from: "users",
-        localField: "_id",
-        foreignField: "sales",
-        as: "connectedUsers",
-      },
-    });
 
     if (startDate && endDate) {
-      pipeline.push({
-        $addFields: {
-          connectedUsers: {
-            $filter: {
-              input: "$connectedUsers",
-              as: "connectedUser",
-              cond: {
-                $and: [
-                  { $gte: ["$$connectedUser.Date", startDate] },
-                  { $lte: ["$$connectedUser.Date", endDate] },
-                ],
-              },
-            },
-          },
+      matchField.$match = {
+        ["connectedUsers.Date"]: {
+          $gte: startDate,
+          $lte: endDate,
         },
-      });
+      };
     }
 
-    // Unwind the salesPersonDetails array
-    pipeline.push({
-      $unwind: "$connectedUsers",
-    });
-
-    pipeline.push({
-      $lookup: {
-        from: "follows",
-        localField: "connectedUsers._id",
-        foreignField: "quatationId",
-        as: "connectedUsers.followDetails",
-      },
-    });
-    
-
-     if (status) {
-       let statusFilter = {};
+      if (status) {
+    //    let statusFilter = {};
        if (status === "approve") {
-         statusFilter = {
+         matchField = {
            "connectedUsers.followDetails.Approve": true,
          };
        } else if (status === "reject") {
-         statusFilter = {
+         matchField = {
            "connectedUsers.followDetails.Reject": true,
          };
        } else if (status === "followup") {
-         statusFilter = {
+         matchField = {
            "connectedUsers.followDetails.followup": true,
          };
        }
+  }
 
-       pipeline.push({
-         $match: statusFilter,
-       });
-       console.log(statusFilter);
-     }
+// console.log(matchField);
 
+    const usersConnectedToSales = await salesPerson.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "sales",
+          as: "connectedUsers",
+        },
+      },
+      {
+        $unwind: "$connectedUsers",
+      },
+      {
+        $lookup: {
+          from: "follows",
+          localField: "connectedUsers._id",
+          foreignField: "quatationId",
+          as: "connectedUsers.followDetails",
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          userName: { $first: "$Name" },
+          mobileNo: { $first: "$mobileNo" },
+          connectedUsers: { $push: "$connectedUsers" },
+        },
+      },
+      {
+        $match: matchField
+      },
+      {
+        $project: {
+          __v: 0,
+        },
+      },
+    ]);
 
-    const usersConnectedToSales = await salesPerson.aggregate(pipeline);
-    //  console.log(usersConnectedToSales); 
+    // const pipeline = [];
+
+    // // Match stage to find the salesperson by ID
+    // pipeline.push({
+    //   $match: {
+    //     _id: new Types.ObjectId(id),
+    //   },
+    // });
+
+    // // Lookup stage to get the salesperson details
+    // pipeline.push({
+    //   $lookup: {
+    //     from: "users",
+    //     localField: "_id",
+    //     foreignField: "sales",
+    //     as: "connectedUsers",
+    //   },
+    // });
+
+    // if (startDate && endDate) {
+    //   pipeline.push({
+    //     $addFields: {
+    //       connectedUsers: {
+    //         $filter: {
+    //           input: "$connectedUsers",
+    //           as: "connectedUser",
+    //           cond: {
+    //             $and: [
+    //               { $gte: ["$$connectedUser.Date", startDate] },
+    //               { $lte: ["$$connectedUser.Date", endDate] },
+    //             ],
+    //           },
+    //         },
+    //       },
+    //     },
+    //   });
+    // }
+
+    // // Unwind the salesPersonDetails array
+    // pipeline.push({
+    //   $unwind: "$connectedUsers",
+    // });
+
+    // pipeline.push({
+    //   $lookup: {
+    //     from: "follows",
+    //     localField: "connectedUsers._id",
+    //     foreignField: "quatationId",
+    //     as: "connectedUsers.followDetails",
+    //   },
+    // });
+
+    //  if (status) {
+    //    let statusFilter = {};
+    //    if (status === "approve") {
+    //      statusFilter = {
+    //        "connectedUsers.followDetails.Approve": true,
+    //      };
+    //    } else if (status === "reject") {
+    //      statusFilter = {
+    //        "connectedUsers.followDetails.Reject": true,
+    //      };
+    //    } else if (status === "followup") {
+    //      statusFilter = {
+    //        "connectedUsers.followDetails.followup": true,
+    //      };
+    //    }
+
+    //    pipeline.push({
+    //      $match: statusFilter,
+    //    });
+    //    console.log(statusFilter);
+    //  }
+
+    // const usersConnectedToSales = await salesPerson.aggregate(pipeline);
+    //  console.log(usersConnectedToSales);
     if (usersConnectedToSales.length === 0) {
       return res.status(404).json({
         status: "Fail",

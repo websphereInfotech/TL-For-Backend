@@ -20,6 +20,7 @@ exports.userdetails_create = async function (req, res) {
       architec,
       carpenter,
       shop,
+      addtotal,
     } = req.body;
 
     const checkserialno = await user.findOne({ serialNumber });
@@ -49,6 +50,15 @@ exports.userdetails_create = async function (req, res) {
 
     await userData.save();
 
+    const addTotalData = addtotal.map((item) => ({
+      user_id: userData._id,
+      ...item,
+    }));
+    // console.log(addTotalData);
+    const totalOfAll = await Total.create(addTotalData);
+    // console.log(totalOfAll);
+    // console.log(userData);
+    // console.log(userData.totalOfAll);
     const payload = {
       id: userData._id,
       userName: userName,
@@ -62,11 +72,25 @@ exports.userdetails_create = async function (req, res) {
       shop: shop,
     };
     let token = jwt.sign(payload, process.env.KEY, { expiresIn: "1d" });
-
+    
+    const ResponseUserData = {
+      id: userData._id,
+        userName: userName,
+        mobileNo: mobileNo,
+        address: address,
+        serialNumber: serialNumber,
+        Date: Date,
+        sales: sales,
+        architec: architec,
+        carpenter: carpenter,
+        shop: shop,
+        addtotal: totalOfAll,
+      };
+      userData.totalOfAll = totalOfAll;
     res.status(200).json({
       status: "Success",
-      message: "User Create Successfully",
-      data: userData,
+      message: "Quotation Create Successfully",
+      data: ResponseUserData,
       token: token,
     });
   } catch (error) {
@@ -81,6 +105,7 @@ exports.userdetails_create = async function (req, res) {
 exports.userdetails_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
+    console.log(quatationId);
     const {
       userName,
       mobileNo,
@@ -91,7 +116,9 @@ exports.userdetails_update = async function (req, res) {
       architec,
       carpenter,
       shop,
+      addtotal
     } = req.body;
+
     const updateuserdata = {
       userName: userName,
       mobileNo: mobileNo,
@@ -103,26 +130,52 @@ exports.userdetails_update = async function (req, res) {
       carpenter_id: carpenter,
       shop_id: shop,
     };
+      console.log(updateuserdata);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
-    // console.log(userdata)
+    console.log(userdata);
+
     if (!userdata) {
       return res.status(404).json({
         status: "Fail",
-        message: "user not found",
+        message: "Quotation not found",
       });
     }
+
+    const totalremove = await Total.findByIdAndDelete(user_id);
+    const addTotalData = addtotal.map((item) => ({
+      user_id: userdata._id,
+      ...item,
+    }));
+    // console.log(addTotalData);
+    const totalOfAll = await Total.create(addTotalData);
+    const ResponseUserData = {
+      id: userdata._id,
+      userName: userName,
+      mobileNo: mobileNo,
+      address: address,
+      serialNumber: serialNumber,
+      Date: Date,
+      sales: sales,
+      architec: architec,
+      carpenter: carpenter,
+      shop: shop,
+      addtotal: totalOfAll,
+    };
+    userdata.totalOfAll = totalOfAll;
+    // console.log(userdata)
+
     res.status(200).json({
       status: "Success",
-      message: "User Update Successfully",
-      data: userdata,
+      message: "Quotation Update Successfully",
+      data: ResponseUserData,
     });
   } catch (error) {
     // console.log(error)
     res.status(400).json({
       status: "Fail",
-      message: "user not found",
+      message: "Quotation not found",
     });
   }
 };
