@@ -14,7 +14,7 @@ exports.approve = async (req, res) => {
 
     const existingQutation = await Follow.findOneAndUpdate(
       { quatationId: quatationId, followup: true },
-      { $set: { followup: false, Approve: true, Reject: true }},
+      { $set: { followup: false, Approve: true, Reject: false }},
       { new:true }
     );
 
