@@ -210,11 +210,12 @@ exports.salesPersonList = async (req, res) => {
         $match: matchField,
       },
       {
-        $match: {
+        $match: { 
+          // "connectedUsers.Date": { $gte: startDate, $lte: endDate },
           $and: [
-            { "connectedUsers.Date": { $gte: startDate || new Date(0) } },
-            { "connectedUsers.Date": { $lte: endDate || new Date() } },
-          ],
+                { "connectedUsers.Date": { $gte: startDate } },
+                { "connectedUsers.Date": { $lte: endDate } },
+              ],
         },
       },
       {
@@ -233,12 +234,12 @@ exports.salesPersonList = async (req, res) => {
     ]);
 
     // console.log(usersConnectedToSales);
-    if (usersConnectedToSales.length === 0) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "No users connected to the SalesPerson",
-      });
-    }
+    // if (usersConnectedToSales.length === 0) {
+    //   return res.status(404).json({
+    //     status: "Fail",
+    //     message: "No users connected to the SalesPerson",
+    //   });
+    // }
     console.log(usersConnectedToSales);
     res.status(200).json({
       status: "Success",
@@ -276,7 +277,7 @@ exports.salesPersonList = async (req, res) => {
   //     const usersConnectedToSales = await salesPerson.aggregate([
   //       {
   //         $match: {
-  //           _id: new Types.ObjectId("6527d1f28301166df4bfc919"),
+  //           _id: new Types.ObjectId(id),
   //         },
   //       },
   //       {

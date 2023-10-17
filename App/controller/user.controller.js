@@ -131,7 +131,7 @@ exports.userdetails_update = async function (req, res) {
       shop_id: shop,
     };
       // console.log(updateuserdata);
-    const userdata = await user.findByIdAndUpdate(quatationId, { updateuserdata }, {
+    const userdata = await user.findByIdAndUpdate(quatationId,  updateuserdata , {
       new: true,
     });
     
