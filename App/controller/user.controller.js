@@ -203,6 +203,7 @@ exports.userdetails_viewdata = async function (req, res) {
       .populate("carpenter")
       .populate("architec")
       .populate("sales");
+      
     if (!userviewdata) {
       return res.status(400).json({
         status: "Fail",

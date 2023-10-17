@@ -6,6 +6,7 @@ exports.login_page = async function(req,res){
     try {
         const {login_id,password}=req.body
         const loginIdFind=await login.findOne({login_id})
+        // console.log(login_id);
         if(!loginIdFind){
             return res.status(404).json({
                 status:"Fail",
@@ -23,6 +24,7 @@ exports.login_page = async function(req,res){
             login_id:loginIdFind.login_id,
             password:loginIdFind.password
         }
+        
         var token = jwt.sign(payload, process.env.KEY,{expiresIn:'1d'});
         const tokensave = Token({
             id:loginIdFind._id,
