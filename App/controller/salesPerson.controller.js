@@ -153,8 +153,12 @@ exports.salesPersonListData = async (req, res) => {
 exports.salesPersonList = async (req, res) => {
   try {
     const id = req.params.id;
-    const startDate = req.query.startDate ? new Date(req.query.startDate) : new Date(0);
-    const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+    const startDate = req.query.startDate
+      ? new Date(req.query.startDate)
+      : new Date(0);
+    const endDate = req.query.endDate
+      ? new Date(req.query.endDate)
+      : new Date();
     const status = req.query.status;
 
     let matchField = {}; // Initialize an empty object
@@ -210,15 +214,6 @@ exports.salesPersonList = async (req, res) => {
         $match: matchField,
       },
       {
-        $match: { 
-          // "connectedUsers.Date": { $gte: startDate, $lte: endDate },
-          $and: [
-                { "connectedUsers.Date": { $gte: startDate } },
-                { "connectedUsers.Date": { $lte: endDate } },
-              ],
-        },
-      },
-      {
         $group: {
           _id: "$_id",
           userName: { $first: "$Name" },
@@ -255,87 +250,86 @@ exports.salesPersonList = async (req, res) => {
   }
 };
 
-  // exports.salesPersonList = async (req, res) => {
-  //   try {
-  //     const id = req.params.id;
-  //     const startDate = req.query.startDate ? new Date(req.query.startDate) : new Date(0);
-  //     const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
-  //     const status = req.query.status;
+// exports.salesPersonList = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const startDate = req.query.startDate ? new Date(req.query.startDate) : new Date(0);
+//     const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+//     const status = req.query.status;
 
-  //     let matchField = {}; // Initialize an empty object
+//     let matchField = {}; // Initialize an empty object
 
-  //     if (status) {
-  //       if (status === "approve") {
-  //         matchField["connectedUsers.followDetails.Approve"] = true;
-  //       } else if (status === "reject") {
-  //         matchField["connectedUsers.followDetails.Reject"] = true;
-  //       } else if (status === "followup") {
-  //         matchField["connectedUsers.followDetails.followup"] = true;
-  //       }
-  //     }
-  //     console.log(matchField);
-  //     const usersConnectedToSales = await salesPerson.aggregate([
-  //       {
-  //         $match: {
-  //           _id: new Types.ObjectId(id),
-  //         },
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: "users",
-  //           localField: "_id",
-  //           foreignField: "sales",
-  //           as: "connectedUsers",
-  //         },
-  //       },
-  //       {
-  //         $unwind: "$connectedUsers",
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: "follows",
-  //           localField: "connectedUsers._id",
-  //           foreignField: "quatationId",
-  //           as: "connectedUsers.followDetails",
-  //         },
-  //       },
+//     if (status) {
+//       if (status === "approve") {
+//         matchField["connectedUsers.followDetails.Approve"] = true;
+//       } else if (status === "reject") {
+//         matchField["connectedUsers.followDetails.Reject"] = true;
+//       } else if (status === "followup") {
+//         matchField["connectedUsers.followDetails.followup"] = true;
+//       }
+//     }
+//     console.log(matchField);
+//     const usersConnectedToSales = await salesPerson.aggregate([
+//       {
+//         $match: {
+//           _id: new Types.ObjectId(id),
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "_id",
+//           foreignField: "sales",
+//           as: "connectedUsers",
+//         },
+//       },
+//       {
+//         $unwind: "$connectedUsers",
+//       },
+//       {
+//         $lookup: {
+//           from: "follows",
+//           localField: "connectedUsers._id",
+//           foreignField: "quatationId",
+//           as: "connectedUsers.followDetails",
+//         },
+//       },
 
-  //       {
-  //         $match: {
-  //           "connectedUsers.Date": { $gte: startDate, $lte: endDate },
-  //           ...matchField, // Include the status filter
-  //         },
-  //       },
-  //       {
-  //         $group: {
-  //           _id: "$_id",
-  //           userName: { $first: "$Name" },
-  //           mobileNo: { $first: "$mobileNo" },
-  //           connectedUsers: { $push: "$connectedUsers" },
-  //         },
-  //       },
-  //       {
-  //         $project: {
-  //           __v: 0,
-  //         },
-  //       },
-  //     ]);
-  //     console.log(usersConnectedToSales);
-  //     res.status(200).json({
-  //       status: "Success",
-  //       message: "Get all data",
-  //       data: usersConnectedToSales,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(404).json({
-  //       status: "Fail",
-  //       message: error.message,
-  //     });
-  //   }
-  // };
+//       {
+//         $match: {
+//           "connectedUsers.Date": { $gte: startDate, $lte: endDate },
+//           ...matchField, // Include the status filter
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$_id",
+//           userName: { $first: "$Name" },
+//           mobileNo: { $first: "$mobileNo" },
+//           connectedUsers: { $push: "$connectedUsers" },
+//         },
+//       },
+//       {
+//         $project: {
+//           __v: 0,
+//         },
+//       },
+//     ]);
+//     console.log(usersConnectedToSales);
+//     res.status(200).json({
+//       status: "Success",
+//       message: "Get all data",
+//       data: usersConnectedToSales,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(404).json({
+//       status: "Fail",
+//       message: error.message,
+//     });
+//   }
+// };
 
-  
 // salesPersonSearch
 exports.salesPersonSearch = async (req, res) => {
   try {
