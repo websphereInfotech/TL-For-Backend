@@ -57,7 +57,7 @@ exports.Reject = async (req, res) => {
     );
 
     if (!existingQutation) {
-      return res.status(403).json({
+      return res.status(404).json({
         status: "Fail",
         message: "permission not update ",
       });

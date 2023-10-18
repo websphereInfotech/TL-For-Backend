@@ -44,7 +44,11 @@
         }
         .alldata{
           display: flex;
-          justify-content: space-around;
+          
+        }
+        .quotation-name{
+          display: flex;
+          justify-content: center;
           align-items: center;
         }
     </style> 
@@ -61,10 +65,19 @@
     <h2 style="text-align: center;">Quotation</h2>
 <div class="alldata">
       <div class="quotation-name">
-        <p><h3>Quotation name:- <%= users.userName %></h3></p>
-        <p><h3>mobile No:-<%= users.mobileNo %></h3></p>
-        <p><h3>address:- <%= users.address %></h3></p>
+        <!-- <p><h3>Quotation name:- <%= users.userName %></h3></p> -->
+        <div>Quotation name:-</div>
+        <div><%= users.userName %></div>
       </div>
+      <div class="quotation-name">
+          <div>mobile No:-</div>
+          <div><%= users.mobileNo %></div>
+      </div>
+           <div class="quotation-name">
+          <div>address:-</div>
+          <div><%= users.address %></div>
+      </div>
+</div>
       <div class="quotation-address">
         <p><h3>Token Number:- <%= users.serialNumber %></h3></p>
         <p><h3>Date:- <%= new Date(users.Date).toLocaleDateString('en-GB')  %></h3></p>

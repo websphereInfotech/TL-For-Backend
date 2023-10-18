@@ -281,6 +281,14 @@ exports.userdetails_listdata = async function (req, res) {
         },
       },
       {
+        $lookup: {
+          from: "follows",
+          localField: "_id",
+          foreignField: "quatationId",
+          as: "followDetails",
+        },
+      },
+      {
         $project: {
           __v: 0,
           "shop.__v": 0,
