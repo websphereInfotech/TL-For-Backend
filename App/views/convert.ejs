@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pdf Download</title>
     <style>
+      *{
+        /* border: 1px solid black; */
+      }
         body {
             font-family: 'Times New Roman', Times, serif;
+
             font-style: normal;
         }
         .header {
@@ -27,6 +31,14 @@
           text-align: left;
           width: 130px;
         }
+        .quotation-name{
+          padding: 20px;
+        }
+        .quotation-address{
+          padding: 20px;
+          /* float: left; */
+        
+        }
         .quotation-right{
           text-align: justify;
           width: 130px;
@@ -43,10 +55,15 @@
           align-items: center;
         }
         .alldata{
+          /* float: left; */
           display: flex;
           justify-content: space-around;
           align-items: center;
         }
+        .main{
+          padding: 10px;
+        }
+        
     </style> 
   </head>
   <body>
@@ -59,7 +76,8 @@
     </div>
 
     <h2 style="text-align: center;">Quotation</h2>
-<div class="alldata">
+<div class="main">
+    <div class="alldata">
       <div class="quotation-name">
         <p><h3>Quotation name:- <%= users.userName %></h3></p>
         <p><h3>mobile No:-<%= users.mobileNo %></h3></p>
@@ -70,114 +88,112 @@
         <p><h3>Date:- <%= new Date(users.Date).toLocaleDateString('en-GB')  %></h3></p>
         <p><h3>Status:- <%= (status.Approve) ? 'Approve' : (status.Reject ? 'Reject' : 'Followup') %></h3></p>
       </div>
-</div>
+    </div>
+    
+      <div class="allsales">
+        <%if(users.sales){%>
+          <div class="salesperson">
+            <h2>SALES PERSON</h2>
+              <table align="left" cellspacing="0px">
+                <tr>
+                  <th align="justify">name </th>
+                  <td><u><%= users.sales.Name %></u></td>
+                </tr>
+                <tr>
+                  <th align="justify">mobile No </th>
+                  <td><u><%= users.sales.mobileNo %></u></td>
+                </tr>
+              </table>
+          </div>
 
-
-<div>
-    <div class="allsales">
-      <%if(users.sales){%>
-        <div class="salesperson">
-          <h2>SALES PERSON</h2>
+        <%}%> <%if(users.architec.length){%>
+        <div class="architec">
+          <h2 style="text-align: left;">ARCHITECHER</h2>
             <table align="left">
+              <% users.architec.forEach(function(item){ %>
               <tr>
-                <th align="justify">name </th>
-                <td><u><%= users.sales.Name %></u></td>
+                  <th align="justify">architecName </th>
+                  <td><u><%= item.architecsName %></u></td>
               </tr>
               <tr>
-                <th align="justify">mobile No </th>
-                <td><u><%= users.sales.mobileNo %></u></td>
+                  <th align="justify">mobile No</th>
+                  <td><u><%= item.mobileNo %></u></td>
               </tr>
+              <tr>
+                  <th align="justify">address</th>
+                  <td><u><%= item.address %></u></td>
+              </tr>
+              <% }) %>
             </table>
         </div>
-
-      <%}%> <%if(users.architec.length){%>
-      <div class="architec">
-        <h2 style="text-align: left;">ARCHITECHER</h2>
-          <table align="left">
-            <% users.architec.forEach(function(item){ %>
-              <tr>
-                <th align="justify">architecName </th>
-                <td><u><%= item.architecsName %></u></td>
-                </tr>
-                <tr>
-                <th align="justify">mobile No</th>
-                <td><u><%= item.mobileNo %></u></td>
-                </tr>
-                <tr>
-                <th align="justify">address</th>
-                <td><u><%= item.address %></u></td>
-                </tr>
-            </tr>
-            <% }) %>
-        </table>
       </div>
-    </div>
-
-    <div class="allcar">
-      <%}%> <%if(users.carpenter.length){%>
-        <div class="carpenter">
-          <h2>CARPENTER</h2>
-            <table align="left">
-              <% users.carpenter.forEach(function(item){ %>
-              <tr>
-              <th align="justify">carpentersName</th>
-              <td><u><%= item.carpentersName %></u></td>
-              </tr>
-              <tr>
-              <th align="justify">mobile No</th>
-              <td><u><%= item.mobileNo %></u></td>
-              </tr>
-              <tr>
-              <th align="justify">address</th>
-              <td><u><%= item.address %></u></td>
-              </tr>
-              <% }) %>
-            </table>
-        </div>
-      <%}%> <%if(users.shop.length){%>
-        <div class="shop">
-          <h2 style="text-align: left;">SHOP</h2>
-            <table align="right">
-              <% users.shop.forEach(function(item){ %>
-                <tr>
-                <th align="justify">shopName</th>
-                <td><u><%= item.shopName %></u></td>
-                </tr>
-                <tr>
-                <th align="justify">mobile No</th>
-                <td><u><%= item.mobileNo %></u></td>
-                </tr>
-                <tr>
-                <th align="justify">address</th>
-                <td><u><%= item.address %></u></td>
-                </tr>
-              <% }) %>
-            </table>
-        </div>
-    </div>
 
 
-      <%}%> <%if(Totalwithuser.length){%>
-      <h2 style="text-align: center;">TOTAL</h2>
-      <table border="1" align="center" style="width: 100% ;">
-        <th>Description</th>
-        <th>Area</th>
-        <th>Size</th>
-        <th>Rate</th>
-        <th>Quantity</th>
-        <th>Total</th>
-        <% Totalwithuser.forEach(function(item){ %>
-        <tr>
-          <td><%= item.description %></td>
-          <td><%= item.area %></td>
-          <td><%= item.size %></td>
-          <td><%= item.rate %></td>
-          <td><%= item.quantity %></td>
-          <td><%= item.total %></td>
-        </tr>
-        <% }) %>
-      </table>
-      <%}%>
-    </div>
+      <div class="allcar">
+          <%}%> <%if(users.carpenter.length){%>
+            <div class="carpenter">
+              <h2>CARPENTER</h2>
+              <table align="left">
+                <% users.carpenter.forEach(function(item){ %>
+                <tr>
+                  <th align="justify">carpentersName</th>
+                  <td><u><%= item.carpentersName %></u></td>
+                </tr>
+                <tr>
+                  <th align="justify">mobile No</th>
+                  <td><u><%= item.mobileNo %></u></td>
+                </tr>
+                <tr>
+                  <th align="justify">address</th>
+                  <td><u><%= item.address %></u></td>
+                </tr>
+                <% }) %>
+              </table>
+            </div>
+          <%}%> <%if(users.shop.length){%>
+            <div class="shop">
+              <h2 style="text-align: left;">SHOP</h2>
+              <table align="right">
+                  <% users.shop.forEach(function(item){ %>
+                  <tr>
+                    <th align="justify">shopName</th>
+                    <td><u><%= item.shopName %></u></td>
+                  </tr>
+                  <tr>
+                    <th align="justify">mobile No</th>
+                    <td><u><%= item.mobileNo %></u></td>
+                  </tr>
+                  <tr>
+                    <th align="justify">address</th>
+                    <td><u><%= item.address %></u></td>
+                  </tr>
+                  <% }) %>
+              </table>
+            </div>
+</div>
+<div class="tab">
+    <%}%> <%if(Totalwithuser.length){%>
+        <h2 style="text-align: center;">TOTAL</h2>
+        <table border="1" align="center" style="width: 100% ;">
+          <th>Description</th>
+          <th>Area</th>
+          <th>Size</th>
+          <th>Rate</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <% Totalwithuser.forEach(function(item){ %>
+          <tr>
+            <td><%= item.description %></td>
+            <td><%= item.area %></td>
+            <td><%= item.size %></td>
+            <td><%= item.rate %></td>
+            <td><%= item.quantity %></td>
+            <td><%= item.total %></td>
+          </tr>
+          <% }) %>
+        </table>
+    <%}%>
+</div>
+     
   </body>
 </html>
