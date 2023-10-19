@@ -168,7 +168,7 @@ exports.architecdetails_searchdata = async function (req, res) {
     let matchField = {};
 
     if (req.query.architecName) {
-      matchField.userName = new RegExp(req.query.architecName, "i");
+      matchField.architecsName = new RegExp(req.query.architecName, "i");
     }
 
     if (req.query.serialNumber) {

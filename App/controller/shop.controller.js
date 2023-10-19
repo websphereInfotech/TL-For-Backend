@@ -171,9 +171,9 @@ exports.shopsdetails_searchdata = async function (req, res) {
     let matchField = {};
 
     if (req.query.shopName) {
-      matchField.userName = new RegExp(req.query.shopName, "i");
+      matchField.shopName = new RegExp(req.query.shopName, "i");
     }
-
+    // console.log(matchField);
     if (req.query.serialNumber) {
       matchField.serialNumber = parseInt(req.query.serialNumber);
     }
