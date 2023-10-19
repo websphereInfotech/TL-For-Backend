@@ -46,13 +46,13 @@ exports.personUpdate = async (req, res) => {
   try {
     const { Name, mobileNo } = req.body;
 
-    const findMob = await salesPerson.findOne({ mobileNo });
-    if (findMob) {
-      return res.status(400).json({
-        status: "Fail",
-        message: "Mobile Number already exist",
-      });
-    }
+    // const findMob = await salesPerson.findOne({ mobileNo });
+    // if (findMob) {
+    //   return res.status(400).json({
+    //     status: "Fail",
+    //     message: "Mobile Number already exist",
+    //   });
+    // }
 
     const updatePerson = {
       Name,
