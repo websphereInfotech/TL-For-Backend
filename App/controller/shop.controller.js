@@ -123,7 +123,7 @@ exports.shopdetails_viewdata = async function (req, res) {
 exports.shopdetails_listdata = async function (req, res) {
   try {
     const shopId = req.params.id;
-    
+
     const usersConnectedToShop = await user.aggregate([
       {
         $match: {
@@ -170,8 +170,8 @@ exports.shopsdetails_searchdata = async function (req, res) {
   try {
     let matchField = {};
 
-    if (req.query.userName) {
-      matchField.userName = new RegExp(req.query.userName, "i");
+    if (req.query.shopName) {
+      matchField.userName = new RegExp(req.query.shopName, "i");
     }
 
     if (req.query.serialNumber) {
@@ -202,8 +202,8 @@ exports.shopsdetails_searchdata = async function (req, res) {
 
     // if (!searchData || searchData.length === 0) {
     //   return res.status(404).json({
-    //     status: "Fail",
-    //     message: "Data not found",
+    //     status: "Success",
+    //     data: [ ]
     //   });
     // }
     res.status(200).json({

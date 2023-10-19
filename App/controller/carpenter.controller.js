@@ -166,8 +166,8 @@ exports.carpentersdetails_searchdata = async function (req, res) {
   try {
     let matchField = {};
 
-    if (req.query.userName) {
-      matchField.userName = new RegExp(req.query.userName, "i");
+    if (req.query.carpentersName) {
+      matchField.userName = new RegExp(req.query.carpentersName, "i");
     }
 
     if (req.query.serialNumber) {
