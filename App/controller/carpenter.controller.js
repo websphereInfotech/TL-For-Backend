@@ -174,16 +174,16 @@ exports.carpentersdetails_searchdata = async function (req, res) {
       matchField.serialNumber = parseInt(req.query.serialNumber);
     }
 
-    const carpenterdata = await user
+    const carpenterdata = await carpenter
       .aggregate([
         {
           $match: matchField,
         },
         {
           $lookup: {
-            from: "carpenters",
-            localField: "carpenter",
-            foreignField: "_id",
+            from: "users",
+            localField: "_id",
+            foreignField: "carpenter",
             as: "carpenterData",
           },
         },

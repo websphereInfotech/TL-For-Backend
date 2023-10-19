@@ -178,16 +178,16 @@ exports.shopsdetails_searchdata = async function (req, res) {
       matchField.serialNumber = parseInt(req.query.serialNumber);
     }
 
-    const searchData = await user
+    const searchData = await shops
       .aggregate([
         {
           $match: matchField,
         },
         {
           $lookup: {
-            from: "shops",
-            localField: "shop",
-            foreignField: "_id",
+            from: "users",
+            localField: "_id",
+            foreignField: "shop",
             as: "shopData",
           },
         },

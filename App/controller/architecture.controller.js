@@ -175,16 +175,16 @@ exports.architecdetails_searchdata = async function (req, res) {
       matchField.serialNumber = parseInt(req.query.serialNumber);
     }
 
-    const searchData = await user
+    const searchData = await architec
       .aggregate([
         {
           $match: matchField,
         },
         {
           $lookup: {
-            from: "architectuers",
-            localField: "architec",
-            foreignField: "_id",
+            from: "users",
+            localField: "_id",
+            foreignField: "architec",
             as: "architectureData",
           },
         },
