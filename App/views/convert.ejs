@@ -5,26 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pdf Download</title>
     <style>
-      *{
-        /* border: 1px solid black; */
-      }
         body {
             font-family: 'Times New Roman', Times, serif;
             font-style: normal;
-        }
-        h4{
-            margin: 16px !important;
-        }
-        table td {
-            text-align: center;
-        }
-        tr td,
-        tr th{
-            padding: 5px;
-        }
-        h2{
-            text-align: center;
-            margin-top: 30px;
+            padding: 0 100px;
         }
         .header {
             background-color: rgb(78, 47, 8);
@@ -32,27 +16,23 @@
             padding: 20px;
             color: white;
         }
+        h2{
+            /* text-align: center; */
+        }
+        table th{
+            text-align: justify;
+        } 
         .allsales{
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-        .alldata{
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        .allsales tr td,
+        .allsales tr th{
+            padding: 5px;
         }
-        .quotation-add{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .main{
-          padding: 0 100px;
-        }
-        .quotation-info{
-            font-weight: lighter;
-            margin-left: 20px;
+        .tab th{
+            text-align: center;
         }
     </style>
   </head>
@@ -64,44 +44,33 @@
         </header>
     </div>
     <h2 style="text-align: center;">Quotation</h2>
-<div class="main">
-    <div class="alldata">
-     <div class="quotation-add">
-        <div class="">
-            <h4>Token Number :-</h4>
-            <h4>Date :-</h4>
-        </div>
-        <div class="quotation-name">
-            <p><%= users.serialNumber %></p>
-            <p><%= new Date(users.Date).toLocaleDateString('en-GB')  %></p>
-        </div>
-    </div>
-    <div class="quotation-add">
-        <div class="">
-            <h4>Quotation name :-</h4>
-            <h4>mobile No :-</h4>
-        </div>
-        <div class="quotation-name">
-            <p><%= users.userName %></p>
-            <p><%= users.mobileNo %></p>
-        </div>
-    </div>
-    <div class="quotation-add">
+    <!-- <div> -->
+        <table align="center" >
+            <tr>
+                <th>Token No :-</th>
+                <td><%= users.serialNumber %></td>
+                <th>Status :-</th>
+                <td><%= (status.Approve) ? 'Approve' : (status.Reject ? 'Reject' : 'Followup') %></td>
+            </tr>
+            <tr>
+                <th>Date :-</th>
+                <td><%= new Date(users.Date).toLocaleDateString('en-GB')  %></td>
+                <th>Mobile No :-</th>
+                <td><%= users.mobileNo %></td>
+            </tr>
+            <tr>
+                <th>Quotation name :-</th>
+                <td><%= users.userName %></td>
+                <th>Address :-</th>
+                <td><%= users.address %></td>
+            </tr>
+        </table>
+    <!-- </div> -->
+    <div class="allsales">
         <div>
-            <h4>Status :-</h4>
-            <h4>address :-</h4>
-        </div>
-        <div class="quotation-name">
-            <p><%= (status.Approve) ? 'Approve' : (status.Reject ? 'Reject' : 'Followup') %></p>
-            <p><%= users.address %></p>
-        </div>
-    </div>
-</div>
-<div class="allsales">
-  <div>
           <%if(users.architec.length){%>
             <h2>ARCHITEC </h2>
-            <table cell>
+            <table>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -110,22 +79,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% users.architec.forEach(function(item){ %>
-                      <tr>
+                  <% users.architec.forEach(function(item){ %>
+                    <tr>
                         <td><%= item.architecsName %></td>
                         <td><%= item.mobileNo %></td>
                         <td><%= item.address %></td>
-                      </tr>
-                    <% }) %>
+                    </tr>
+                  <% }) %>
                 </tbody>
             </table>
           <% } %>
         </div>
         <div>
-          <%if(users.carpenter.length){%>
+           <%if(users.carpenter.length){%>
             <h2>CARPENTER </h2>
             <table>
-               <% users.carpenter.forEach(function(item){ %>
+              <% users.carpenter.forEach(function(item){ %>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -145,7 +114,7 @@
              <% } %>
         </div>
         <div>
-          <%if(users.shop.length){%>
+           <%if(users.shop.length){%>
             <h2>SHOP</h2>
             <table>
               <% users.shop.forEach(function(item){ %>
@@ -165,26 +134,26 @@
                 </tbody>
                 <% }) %>
             </table>
-          <% } %>
+            <% } %>
         </div>
     </div>
-      <div>
-        <%if(users.sales){%>
+    <div>
+      <%if(users.sales){%>
         <h2>SALES PERSON</h2>
-        <div class="quotation-add">
-            <div class="">
-              <h4>Name :-</h4>
-                <h4>Mobile No :-</h4>
-            </div>
-              <div class="quotation-name">
-                <p><%= users.sales.Name %></p>
-                <p><%= users.sales.mobileNo %></p>
-              </div>
-        </div>
-        <%}%>
+        <table align="center">
+            <tr>
+              <th>Name</th>
+              <td><%= users.sales.Name %></td>
+            </tr>
+            <tr>
+              <th>Mobile No</th>
+              <td><%= users.sales.mobileNo %></td>
+            </tr>
+        </table>
+      <%}%>
     </div>
 <div class="tab">
-  <%if(Totalwithuser.length){%>
+    <%if(Totalwithuser.length){%>
         <h2 style="text-align: center;">TOTAL</h2>
         <table border="1" align="center" style="width: 100% ;">
           <th>Description</th>
@@ -202,9 +171,9 @@
             <td><%= item.quantity %></td>
             <td><%= item.total %></td>
           </tr>
-          <% }) %>
+           <% }) %>
         </table>
-  <%}%>
+    <%}%>
 </div>
   </body>
 </html>
