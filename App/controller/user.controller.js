@@ -49,7 +49,12 @@ exports.userdetails_create = async function (req, res) {
     await newQutationId.save();
 
     await userData.save();
-
+    if (!addtotal) {
+      return res.status(400).json({
+        status: "Fail",
+        message: "Required Field of Total",
+      });
+    }
     const addTotalData = addtotal.map((item) => ({
       user_id: userData._id,
       ...item,
@@ -72,21 +77,21 @@ exports.userdetails_create = async function (req, res) {
       shop: shop,
     };
     let token = jwt.sign(payload, process.env.KEY, { expiresIn: "1d" });
-    
+
     const ResponseUserData = {
       id: userData._id,
-        userName: userName,
-        mobileNo: mobileNo,
-        address: address,
-        serialNumber: serialNumber,
-        Date: Date,
-        sales: sales,
-        architec: architec,
-        carpenter: carpenter,
-        shop: shop,
-        addtotal: totalOfAll,
-      };
-      userData.totalOfAll = totalOfAll;
+      userName: userName,
+      mobileNo: mobileNo,
+      address: address,
+      serialNumber: serialNumber,
+      Date: Date,
+      sales: sales,
+      architec: architec,
+      carpenter: carpenter,
+      shop: shop,
+      addtotal: totalOfAll,
+    };
+    userData.totalOfAll = totalOfAll;
     res.status(200).json({
       status: "Success",
       message: "Quotation Create Successfully",
@@ -116,7 +121,7 @@ exports.userdetails_update = async function (req, res) {
       architec,
       carpenter,
       shop,
-      addtotal
+      addtotal,
     } = req.body;
 
     const updateuserdata = {
@@ -130,11 +135,11 @@ exports.userdetails_update = async function (req, res) {
       carpenter_id: carpenter,
       shop_id: shop,
     };
-      // console.log(updateuserdata);
-    const userdata = await user.findByIdAndUpdate(quatationId,  updateuserdata , {
+    // console.log(updateuserdata);
+    const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
-    
+
     // console.log(userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
@@ -203,7 +208,7 @@ exports.userdetails_viewdata = async function (req, res) {
       .populate("carpenter")
       .populate("architec")
       .populate("sales");
-      
+
     if (!userviewdata) {
       return res.status(400).json({
         status: "Fail",
