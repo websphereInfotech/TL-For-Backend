@@ -12,166 +12,179 @@
             font-family: 'Times New Roman', Times, serif;
             font-style: normal;
         }
+        h4{
+            margin: 16px !important;
+        }
+        table td {
+            text-align: center;
+        }
+        tr td,
+        tr th{
+            padding: 5px;
+        }
+        h2{
+            text-align: center;
+            margin-top: 30px;
+        }
         .header {
             background-color: rgb(78, 47, 8);
             text-align: center;
             padding: 20px;
-            color: white; 
-        }
-        .quotation-info{
-           border-bottom: 1px solid #000;
-           display: flex;
-           justify-content: space-between;
-        }
-        .quotation-info li{
-            border-bottom: 1px solid #000;
-        }
-        .quotation{
-          text-align: left;
-          width: 130px;
-        }
-        .quotation-name{
-          padding: 20px;
-        }
-        .quotation-address{
-          padding: 20px;
-          /* float: left; */
-        
-        }
-        .quotation-right{
-          text-align: justify;
-          width: 130px;
-          margin-left: auto;
+            color: white;
         }
         .allsales{
           display: flex;
-          justify-content: space-around;
-          align-items: center;
-        }
-        .allcar{
-          display: flex;
-          justify-content: space-around;
+          justify-content: space-between;
           align-items: center;
         }
         .alldata{
-          /* float: left; */
           display: flex;
-          justify-content: space-around;
+          justify-content: space-between;
           align-items: center;
         }
-        .main{
-          padding: 10px;
+        .quotation-add{
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-    </style> 
+        .main{
+          padding: 0 100px;
+        }
+        .quotation-info{
+            font-weight: lighter;
+            margin-left: 20px;
+        }
+    </style>
   </head>
   <body>
-
     <div class="header">
         <header>
             <h1>TIMBERLAND</h1>
             <h4>HOME FOR VENEER</h4>
         </header>
     </div>
-
     <h2 style="text-align: center;">Quotation</h2>
 <div class="main">
     <div class="alldata">
-      <div class="quotation-name">
-        <p><h3>Quotation name:- <%= users.userName %></h3></p>
-        <p><h3>mobile No:-<%= users.mobileNo %></h3></p>
-        <p><h3>address:- <%= users.address %></h3></p>
-      </div>
-      <div class="quotation-address">
-        <p><h3>Token Number:- <%= users.serialNumber %></h3></p>
-        <p><h3>Date:- <%= new Date(users.Date).toLocaleDateString('en-GB')  %></h3></p>
-        <p><h3>Status:- <%= (status.Approve) ? 'Approve' : (status.Reject ? 'Reject' : 'Followup') %></h3></p>
-      </div>
-    </div>
-    
-      <div class="allsales">
-        <%if(users.sales){%>
-          <div class="salesperson">
-            <h2>SALES PERSON</h2>
-              <table align="left" cellspacing="0px">
-                <tr>
-                  <th align="justify">name </th>
-                  <td><u><%= users.sales.Name %></u></td>
-                </tr>
-                <tr>
-                  <th align="justify">mobile No </th>
-                  <td><u><%= users.sales.mobileNo %></u></td>
-                </tr>
-              </table>
-          </div>
-
-        <%}%> <%if(users.architec.length){%>
-        <div class="architec">
-          <h2 style="text-align: left;">ARCHITECHER</h2>
-            <table align="left">
-              <% users.architec.forEach(function(item){ %>
-              <tr>
-                  <th align="justify">architecName </th>
-                  <td><u><%= item.architecsName %></u></td>
-              </tr>
-              <tr>
-                  <th align="justify">mobile No</th>
-                  <td><u><%= item.mobileNo %></u></td>
-              </tr>
-              <tr>
-                  <th align="justify">address</th>
-                  <td><u><%= item.address %></u></td>
-              </tr>
-              <% }) %>
-            </table>
+     <div class="quotation-add">
+        <div class="">
+            <h4>Token Number :-</h4>
+            <h4>Date :-</h4>
         </div>
-      </div>
-
-
-      <div class="allcar">
-          <%}%> <%if(users.carpenter.length){%>
-            <div class="carpenter">
-              <h2>CARPENTER</h2>
-              <table align="left">
-                <% users.carpenter.forEach(function(item){ %>
-                <tr>
-                  <th align="justify">carpentersName</th>
-                  <td><u><%= item.carpentersName %></u></td>
-                </tr>
-                <tr>
-                  <th align="justify">mobile No</th>
-                  <td><u><%= item.mobileNo %></u></td>
-                </tr>
-                <tr>
-                  <th align="justify">address</th>
-                  <td><u><%= item.address %></u></td>
-                </tr>
-                <% }) %>
-              </table>
-            </div>
-          <%}%> <%if(users.shop.length){%>
-            <div class="shop">
-              <h2 style="text-align: left;">SHOP</h2>
-              <table align="right">
-                  <% users.shop.forEach(function(item){ %>
-                  <tr>
-                    <th align="justify">shopName</th>
-                    <td><u><%= item.shopName %></u></td>
-                  </tr>
-                  <tr>
-                    <th align="justify">mobile No</th>
-                    <td><u><%= item.mobileNo %></u></td>
-                  </tr>
-                  <tr>
-                    <th align="justify">address</th>
-                    <td><u><%= item.address %></u></td>
-                  </tr>
-                  <% }) %>
-              </table>
-            </div>
+        <div class="quotation-name">
+            <p><%= users.serialNumber %></p>
+            <p><%= new Date(users.Date).toLocaleDateString('en-GB')  %></p>
+        </div>
+    </div>
+    <div class="quotation-add">
+        <div class="">
+            <h4>Quotation name :-</h4>
+            <h4>mobile No :-</h4>
+        </div>
+        <div class="quotation-name">
+            <p><%= users.userName %></p>
+            <p><%= users.mobileNo %></p>
+        </div>
+    </div>
+    <div class="quotation-add">
+        <div>
+            <h4>Status :-</h4>
+            <h4>address :-</h4>
+        </div>
+        <div class="quotation-name">
+            <p><%= (status.Approve) ? 'Approve' : (status.Reject ? 'Reject' : 'Followup') %></p>
+            <p><%= users.address %></p>
+        </div>
+    </div>
 </div>
+<div class="allsales">
+  <div>
+          <%if(users.architec.length){%>
+            <h2>ARCHITEC </h2>
+            <table cell>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile No</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.architec.forEach(function(item){ %>
+                      <tr>
+                        <td><%= item.architecsName %></td>
+                        <td><%= item.mobileNo %></td>
+                        <td><%= item.address %></td>
+                      </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+          <% } %>
+        </div>
+        <div>
+          <%if(users.carpenter.length){%>
+            <h2>CARPENTER </h2>
+            <table>
+               <% users.carpenter.forEach(function(item){ %>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile No</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><%= item.carpentersName %></td>
+                        <td><%= item.mobileNo %></td>
+                        <td><%= item.address %></td>
+                    </tr>
+                </tbody>
+                 <% }) %>
+            </table>
+             <% } %>
+        </div>
+        <div>
+          <%if(users.shop.length){%>
+            <h2>SHOP</h2>
+            <table>
+              <% users.shop.forEach(function(item){ %>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile No</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><%= item.shopName %></td>
+                        <td><%= item.mobileNo %></td>
+                        <td><%= item.address %></td>
+                    </tr>
+                </tbody>
+                <% }) %>
+            </table>
+          <% } %>
+        </div>
+    </div>x 
+      <div>
+        <%if(users.sales){%>
+        <h2>SALES PERSON</h2>
+        <div class="quotation-add">
+            <div class="">
+              <h4>Name :-</h4>
+                <h4>Mobile No :-</h4>
+            </div>
+              <div class="quotation-name">
+                <p><%= users.sales.Name %></p>
+                <p><%= users.sales.mobileNo %></p>
+              </div>
+        </div>
+        <%}%>
+    </div>
 <div class="tab">
-    <%}%> <%if(Totalwithuser.length){%>
+  <%if(Totalwithuser.length){%>
         <h2 style="text-align: center;">TOTAL</h2>
         <table border="1" align="center" style="width: 100% ;">
           <th>Description</th>
@@ -191,8 +204,7 @@
           </tr>
           <% }) %>
         </table>
-    <%}%>
+  <%}%>
 </div>
-     
   </body>
 </html>

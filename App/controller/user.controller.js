@@ -299,6 +299,7 @@ exports.userdetails_listdata = async function (req, res) {
           "shop.__v": 0,
           "carpenter.__v": 0,
           "architecture.__v": 0,
+          "followDetails.__v": 0
         },
       },
     ]);

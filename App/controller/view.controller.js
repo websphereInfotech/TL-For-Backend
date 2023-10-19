@@ -26,25 +26,25 @@ exports.AllFiles = async (req, res) => {
     });
   }
   // console.log(users);
-  res.render(path.join(__dirname, "../views/convert.ejs"), {
-    users,
-    Totalwithuser,
-    status,
-  });
-  // let base64 = "";
-  // const html = await ejs.renderFile(
-  //   path.join(__dirname, "../views/convert1.ejs"),
-  //   { users, Totalwithuser, status }
-  // );
-  // // console.log(html)
-  // const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
-  //   // console.log(buffer)
-  //   const base64String = buffer.toString("base64");
-  //   // console.log(base64String)
-  //   return res.status(200).json({
-  //     status: "Success",
-  //     message: "pdf create successFully",
-  //     data: base64String,
-  //   });
+  // res.render(path.join(__dirname, "../views/convert.ejs"), {
+  //   users,
+  //   Totalwithuser,
+  //   status,
   // });
+  // let base64 = "";
+  const html = await ejs.renderFile(
+    path.join(__dirname, "../views/convert.ejs"),
+    { users, Totalwithuser, status }
+  );
+  // console.log(html)
+  const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
+    // console.log(buffer)
+    const base64String = buffer.toString("base64");
+    // console.log(base64String)
+    return res.status(200).json({
+      status: "Success",
+      message: "pdf create successFully",
+      data: base64String,
+    });
+  });
 };

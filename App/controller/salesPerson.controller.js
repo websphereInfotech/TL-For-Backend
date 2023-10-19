@@ -278,7 +278,7 @@ exports.salesPersonList = async (req, res) => {
       } else if (status === "reject") {
         matchField["connectedUsers.followDetails.Reject"] = true;
       } else if (status === "followup") {
-        matchField["connectedUsers.followDetails.followup"] = true;
+        matchField["connectedUsers.followDetails.followup"] = true; 
       }
     }
 
@@ -329,6 +329,8 @@ exports.salesPersonList = async (req, res) => {
       {
         $project: {
           __v: 0,
+          "connectedUsers.__v": 0,
+          "connectedUsers.followDetails.__v": 0,
         },
       },
     ]);
@@ -458,12 +460,12 @@ exports.salesPersonSearch = async (req, res) => {
       ])
       .exec();
 
-    if (!searchData || searchData.length === 0) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "Data not found",
-      });
-    }
+    // if (!searchData || searchData.length === 0) {
+    //   return res.status(404).json({
+    //     status: "Fail",
+    //     message: "Data not found",
+    //   });
+    // }
     res.status(200).json({
       status: "Success",
       message: "Fetch Data Successfully",

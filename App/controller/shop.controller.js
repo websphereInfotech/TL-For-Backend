@@ -200,12 +200,12 @@ exports.shopsdetails_searchdata = async function (req, res) {
       ])
       .exec();
 
-    if (!searchData || searchData.length === 0) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "Data not found",
-      });
-    }
+    // if (!searchData || searchData.length === 0) {
+    //   return res.status(404).json({
+    //     status: "Fail",
+    //     message: "Data not found",
+    //   });
+    // }
     res.status(200).json({
       status: "Success",
       message: "Fetch Data Successfully",

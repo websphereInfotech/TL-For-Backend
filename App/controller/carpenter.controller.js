@@ -198,12 +198,12 @@ exports.carpentersdetails_searchdata = async function (req, res) {
 
     console.log("Carpenter data: " + carpenterdata);
 
-    if (!carpenterdata || carpenterdata.length === 0) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "Data not found",
-      });
-    }
+    // if (!carpenterdata || carpenterdata.length === 0) {
+    //   return res.status(404).json({
+    //     status: "Fail",
+    //     message: "Data not found",
+    //   });
+    // }
     res.status(200).json({
       status: "Success",
       message: "Fetch Data Successfully",
