@@ -11,7 +11,6 @@ const userschema = Schema(
     mobileNo: {
       type: Number,
       require: true,
-      unique: true,
     },
     address: {
       type: String,
