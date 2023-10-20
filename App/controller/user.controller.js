@@ -140,6 +140,7 @@ exports.userdetails_update = async function (req, res) {
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
+    // console.log(userdata);
 
     // console.log(userdata);
 
