@@ -389,6 +389,14 @@ exports.userdetails_searchdata = async function (req, res) {
         },
       },
       {
+        $lookup: {
+          from: "follows",
+          localField: "_id",
+          foreignField: "quatationId",
+          as: "Followdetails",
+        },
+      },
+      {
         $project: {
           __v: 0,
           "shop.__v": 0,
