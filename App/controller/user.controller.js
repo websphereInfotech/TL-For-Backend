@@ -1,4 +1,5 @@
 var jwt = require("jsonwebtoken");
+var moment = require('moment')
 const user = require("../model/user.model");
 const shops = require("../model/shop.model");
 const carpenter = require("../model/carpenter.model");
@@ -27,7 +28,7 @@ exports.userdetails_create = async function (req, res) {
     if (checkserialno) {
       return res.status(400).json({
         status: "Fail",
-        message: "Serial Number Already Exist",
+        message: "Token Number Already Exist",
       });
     }
 
@@ -172,7 +173,7 @@ exports.userdetails_update = async function (req, res) {
     });
   } catch (error) {
     // console.log(error)
-    res.status(400).json({
+    res.status(404).json({
       status: "Fail",
       message: "Quotation not found",
     });
@@ -215,6 +216,7 @@ exports.userdetails_viewdata = async function (req, res) {
         message: "user not found",
       });
     }
+ const formattedDate = moment(userviewdata.Date).format("DD-MM-YYYY");
 
     const usersConnectedToTotal = await Total.aggregate([
       {
@@ -247,7 +249,10 @@ exports.userdetails_viewdata = async function (req, res) {
     res.status(200).json({
       status: "Success",
       message: "get all data",
-      data1: userviewdata,
+      data1: {
+        ...userviewdata.toObject(),
+        Date: formattedDate, // Replace Date field with the formatted date
+      },
       data: usersConnectedToTotal,
     });
   } catch (error) {
@@ -299,7 +304,7 @@ exports.userdetails_listdata = async function (req, res) {
           "shop.__v": 0,
           "carpenter.__v": 0,
           "architecture.__v": 0,
-          "followDetails.__v": 0
+          "followDetails.__v": 0,
         },
       },
     ]);

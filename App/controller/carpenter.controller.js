@@ -196,7 +196,7 @@ exports.carpentersdetails_searchdata = async function (req, res) {
       ])
       .exec();
 
-    console.log("Carpenter data: " + carpenterdata);
+    // console.log("Carpenter data: " + carpenterdata);
 
     // if (!carpenterdata || carpenterdata.length === 0) {
     //   return res.status(404).json({
