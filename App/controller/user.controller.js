@@ -396,7 +396,7 @@ exports.userdetails_searchdata = async function (req, res) {
           from: "follows",
           localField: "_id",
           foreignField: "quatationId",
-          as: "Followdetails",
+          as: "followDetails",
         },
       },
       {
