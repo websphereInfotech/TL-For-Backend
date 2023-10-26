@@ -76,7 +76,7 @@ exports.createExcel = async (req, res) => {
 
     // Define worksheet columns based on the fields from the "Total" model
     worksheet.columns = [
-      { header: "sr_No", key: "serial_No" },
+      // { header: "sr_No", key: "serial_No" },
       { header: "TokenNo", key: "serialNumber" },
       { header: "Name", key: "userName" },
       { header: "MobileNo", key: "mobileNo" },
@@ -88,9 +88,7 @@ exports.createExcel = async (req, res) => {
       { header: "Rate", key: "rate" },
       { header: "Quantity", key: "quantity" },
       { header: "Total", key: "total" },
-    ];
-
-    
+    ]
     const userTotalData = {};
 
     const totalData = await Total.find({
@@ -106,13 +104,17 @@ exports.createExcel = async (req, res) => {
     users.forEach((user, index) => {
       user.serial_No = index + 1;
 
+      // Add the user's data to the row
+      const userRow = { ...user._doc };
+      worksheet.addRow(userRow);
 
       const userTotals = userTotalData[user._id] || [];
 
       userTotals.forEach((total) => {
-        const row = { ...user._doc, ...total._doc };
-        row.serial_No = index + 1; 
-        worksheet.addRow(row);
+        // Add the "Total" data as separate rows within the user's row
+        const totalRow = { ...total._doc };
+        // totalRow.serial_No = index + 1;
+        worksheet.addRow(totalRow);
       });
     });
 
@@ -130,6 +132,86 @@ exports.createExcel = async (req, res) => {
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
+
+
+
+// exports.createExcel = async (req, res) => {
+//   try {
+//     const startDate = req.query.startDate;
+//     const endDate = req.query.endDate;
+
+//     const query = {};
+
+//     if (startDate && endDate) {
+//       query.Date = { $gte: startDate, $lte: endDate };
+//     }
+
+//     const users = await user
+//       .find(query)
+//       .populate("sales")
+//       .populate("architec")
+//       .populate("carpenter")
+//       .populate("shop");
+
+//     const workbook = new excelJs.Workbook();
+//     const worksheet = workbook.addWorksheet("My Users");
+
+//     // Define worksheet columns based on the fields from the "Total" model
+//     worksheet.columns = [
+//       { header: "sr_No", key: "serial_No" },
+//       { header: "TokenNo", key: "serialNumber" },
+//       { header: "Name", key: "userName" },
+//       { header: "MobileNo", key: "mobileNo" },
+//       { header: "Address", key: "address" },
+//       { header: "Date", key: "Date" },
+//       { header: "Description", key: "description" },
+//       { header: "Area", key: "area" },
+//       { header: "Size", key: "size" },
+//       { header: "Rate", key: "rate" },
+//       { header: "Quantity", key: "quantity" },
+//       { header: "Total", key: "total" },
+//     ];
+
+    
+//     const userTotalData = {};
+
+//     const totalData = await Total.find({
+//       user_id: { $in: users.map((user) => user._id) },
+//     });
+//     totalData.forEach((total) => {
+//       if (!userTotalData[total.user_id]) {
+//         userTotalData[total.user_id] = [];
+//       }
+//       userTotalData[total.user_id].push(total);
+//     });
+
+//     users.forEach((user, index) => {
+//       user.serial_No = index + 1;
+
+
+//       const userTotals = userTotalData[user._id] || [];
+
+//       userTotals.forEach((total) => {
+//         const row = { ...user._doc, ...total._doc };
+//         row.serial_No = index + 1; 
+//         worksheet.addRow(row);
+//       });
+//     });
+
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );
+//     res.setHeader("Content-Disposition", "attachment; filename=Quotation.xlsx");
+
+//     workbook.xlsx.write(res).then(() => {
+//       res.status(200).end();
+//     });
+//   } catch (error) {
+//     console.error("Error creating Excel Sheet Download:", error);
+//     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
+//   }
+// };
 
 
 // exports.createExcel = async (req, res) => {
