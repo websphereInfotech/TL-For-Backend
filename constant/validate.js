@@ -25,18 +25,9 @@ exports.validate = function (method) {
     case "shopupdate":
       return [shopsName, mobileNo];
     case "usercreate":
-      return [
-        userName,
-        mobileNo,
-        address,
-        serialNumber
-      ];
+      return [userName, mobileNo, address, serialNumber];
     case "userupdate":
-      return [
-        userName,
-        mobileNo,
-        address,
-      ];
+      return [userName, mobileNo, address];
     case "login":
       return [login_id, password];
     case "salesPersonCreate":

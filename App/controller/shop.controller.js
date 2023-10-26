@@ -104,12 +104,12 @@ exports.shopdetails_viewdata = async function (req, res) {
     if (!shopviewdata) {
       return res.status(401).json({
         status: "Fail",
-        message: "user not found",
+        message: "Quotation not found",
       });
     }
-    res.status(201).json({
-      status: "Sucess",
-      message: "Shop Fetch Sucessfully",
+    res.status(200).json({
+      status: "Success",
+      message: "Shop Fetch successFully",
       data: shopviewdata,
     });
   } catch (error) {
@@ -133,7 +133,7 @@ exports.shopdetails_listdata = async function (req, res) {
       {
         $lookup: {
           from: "shops",
-          localField: "shop_id",
+          localField: "shop",
           foreignField: "_id",
           as: "shopDetails",
         },

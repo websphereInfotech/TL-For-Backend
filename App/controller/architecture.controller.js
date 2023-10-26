@@ -102,10 +102,10 @@ exports.architec_viewdata = async function (req, res) {
     if (!architecviewdata) {
       return res.status(401).json({
         status: "Fail",
-        message: "user not found",
+        message: "architec not found",
       });
     }
-    res.status(201).json({
+    res.status(200).json({
       status: "Sucess",
       message: "Architecture Fetch Sucessfully",
       data: architecviewdata,
@@ -113,7 +113,7 @@ exports.architec_viewdata = async function (req, res) {
   } catch (error) {
     res.status(404).json({
       status: "Fail",
-      message: "user no fetch data",
+      message: "something went wrong",
     });
   }
 };
@@ -142,7 +142,7 @@ exports.architec_listdata = async function (req, res) {
         },
       },
     ]);
-    
+
     if (usersConnectedToarchitecher.length === 0) {
       return res.status(404).json({
         status: "Fail",

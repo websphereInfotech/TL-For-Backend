@@ -1,5 +1,5 @@
 var jwt = require("jsonwebtoken");
-var moment = require('moment')
+var moment = require("moment");
 const user = require("../model/user.model");
 const shops = require("../model/shop.model");
 const carpenter = require("../model/carpenter.model");
@@ -8,7 +8,7 @@ const Follow = require("../model/follow.model");
 const Total = require("../model/total.model");
 const { default: mongoose } = require("mongoose");
 
-// =========================================================CREATE DATA==================================================================
+// ==========================================CREATE DATA==================================================================
 exports.userdetails_create = async function (req, res) {
   try {
     const {
@@ -107,7 +107,7 @@ exports.userdetails_create = async function (req, res) {
   }
 };
 
-//==============================================================UPDATE DATA============================================================
+//==============================================UPDATE DATA============================================================
 exports.userdetails_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
@@ -180,7 +180,8 @@ exports.userdetails_update = async function (req, res) {
     });
   }
 };
-//===============================================================DELETE DATA====================================================================
+
+//==============================================DELETE DATA====================================================================
 exports.userdetails_delete = async function (req, res) {
   try {
     const userdatadelete = await user.findByIdAndDelete({ _id: req.params.id });
@@ -201,7 +202,8 @@ exports.userdetails_delete = async function (req, res) {
     });
   }
 };
-// //========================================================================VIEW DATA=========================================================
+
+//============================================VIEW DATA=========================================================
 exports.userdetails_viewdata = async function (req, res) {
   try {
     const userviewdata = await user
@@ -217,7 +219,7 @@ exports.userdetails_viewdata = async function (req, res) {
         message: "user not found",
       });
     }
- const formattedDate = moment(userviewdata.Date).format("DD-MM-YYYY");
+    const formattedDate = moment(userviewdata.Date).format("DD-MM-YYYY");
 
     const usersConnectedToTotal = await Total.aggregate([
       {
@@ -263,7 +265,8 @@ exports.userdetails_viewdata = async function (req, res) {
     });
   }
 };
-// //========================================================================LIST DATA=========================================================
+
+//============================================LIST DATA=========================================================
 exports.userdetails_listdata = async function (req, res) {
   try {
     const users = await user.aggregate([
@@ -326,7 +329,7 @@ exports.userdetails_listdata = async function (req, res) {
   }
 };
 
-//============================================================================SERCH DATA=========================================================
+//==============================================SERCH DATA=========================================================
 exports.userdetails_searchdata = async function (req, res) {
   try {
     // const nameField = ;

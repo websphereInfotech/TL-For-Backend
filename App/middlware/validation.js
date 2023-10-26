@@ -334,9 +334,9 @@ exports.totalcreate = function (req, res, next) {
     .map((data, index) => {
       const { error, value } = validationSchema.validate(data);
       if (error) {
-       return error.message;
+        return error.message;
       } else {
-       return null;
+        return null;
       }
     })
     .filter((result) => result !== null);

@@ -8,27 +8,27 @@ const totalSchemas = Schema({
   },
   description: {
     type: String,
-    require: true,
+    required: true,
   },
   area: {
     type: String,
-    require: true,
+    required: true,
   },
   size: {
     type: Number,
-    require: true,
+    required: true,
   },
   rate: {
     type: Number,
-    require: true,
+    required: true,
   },
   quantity: {
     type: Number,
-    require: true,
+    required: true,
   },
   total: {
     type: Number,
-    require: true,
+    required: true,
   },
 });
 
