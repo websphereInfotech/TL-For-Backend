@@ -1,6 +1,6 @@
 var shops = require("../model/shop.model");
 var jwt = require("jsonwebtoken");
-const user = require("../model/user.model");
+const user = require("../model/quotation.model");
 const { default: mongoose } = require("mongoose");
 
 exports.shopdetails_create = async function (req, res) {

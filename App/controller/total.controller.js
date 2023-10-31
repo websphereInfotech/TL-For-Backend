@@ -1,5 +1,5 @@
 const Total = require("../model/total.model");
-const user = require("../model/user.model");
+const user = require("../model/quotation.model");
 
 
 // totalCreate

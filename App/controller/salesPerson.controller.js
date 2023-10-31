@@ -1,7 +1,7 @@
 const { types } = require("joi");
 const moment = require('moment');
 const salesPerson = require("../model/salesPerson.model");
-const user = require("../model/user.model");
+const user = require("../model/quotation.model");
 var jwt = require("jsonwebtoken");
 const { Types, default: mongoose } = require("mongoose");
 

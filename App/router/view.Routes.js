@@ -6,6 +6,6 @@ const { verifytoken } = require("../middlware/auth");
 
 router.get("/quatation/pdf/:id", AllFiles);
 
-router.get("/excel", createExcel);
+router.get("/excel/:id", createExcel);
 
 module.exports = router;

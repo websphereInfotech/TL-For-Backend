@@ -1,6 +1,6 @@
 var jwt = require("jsonwebtoken");
 var moment = require("moment");
-const user = require("../model/user.model");
+const user = require("../model/quotation.model");
 const shops = require("../model/shop.model");
 const carpenter = require("../model/carpenter.model");
 const architec = require("../model/architec.model");
@@ -9,7 +9,7 @@ const Total = require("../model/total.model");
 const { default: mongoose } = require("mongoose");
 
 // ==========================================CREATE DATA==================================================================
-exports.userdetails_create = async function (req, res) {
+exports.quotation_create = async function (req, res) {
   try {
     const {
       userName,
@@ -108,7 +108,7 @@ exports.userdetails_create = async function (req, res) {
 };
 
 //==============================================UPDATE DATA============================================================
-exports.userdetails_update = async function (req, res) {
+exports.quotation_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
     console.log(quatationId);
@@ -182,7 +182,7 @@ exports.userdetails_update = async function (req, res) {
 };
 
 //==============================================DELETE DATA====================================================================
-exports.userdetails_delete = async function (req, res) {
+exports.quotation_delete = async function (req, res) {
   try {
     const userdatadelete = await user.findByIdAndDelete({ _id: req.params.id });
     if (!userdatadelete) {
@@ -204,7 +204,7 @@ exports.userdetails_delete = async function (req, res) {
 };
 
 //============================================VIEW DATA=========================================================
-exports.userdetails_viewdata = async function (req, res) {
+exports.quotation_view = async function (req, res) {
   try {
     const userviewdata = await user
       .findById({ _id: req.params.id })
@@ -267,7 +267,7 @@ exports.userdetails_viewdata = async function (req, res) {
 };
 
 //============================================LIST DATA=========================================================
-exports.userdetails_listdata = async function (req, res) {
+exports.quotation_list = async function (req, res) {
   try {
     const users = await user.aggregate([
       {
@@ -330,7 +330,7 @@ exports.userdetails_listdata = async function (req, res) {
 };
 
 //==============================================SERCH DATA=========================================================
-exports.userdetails_searchdata = async function (req, res) {
+exports.quotation_search = async function (req, res) {
   try {
     // const nameField = ;
     // const serialNoField = ;

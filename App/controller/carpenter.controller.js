@@ -1,5 +1,5 @@
 const carpenter = require("../model/carpenter.model");
-const user = require("../model/user.model");
+const user = require("../model/quotation.model");
 var jwt = require("jsonwebtoken");
 const { default: mongoose } = require("mongoose");
 

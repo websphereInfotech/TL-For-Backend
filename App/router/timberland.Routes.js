@@ -2,11 +2,11 @@ const loginRoute = require("./login.Routes");
 const shopRoute = require("./shop.Routes");
 const architectureRoute = require("./architec.Routes");
 const carpenterRoute = require("./carpenter.Routes");
-const userRoute = require("./user.Routes");
-const salesPersonRouter = require('./salesPerson.Routes')
-const followRoutes =require('./follow.Routes')
-const totalRoutes = require('./total.Routes')
-const viewRoutes = require('../router/view.Routes');
+const userRoute = require("./quotation.Routes");
+const salesPersonRouter = require("./salesPerson.Routes");
+const followRoutes = require("./follow.Routes");
+const totalRoutes = require("./total.Routes");
+const viewRoutes = require("../router/view.Routes");
 module.exports = {
   loginRoute,
   shopRoute,
@@ -16,5 +16,5 @@ module.exports = {
   salesPersonRouter,
   followRoutes,
   totalRoutes,
-  viewRoutes
+  viewRoutes,
 };
