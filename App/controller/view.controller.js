@@ -3,7 +3,7 @@ const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
 const Total = require("../model/total.model");
-const Sales = require('../model/salesPerson.model')
+const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
@@ -54,14 +54,155 @@ exports.AllFiles = async (req, res) => {
   }
 };
 
+// exports.createExcel = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const startDate = req.query.startDate
+//       ? new Date(req.query.startDate)
+//       : new Date(0);
+//     const endDate = req.query.endDate
+//       ? new Date(req.query.endDate)
+//       : new Date();
+
+//     const matchField = {};
+
+//     if (req.query.startDate || req.query.endDate) {
+//       matchField.$and = [
+//         { "connectedUsers.Date": { $gte: startDate } },
+//         { "connectedUsers.Date": { $lte: endDate } },
+//       ];
+//     }
+
+//     const usersConnectedToSales = await Sales.aggregate([
+//       {
+//         $match: {
+//           _id: new mongoose.Types.ObjectId(id),
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "_id",
+//           foreignField: "sales",
+//           as: "connectedUsers",
+//         },
+//       },
+//       {
+//         $unwind: "$connectedUsers",
+//       },
+//       {
+//         $match: matchField,
+//       },
+//       {
+//         $group: {
+//           _id: "$_id",
+//           userName: { $first: "$Name" },
+//           mobileNo: { $first: "$mobileNo" },
+//           connectedUsers: { $push: "$connectedUsers" },
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "totals",
+//           localField: "connectedUsers._id",
+//           foreignField: "user_id",
+//           as: "totalData",
+//         },
+//       },
+//     ]);
+
+//     // Create a new Excel workbook and worksheet
+//     const workbook = new excelJs.Workbook();
+//     const worksheet = workbook.addWorksheet("Quotation Data");
+
+//     // Define the Excel headers based on your data structure
+//     worksheet.columns = [
+//       { header: "TokenNo", key: "serialNumber" },
+//       { header: "Name", key: "userName" },
+//       { header: "MobileNo", key: "mobileNo" },
+//       { header: "Address", key: "address" },
+//       { header: "Date", key: "Date" },
+//       { header: "Description", key: "description" },
+//       { header: "Area", key: "area" },
+//       { header: "Size", key: "size" },
+//       { header: "Rate", key: "rate" },
+//       { header: "Quantity", key: "quantity" },
+//       { header: "Total", key: "total" },
+//     ];
+//     worksheet.columns.forEach((column) => {
+//       column.alignment = { horizontal: "center" };
+//       column.width = 15;
+//     });
+
+//     usersConnectedToSales.forEach((user) => {
+//       user.connectedUsers.forEach((cUser) => {
+//         const rowData = {
+//           serialNumber: cUser.serialNumber,
+//           userName: cUser.userName,
+//           mobileNo: cUser.mobileNo,
+//           address: cUser.address,
+//           Date: cUser.Date,
+//           description: "", // Initialize the description field
+//           area: "", // Initialize the area field
+//           size: 0, // Initialize the size field
+//           rate: 0, // Initialize the rate field
+//           quantity: 0, // Initialize the quantity field
+//           total: 0,
+//         };
+
+//         const totalData = user.totalData.filter((data) =>
+//           data.user_id.equals(cUser._id)
+//         );
+//         totalData.forEach((data) => {
+//           // You may want to handle multiple total data here, for example, adding them to an array or as separate rows.
+//           // For simplicity, I'm just updating the values in the rowData here.
+//           rowData.description = data.description;
+//           rowData.area = data.area;
+//           rowData.size = data.size;
+//           rowData.rate = data.rate;
+//           rowData.quantity = data.quantity;
+//           rowData.total = data.total;
+
+//           // Add rowData to the worksheet
+//           worksheet.addRow(rowData);
+//         });
+//       });
+//     });
+
+//     // Set content disposition for the response
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );
+//     res.setHeader(
+//       "Content-Disposition",
+//       "attachment; filename=quotation_data.xlsx"
+//     );
+
+//     // Generate the Excel file and send it as a response
+//     const buffer = await workbook.xlsx.writeBuffer();
+//     res.end(buffer);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(404).json({
+//       status: "Fail",
+//       message: error.message,
+//     });
+//   }
+// };
+
 exports.createExcel = async (req, res) => {
   try {
     const id = req.params.id;
-    const startDate = req.query.startDate ? new Date(req.query.startDate) : new Date(0);
-    const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+    const startDate = req.query.startDate
+      ? new Date(req.query.startDate)
+      : new Date(0);
+    const endDate = req.query.endDate
+      ? new Date(req.query.endDate)
+      : new Date();
 
-    const matchField  = {}
-    
+    const matchField = {};
+
     if (req.query.startDate || req.query.endDate) {
       matchField.$and = [
         { "connectedUsers.Date": { $gte: startDate } },
@@ -97,15 +238,23 @@ exports.createExcel = async (req, res) => {
           connectedUsers: { $push: "$connectedUsers" },
         },
       },
+      {
+        $lookup: {
+          from: "totals",
+          localField: "connectedUsers._id",
+          foreignField: "user_id",
+          as: "totalData",
+        },
+      },
     ]);
 
     // Create a new Excel workbook and worksheet
+    const excelJs = require("exceljs");
     const workbook = new excelJs.Workbook();
     const worksheet = workbook.addWorksheet("Quotation Data");
 
     // Define the Excel headers based on your data structure
     worksheet.columns = [
-      // { header: "sr_No", key: "serial_No" },
       { header: "TokenNo", key: "serialNumber" },
       { header: "Name", key: "userName" },
       { header: "MobileNo", key: "mobileNo" },
@@ -118,21 +267,35 @@ exports.createExcel = async (req, res) => {
       { header: "Quantity", key: "quantity" },
       { header: "Total", key: "total" },
     ];
-    // worksheet.addRow(headers);
-    // console.log(">>>>>>>>>>",Sales.Name);
+    worksheet.columns.forEach((column) => {
+      column.alignment = { horizontal: "center" };
+      column.width = 15;
+    });
+
     usersConnectedToSales.forEach((user) => {
       user.connectedUsers.forEach((cUser) => {
-        const rowData = {
+        const totalData = user.totalData.filter((data) =>
+          data.user_id.equals(cUser._id)
+        );
+        const data = {
           serialNumber: cUser.serialNumber,
           userName: cUser.userName,
           mobileNo: cUser.mobileNo,
           address: cUser.address,
           Date: cUser.Date,
-          // Description:cUser.description
         };
-        console.log("rowData:", rowData);
-        worksheet.addRow(rowData);
-        // console.log("????",rowData);
+        worksheet.addRow(data)
+        totalData.forEach((data) => {
+          const rowData = {
+            description: data.description,
+            area: data.area,
+            size: data.size,
+            rate: data.rate,
+            quantity: data.quantity,
+            total: data.total,
+          };
+          worksheet.addRow(rowData);
+        });
       });
     });
 
@@ -158,6 +321,236 @@ exports.createExcel = async (req, res) => {
   }
 };
 
+
+// exports.createExcel = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const startDate = req.query.startDate
+//       ? new Date(req.query.startDate)
+//       : new Date(0);
+//     const endDate = req.query.endDate
+//       ? new Date(req.query.endDate)
+//       : new Date();
+
+//     const matchField = {};
+
+//     if (req.query.startDate || req.query.endDate) {
+//       matchField.$and = [
+//         { "connectedUsers.Date": { $gte: startDate } },
+//         { "connectedUsers.Date": { $lte: endDate } },
+//       ];
+//     }
+
+//     const usersConnectedToSales = await Sales.aggregate([
+//       {
+//         $match: {
+//           _id: new mongoose.Types.ObjectId(id),
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "_id",
+//           foreignField: "sales",
+//           as: "connectedUsers",
+//         },
+//       },
+//       {
+//         $unwind: "$connectedUsers",
+//       },
+//       {
+//         $match: matchField,
+//       },
+//       {
+//         $group: {
+//           _id: "$_id",
+//           userName: { $first: "$Name" },
+//           mobileNo: { $first: "$mobileNo" },
+//           connectedUsers: { $push: "$connectedUsers" },
+//           totalData: { $push: "$totalData" }, // Collect all total data in one array
+//         },
+//       },
+//     ]);
+
+//     // Create a new Excel workbook and worksheet
+//     const workbook = new excelJs.Workbook();
+//     const worksheet = workbook.addWorksheet("Quotation Data");
+
+//     // Define the Excel headers based on your data structure
+//     worksheet.columns = [
+//       { header: "TokenNo", key: "serialNumber" },
+//       { header: "Name", key: "userName" },
+//       { header: "MobileNo", key: "mobileNo" },
+//       { header: "Address", key: "address" },
+//       { header: "Date", key: "Date" },
+//       { header: "Description", key: "description" },
+//       { header: "Area", key: "area" },
+//       { header: "Size", key: "size" },
+//       { header: "Rate", key: "rate" },
+//       { header: "Quantity", key: "quantity" },
+//       { header: "Total", key: "total" },
+//     ];
+//     worksheet.columns.forEach((column) => {
+//       column.alignment = { horizontal: "center" };
+//       column.width = 15;
+//     });
+
+//     usersConnectedToSales.forEach((user) => {
+//       user.connectedUsers.forEach((cUser) => {
+//         const rowData = {
+//           serialNumber: cUser.serialNumber,
+//           userName: cUser.userName,
+//           mobileNo: cUser.mobileNo,
+//           address: cUser.address,
+//           Date: cUser.Date,
+//           description: "", // Initialize the description field
+//           area: "", // Initialize the area field
+//           size: 0, // Initialize the size field
+//           rate: 0, // Initialize the rate field
+//           quantity: 0, // Initialize the quantity field
+//           total: 0,
+//         };
+
+//         user.totalData.forEach((data) => {
+//           // Update rowData with total data
+//           rowData.description = data.description;
+//           rowData.area = data.area;
+//           rowData.size = data.size;
+//           rowData.rate = data.rate;
+//           rowData.quantity = data.quantity;
+//           rowData.total += data.total; // Accumulate total values
+//         });
+
+//         // Add rowData to the worksheet
+//         worksheet.addRow(rowData);
+//       });
+//     });
+
+//     // Set content disposition for the response
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );
+//     res.setHeader(
+//       "Content-Disposition",
+//       "attachment; filename=quotation_data.xlsx"
+//     );
+
+//     // Generate the Excel file and send it as a response
+//     const buffer = await workbook.xlsx.writeBuffer();
+//     res.end(buffer);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(404).json({
+//       status: "Fail",
+//       message: error.message,
+//     });
+//   }
+// };
+
+
+
+
+// exports.createExcel = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const startDate = req.query.startDate ? new Date(req.query.startDate) : new Date(0);
+//     const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+
+//     const matchField  = {}
+
+//     if (req.query.startDate || req.query.endDate) {
+//       matchField.$and = [
+//         { "connectedUsers.Date": { $gte: startDate } },
+//         { "connectedUsers.Date": { $lte: endDate } },
+//       ];
+//     }
+
+//     const usersConnectedToSales = await Sales.aggregate([
+//       {
+//         $match: {
+//           _id: new mongoose.Types.ObjectId(id),
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "_id",
+//           foreignField: "sales",
+//           as: "connectedUsers",
+//         },
+//       },
+//       {
+//         $unwind: "$connectedUsers",
+//       },
+//       {
+//         $match: matchField,
+//       },
+//       {
+//         $group: {
+//           _id: "$_id",
+//           userName: { $first: "$Name" },
+//           mobileNo: { $first: "$mobileNo" },
+//           connectedUsers: { $push: "$connectedUsers" },
+//         },
+//       },
+//     ]);
+//     console.log(usersConnectedToSales);
+
+//     // Create a new Excel workbook and worksheet
+//     const workbook = new excelJs.Workbook();
+//     const worksheet = workbook.addWorksheet("Quotation Data");
+
+//     // Define the Excel headers based on your data structure
+//     worksheet.columns = [
+//       // { header: "sr_No", key: "serial_No" },
+//       { header: "TokenNo", key: "serialNumber" },
+//       { header: "Name", key: "userName" },
+//       { header: "MobileNo", key: "mobileNo" },
+//       { header: "Address", key: "address" },
+//       { header: "Date", key: "Date" },
+//       { header: "Description", key: "description" },
+//       { header: "Area", key: "area" },
+//       { header: "Size", key: "size" },
+//       { header: "Rate", key: "rate" },
+//       { header: "Quantity", key: "quantity" },
+//       { header: "Total", key: "total" },
+//     ];
+//     //  worksheet.columns.forEach((column) => {
+//     //     column.alignment = { horizontal: 'center' };
+//     //     column.width=15
+//     //   });
+
+//     // worksheet.addRow(headers);
+
+//     usersConnectedToSales.forEach((user) => {
+//       user.connectedUsers.forEach((cUser) => {
+//         const rowData = {
+//           serialNumber: cUser.serialNumber,
+//           userName: cUser.userName,
+//           mobileNo: cUser.mobileNo,
+//           address: cUser.address,
+//           Date: cUser.Date,
+//           // Description:cUser.description
+//         };
+//         console.log('>>>>>>>',rowData);
+//         worksheet.addRow(rowData);
+
+//       });
+//     });
+
+//     // Set content disposition for the response
+//     res.setHeader( "Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//     res.setHeader( "Content-Disposition", "attachment; filename=quotation_data.xlsx");
+
+//     // Generate the Excel file and send it as a response
+//     const buffer = await workbook.xlsx.writeBuffer();
+//     res.end(buffer);
+//   } catch (error) {
+//     console.error("Error creating Excel Sheet Download:", error);
+//     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
+//   }
+// };
 
 // exports.createExcel = async (req, res) => {
 //   try {
