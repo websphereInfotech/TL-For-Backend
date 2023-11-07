@@ -206,6 +206,29 @@ exports.salesPersonList = async (req, res) => {
           foreignField: "quatationId",
           as: "connectedUsers.followDetails",
         },
+      }, {
+        $lookup: {
+          from: "shops",
+          localField: "connectedUsers.shop",
+          foreignField: "_id",
+          as: "connectedUsers.shop",
+        },
+      },
+      {
+        $lookup: {
+          from: "carpenters",
+          localField: "connectedUsers.carpenter",
+          foreignField: "_id",
+          as: "connectedUsers.carpenter",
+        },
+      },
+      {
+        $lookup: {
+          from: "architectuers",
+          localField: "connectedUsers.architec",
+          foreignField: "_id",
+          as: "connectedUsers.architecture",
+        },
       },
       {
         $match: matchField,
