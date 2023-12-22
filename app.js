@@ -23,7 +23,9 @@ const {
 } = require("./App/router/timberland.Routes");
 var port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(express.json());
