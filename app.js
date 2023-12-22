@@ -25,7 +25,7 @@ var port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "https://timberland.onrender.com",
+    origin: "https://tl-for-backend-dev-ttkf.4.us-1.fl0.io",
     headers: ["Content-Type", "Authorization"],
     credentials: true,
   })
