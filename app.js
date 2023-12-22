@@ -26,7 +26,7 @@ var port = process.env.PORT || 3000;
 app.use(
   cors({
     origin: "https://timberland.onrender.com",
-    headers: ["Content-Type"],
+    headers: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
