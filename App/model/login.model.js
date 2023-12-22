@@ -11,6 +11,6 @@ const Schema = mongoose.Schema;
         require:true
     }
  });
- const login = mongoose.model('login',loginschema)
+ const Login = mongoose.model('Login',loginschema)
 
- module.exports=login;
+ module.exports=Login;

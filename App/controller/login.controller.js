@@ -2,48 +2,52 @@ var login = require('../model/login.model')
 var Token=require('../model/token.model')
 var jwt = require('jsonwebtoken');
 
-exports.login_page = async function(req,res){
+exports.login_page = async function(req, res) {
     try {
-        const {login_id,password}=req.body
-        const loginIdFind=await login.findOne({login_id})
-        if(!loginIdFind){
-            return res.status(404).json({
-                status:"Fail",
-                message:"Enter valid loginid"
-            })
+        const { login_id, password } = req.body;
+
+        const loginIdFind = await login.findOne({login_id})
+
+        if (!loginIdFind) {
+            return res.status(500).json({
+                status: "Fail",
+                message: "Enter valid loginid"
+            });
         }
-        if(loginIdFind.password !== password){
-            return res.status(400).json({
-                status:"Fail",
-                message:"Enter valid password"
-            })
+
+        if (loginIdFind.password !== password) {
+            console.log("password", password);
+            return res.status(500).json({
+                status: "Fail",
+                message: "Enter valid password"
+            });
         }
-        const payload={
-            id:loginIdFind._id,
-            login_id:loginIdFind.login_id,
-            password:loginIdFind.password
-        }
-        
-        var token = jwt.sign(payload, process.env.KEY,{expiresIn:'1d'});
-        const tokensave = Token({
-            id:loginIdFind._id,
-            token:token
-        })
-        await tokensave.save()
-         if(loginIdFind.login_id === login_id && loginIdFind.password === password)
-         {
-            return res.status(200).json({
-                status: "Success",
-                message: "login successfull",
-                token:token
-            })
-         }
+
+        const payload = {
+            id: loginIdFind._id,
+            login_id: loginIdFind.login_id,
+            password: loginIdFind.password
+        };
+
+        var token = jwt.sign(payload, process.env.KEY, { expiresIn: '1d' });
+
+        const tokenSave = new Token({
+            id: loginIdFind._id,
+            token: token
+        });
+
+        await tokenSave.save();
+
+        return res.status(200).json({
+            status: "Success",
+            message: "Login successful",
+            token: token
+        });
     } catch (error) {
-        res.status(404).json({
+        console.error(error);
+        res.status(500).json({
             status: "Fail",
-            message: "fail to login"
-        })
+            message: "Failed to login"
+        });
     }
-}
-
-
+};
