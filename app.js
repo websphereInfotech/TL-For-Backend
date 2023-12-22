@@ -26,7 +26,7 @@ var port = process.env.PORT || 3000;
 app.use(
   cors({
     origin: "https://tl-for-backend-dev-ttkf.4.us-1.fl0.io",
-    headers: ["Content-Type", "Authorization"],
+    headers: ["Content-Type"],
     credentials: true,
   })
 );
