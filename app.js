@@ -40,12 +40,6 @@ app.use("/api", followRoutes);
 app.use("/api", totalRoutes);
 app.use("/api", viewRoutes);
 
-app.use(express.static(path.join(__dirname, 'build')));
-
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 app.listen(port, () => {
   console.log(`Server is running to port ${port}`);
 });
