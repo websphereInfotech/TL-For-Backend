@@ -9,7 +9,7 @@ exports.login_page = async function(req, res) {
         const loginIdFind = await login.findOne({login_id})
 
         if (!loginIdFind) {
-            return res.status(500).json({
+            return res.status(404).json({
                 status: "Fail",
                 message: "Enter valid loginid"
             });
@@ -17,7 +17,7 @@ exports.login_page = async function(req, res) {
 
         if (loginIdFind.password !== password) {
             console.log("password", password);
-            return res.status(500).json({
+            return res.status(404).json({
                 status: "Fail",
                 message: "Enter valid password"
             });
