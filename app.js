@@ -39,7 +39,12 @@ app.use("/api", salesPersonRouter);
 app.use("/api", followRoutes);
 app.use("/api", totalRoutes);
 app.use("/api", viewRoutes);
-
+if (process.env.NODE_ENV === 'production') {
+  //*Set static folder
+  app.use('/', express.static(join(__dirname, 'client', 'build')));
+  
+  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'build','index.html')));
+}
 app.listen(port, () => {
   console.log(`Server is running to port ${port}`);
 });
