@@ -9,9 +9,10 @@ const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
 
 exports.AllFiles = async (req, res) => {
+  console.log("Function invoked");
   try {
     const id = req.params.id;
-
+    console.log("*********", id);
     const users = await user
       .findById(id)
       .populate("sales")
@@ -20,7 +21,6 @@ exports.AllFiles = async (req, res) => {
       .populate("shop");
 
     const Totalwithuser = await Total.find({ user_id: id });
-
     const status = await Follow.findOne({ quatationId: id });
 
     if (!users) {
@@ -40,7 +40,15 @@ exports.AllFiles = async (req, res) => {
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
+    console.log("html", html);
     const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
+      if (err) {
+        console.error("Error creating PDF buffer:", err);
+        return res.status(500).json({
+          status: "Fail",
+          message: "Error creating PDF buffer",
+        });
+      }
       const base64String = buffer.toString("base64");
       return res.status(200).json({
         status: "Success",
@@ -53,7 +61,6 @@ exports.AllFiles = async (req, res) => {
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
-
 
 exports.createExcel = async (req, res) => {
   try {
@@ -165,16 +172,19 @@ exports.createExcel = async (req, res) => {
 
     usersConnectedToSales.forEach((user) => {
       user.connectedUsers.forEach((cUser) => {
-        
         const totalData = user.totalData.filter((data) =>
-        data.user_id.equals(cUser._id)
+          data.user_id.equals(cUser._id)
         );
-      
-        const carpenterName = cUser.carpenter.map((carpenter) => carpenter.carpentersName);
-        const architecName = cUser.architec.map((architec) => architec.architecsName);
+
+        const carpenterName = cUser.carpenter.map(
+          (carpenter) => carpenter.carpentersName
+        );
+        const architecName = cUser.architec.map(
+          (architec) => architec.architecsName
+        );
         const shopName = cUser.shop.map((shop) => shop.shopName);
 
-        console.log("????????????????????????",architecName);
+        console.log("????????????????????????", architecName);
 
         const data = {
           serialNumber: cUser.serialNumber,
@@ -182,12 +192,12 @@ exports.createExcel = async (req, res) => {
           mobileNo: cUser.mobileNo,
           address: cUser.address,
           Date: cUser.Date,
-          carpenter: carpenterName.join(', '), // Set each carpenter's name in a separate column
-          architec: architecName.join(', '),   // Set each architec's name in a separate column
-          shop: shopName.join(', '),    
+          carpenter: carpenterName.join(", "), // Set each carpenter's name in a separate column
+          architec: architecName.join(", "), // Set each architec's name in a separate column
+          shop: shopName.join(", "),
         };
         worksheet.addRow(data);
-    
+
         // carpenterName.forEach((carpenterName) => {
         //   const data = {
         //     carpenter: carpenterName, // Set each carpenter's name in a separate row
@@ -241,4 +251,3 @@ exports.createExcel = async (req, res) => {
     });
   }
 };
-

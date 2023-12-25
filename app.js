@@ -23,12 +23,6 @@ const {
 } = require("./App/router/timberland.Routes");
 var port = process.env.PORT || 3000;
 
-// const corsOptions = {
-//   origin: 'https://timberland.onrender.com',
-// };
-
-// app.use(cors(corsOptions));
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("dev"));
