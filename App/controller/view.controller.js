@@ -9,10 +9,8 @@ const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
 
 exports.AllFiles = async (req, res) => {
-  console.log("Function invoked");
   try {
     const id = req.params.id;
-    console.log("*********",id);
     const users = await user
       .findById(id)
       .populate("sales")
@@ -40,7 +38,6 @@ exports.AllFiles = async (req, res) => {
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
-    console.log("html",html);
     const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
        if (err) {
     console.error("Error creating PDF buffer:", err);
