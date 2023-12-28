@@ -8,10 +8,11 @@ const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
-const { log } = require("console");
+
 exports.AllFiles = async (req, res) => {
   try {
     const id = req.params.id;
+
     const users = await user
       .findById(id)
       .populate("sales")
@@ -20,44 +21,40 @@ exports.AllFiles = async (req, res) => {
       .populate("shop");
 
     const Totalwithuser = await Total.find({ user_id: id });
+
     const status = await Follow.findOne({ quatationId: id });
 
     if (!users) {
       return res.status(404).json({
         status: "Fail",
-        message: "Quotation not found",
+        message: "Quatation not found",
       });
     }
-
+    // console.log(users);
+    // res.render(path.join(__dirname, "../views/convert.ejs"), {
+    //   users,
+    //   Totalwithuser,
+    //   status,
+    // });
+    // let base64 = "";
     const html = await ejs.renderFile(
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
-
-
-    const pdfBuffer = await new Promise((resolve, reject) => {
-      pdf.create(html).toBuffer((err, buffer) => {
-        if (err) {
-          console.error("Error creating PDF buffer:", err);
-          reject(err);
-        } else {
-          resolve(buffer);
-        }
+    const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
+      const base64String = buffer.toString("base64");
+      return res.status(200).json({
+        status: "Success",
+        message: "pdf create successFully",
+        data: base64String,
       });
     });
-
-    const base64String = pdfBuffer.toString("base64");
-
-    return res.status(200).json({
-      status: "Success",
-      message: "PDF created successfully",
-      data: base64String,
-    });
   } catch (error) {
-    console.error("Error creating PDF:", error);
+    console.error("Error creating Pdf Download:", error);
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
+
 exports.createExcel = async (req, res) => {
   try {
     const id = req.params.id;
