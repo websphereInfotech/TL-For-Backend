@@ -2,14 +2,12 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const util = require('util');
+const fs = require('fs').promises;
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
-
-const pdfCreate = util.promisify(pdf.create);
 
 // exports.AllFiles = async (req, res) => {
 //   try {
@@ -98,9 +96,25 @@ exports.AllFiles = async (req, res) => {
     console.log("html", html);
 
     // Use Promises to handle the asynchronous nature of pdf.create
-    const buffer = await pdfCreate(html);
-    
-    const base64String = buffer.toString("base64");
+    const pdfFileName = `temp_${Date.now()}.pdf`;
+    const pdfFilePath = path.join(__dirname, pdfFileName);
+
+    // Use Promises to handle the asynchronous nature of pdf.create
+    const pdfBuffer = await new Promise((resolve, reject) => {
+      pdf.create(html).toFile(pdfFilePath, (err, res) => {
+        if (err) reject(err);
+        else resolve(res);
+      });
+    });
+
+    // Read the generated PDF file
+    const pdfData = await fs.readFile(pdfFilePath);
+
+    // Convert PDF to base64
+    const base64String = pdfData.toString('base64');
+
+    // Delete the temporary PDF file
+    await fs.unlink(pdfFilePath);
 
     return res.status(200).json({
       status: "Success",
