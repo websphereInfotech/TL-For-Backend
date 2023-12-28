@@ -93,10 +93,9 @@ exports.AllFiles = async (req, res) => {
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
-      console.log("html",html);
-      const browser = await puppeteer.launch({
-        executablePath: "C:\Program Files\Google\Chrome\Application\chrome.exe",
-      });
+    console.log("html", html);
+
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(html);
 
@@ -114,6 +113,7 @@ exports.AllFiles = async (req, res) => {
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
+
 
 exports.createExcel = async (req, res) => {
   try {
