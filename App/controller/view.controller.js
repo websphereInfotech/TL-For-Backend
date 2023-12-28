@@ -87,17 +87,18 @@ exports.AllFiles = async (req, res) => {
         message: "Quatation not found",
       });
     }
-    const browser = await puppeteer.launch({
-      headless: 'new',
-      executablePath: puppeteer.executablePath(),
-    });
-    
-    console.log('Browser launched successfully');
+
     const html = await ejs.renderFile(
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
     console.log("html", html);
+
+    console.log('Browser launched successfully');
+    const browser = await puppeteer.launch({ headless: 'new' });
+    
+    console.log('Browser launched successfully');
+
 
     const page = await browser.newPage();
     await page.setContent(html);
