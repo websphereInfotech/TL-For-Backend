@@ -63,7 +63,6 @@ const { Types, default: mongoose } = require("mongoose");
 //     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
 //   }
 // };
-
 exports.AllFiles = async (req, res) => {
   try {
     console.log("*********");
@@ -95,7 +94,11 @@ exports.AllFiles = async (req, res) => {
     );
     console.log("html", html);
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: 'new' });
+
+    // Specify executable path if needed
+    // const browser = await puppeteer.launch({ headless: 'new', executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe' });
+
     const page = await browser.newPage();
     await page.setContent(html);
 
@@ -113,6 +116,7 @@ exports.AllFiles = async (req, res) => {
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
+
 
 
 exports.createExcel = async (req, res) => {
