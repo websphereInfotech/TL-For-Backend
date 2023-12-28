@@ -94,7 +94,7 @@ exports.AllFiles = async (req, res) => {
     );
     console.log("html", html);
 
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({ headless: 'new', executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' });
     console.log('Browser launched successfully');
 
 
