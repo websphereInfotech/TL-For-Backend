@@ -94,7 +94,10 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
       console.log("html",html);
-      const browser = await puppeteer.launch({ headless: true });
+      const browser = await puppeteer.launch({
+        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      });
+      
 
     const page = await browser.newPage();
     await page.setContent(html);
