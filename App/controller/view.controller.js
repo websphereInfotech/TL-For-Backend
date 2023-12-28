@@ -35,24 +35,31 @@ exports.AllFiles = async (req, res) => {
     );
 
    
-    pdf.create(html).toFile(
-      path.join(__dirname, '../views/pdf.ejs', `${data.link}.pdf`),
-      (err, res) => {
-        if (err) {
-          console.error("Error creating PDF file:", err);
-          return res.status(500).json({
-            status: "Fail",
-            message: "Error creating PDF file",
-          });
-        }
-        console.log("PDF file created successfully:", res);
-      }
-    );
+    const pdfOptions = { format: 'Letter' }; // Add any additional options you need
 
-    return res.status(200).json({
-      status: "Success",
-      message: "PDF created successfully",
+const pdfFilePath = path.join(
+  __dirname,
+  '../../../assets/docs/idv_docs/',
+  `${id}_quotation.pdf`
+);
+
+pdf.create(html, pdfOptions).toFile(pdfFilePath, (err, result) => {
+  if (err) {
+    console.error("Error creating PDF file:", err);
+    return res.status(500).json({
+      status: "Fail",
+      message: "Error creating PDF file",
     });
+  }
+
+  console.log("PDF file created successfully:", result);
+
+  return res.status(200).json({
+    status: "Success",
+    message: "PDF created successfully",
+    data: pdfFilePath, // You can send the file path in the response if needed
+  });
+});
 
   } catch (error) {
     console.error("Error creating PDF:", error);
