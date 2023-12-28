@@ -8,10 +8,13 @@ const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
+const { log } = require("console");
 
 exports.AllFiles = async (req, res) => {
   try {
+    console.log("*********");
     const id = req.params.id;
+    console.log("id",id);
     const users = await user
       .findById(id)
       .populate("sales")
@@ -20,49 +23,45 @@ exports.AllFiles = async (req, res) => {
       .populate("shop");
 
     const Totalwithuser = await Total.find({ user_id: id });
-    const status = await Follow.findOne({ quatationId: id });
-
+        const status = await Follow.findOne({ quatationId: id });
+console.log("total",Totalwithuser);
+console.log("status",status);
     if (!users) {
       return res.status(404).json({
         status: "Fail",
-        message: "Quotation not found",
+        message: "Quatation not found",
       });
     }
-
+    console.log(users);
+    // res.render(path.join(__dirname, "../views/convert.ejs"), {
+    //   users,
+    //   Totalwithuser,
+    //   status,
+    // });
+    // let base64 = "";
     const html = await ejs.renderFile(
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
-
-   
-    const pdfOptions = { format: 'Letter' }; // Add any additional options you need
-
-const pdfFilePath = path.join(
-  __dirname,
-  '../../../assets/docs/idv_docs/',
-  `${id}_quotation.pdf`
-);
-
-pdf.create(html, pdfOptions).toFile(pdfFilePath, (err, result) => {
-  if (err) {
-    console.error("Error creating PDF file:", err);
+    console.log("html",html);
+    const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
+       if (err) {
+    console.error("Error creating PDF buffer:", err);
     return res.status(500).json({
       status: "Fail",
-      message: "Error creating PDF file",
+      message: "Error creating PDF buffer",
     });
   }
-
-  console.log("PDF file created successfully:", result);
-
-  return res.status(200).json({
-    status: "Success",
-    message: "PDF created successfully",
-    data: pdfFilePath, // You can send the file path in the response if needed
-  });
-});
-
+  console.log("pdf0",pdf1);
+      const base64String = buffer.toString("base64");
+      return res.status(200).json({
+        status: "Success",
+        message: "pdf create successFully",
+        data: base64String,
+      });
+    });
   } catch (error) {
-    console.error("Error creating PDF:", error);
+    console.error("Error creating Pdf Download:", error);
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
