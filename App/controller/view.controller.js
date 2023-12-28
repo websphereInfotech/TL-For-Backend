@@ -2,73 +2,17 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const puppeteer = require("puppeteer");
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
 
-// exports.AllFiles = async (req, res) => {
-//   try {
-//     console.log("*********");
-//     const id = req.params.id;
-//     console.log("id",id);
-//     const users = await user
-//       .findById(id)
-//       .populate("sales")
-//       .populate("architec")
-//       .populate("carpenter")
-//       .populate("shop");
-
-//     const Totalwithuser = await Total.find({ user_id: id });
-//         const status = await Follow.findOne({ quatationId: id });
-// console.log("total",Totalwithuser);
-// console.log("status",status);
-// console.log("user",user);
-//     if (!users) {
-//       return res.status(404).json({
-//         status: "Fail",
-//         message: "Quatation not found",
-//       });
-//     }
-//     // console.log(users);
-//     // res.render(path.join(__dirname, "../views/convert.ejs"), {
-//     //   users,
-//     //   Totalwithuser,
-//     //   status,
-//     // });
-//     // let base64 = "";
-//     const html = await ejs.renderFile(
-//       path.join(__dirname, "../views/pdf.ejs"),
-//       { users, Totalwithuser, status }
-//     );
-//     const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
-//        if (err) {
-//     console.error("Error creating PDF buffer:", err);
-//     return res.status(500).json({
-//       status: "Fail",
-//       message: "Error creating PDF buffer",
-//     });
-//   }
-//       const base64String = buffer.toString("base64");
-//       return res.status(200).json({
-//         status: "Success",
-//         message: "pdf create successFully",
-//         data: base64String,
-//       });
-//     });
-//   } catch (error) {
-//     console.error("Error creating Pdf Download:", error);
-//     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
-//   }
-// };
-
 exports.AllFiles = async (req, res) => {
   try {
     console.log("*********");
     const id = req.params.id;
-    console.log("id", id);
+    console.log("id",id);
     const users = await user
       .findById(id)
       .populate("sales")
@@ -77,45 +21,48 @@ exports.AllFiles = async (req, res) => {
       .populate("shop");
 
     const Totalwithuser = await Total.find({ user_id: id });
-    const status = await Follow.findOne({ quatationId: id });
-    console.log("total", Totalwithuser);
-    console.log("status", status);
-    console.log("user", user);
-
+        const status = await Follow.findOne({ quatationId: id });
+console.log("total",Totalwithuser);
+console.log("status",status);
     if (!users) {
       return res.status(404).json({
         status: "Fail",
         message: "Quatation not found",
       });
     }
-
+    console.log(users);
+    // res.render(path.join(__dirname, "../views/convert.ejs"), {
+    //   users,
+    //   Totalwithuser,
+    //   status,
+    // });
+    // let base64 = "";
     const html = await ejs.renderFile(
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
-      console.log("html",html);
-      const browser = await puppeteer.launch({
-        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    console.log("html",html);
+    const pdf1 = pdf.create(html).toBuffer((err, buffer) => {
+       if (err) {
+    console.error("Error creating PDF buffer:", err);
+    return res.status(500).json({
+      status: "Fail",
+      message: "Error creating PDF buffer",
+    });
+  }
+      const base64String = buffer.toString("base64");
+      return res.status(200).json({
+        status: "Success",
+        message: "pdf create successFully",
+        data: base64String,
       });
-      
-
-    const page = await browser.newPage();
-    await page.setContent(html);
-
-    const pdfBuffer = await page.pdf();
-    await browser.close();
-
-    const base64String = pdfBuffer.toString("base64");
-    return res.status(200).json({
-      status: "Success",
-      message: "PDF created successfully",
-      data: base64String,
     });
   } catch (error) {
     console.error("Error creating Pdf Download:", error);
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
+
 
 exports.createExcel = async (req, res) => {
   try {
