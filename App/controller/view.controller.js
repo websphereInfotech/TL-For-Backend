@@ -2,7 +2,7 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const puppeteer = require("puppeteer");
+const puppeteer = require('puppeteer');
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
@@ -94,7 +94,11 @@ exports.AllFiles = async (req, res) => {
     );
     console.log("html", html);
 
-    const browser = await puppeteer.launch({ headless: 'new', executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' });
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      executablePath: puppeteer.executablePath(),
+    });
+    
     console.log('Browser launched successfully');
 
 
