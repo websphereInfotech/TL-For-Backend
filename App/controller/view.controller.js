@@ -50,8 +50,10 @@ exports.AllFiles = async (req, res) => {
     const page = await browser.newPage();
     await page.setContent(html);
 
+    const pdfPath = path.join(__dirname, 'App', 'views', 'output', 'mypdf.pdf');
+
     const pdfBuffer = await page.pdf({
-      path: path.join(__dirname, 'App', 'views', 'pdf.ejs'),
+      path: pdfPath,
       format: "A4",
       printBackground: true
     });
