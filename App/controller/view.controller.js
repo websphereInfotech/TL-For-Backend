@@ -44,8 +44,7 @@ exports.AllFiles = async (req, res) => {
     const browser = await puppeteer.launch({
       executablePath,
       headless:false,
-      args: ["--no-sandbox"]
-    });
+      args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ]    });
     console.log('Browser launched successfully');
 
     const page = await browser.newPage();
