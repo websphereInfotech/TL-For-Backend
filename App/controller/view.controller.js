@@ -95,8 +95,9 @@ exports.AllFiles = async (req, res) => {
     console.log("html", html);
 
     const browser = await puppeteer.launch({ 
-      executablePath:'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' ,
-      headless: true,
+      // executablePath:'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' ,
+      // headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     console.log('Browser launched successfully');
 
