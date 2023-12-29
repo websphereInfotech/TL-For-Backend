@@ -39,18 +39,18 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    const browser = await puppeteer.launch({
-      executablePath,
-      headless: true,
-      ignoreDefaultArgs: ['--disable-extensions'],
-    });
+    // const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    const browser = await puppeteer.launch();
     console.log('Browser launched successfully');
 
     const page = await browser.newPage();
     await page.setContent(html);
 
-    const pdfBuffer = await page.pdf();
+    const pdfBuffer = await page.pdf({
+      path: path.join(__dirname, 'App', 'views', 'pdf.ejs'),
+      format: "A4",
+      printBackground: true
+    });
     await browser.close();
 
     const base64String = pdfBuffer.toString("base64");
