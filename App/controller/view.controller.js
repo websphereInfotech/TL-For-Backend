@@ -39,24 +39,18 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-        // const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-        const executablePath ='C:\\Users\\Admin\\.cache\\puppeteer\\chrome\\win64-119.0.6045.105\\chrome-win64\\chrome.exe'
+    const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     const browser = await puppeteer.launch({
       executablePath,
-      headless:false,
-      args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ]    });
+      headless: false,
+    });
     console.log('Browser launched successfully');
 
     const page = await browser.newPage();
+    await page.goto('https://google.com');
     await page.setContent(html);
 
-    const pdfPath = path.join(__dirname, 'App', 'views', 'output', 'mypdf.pdf');
-
-    const pdfBuffer = await page.pdf({
-      path: pdfPath,
-      format: "A4",
-      printBackground: true
-    });
+    const pdfBuffer = await page.pdf();
     await browser.close();
 
     const base64String = pdfBuffer.toString("base64");
