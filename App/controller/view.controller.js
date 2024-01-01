@@ -44,11 +44,10 @@ exports.AllFiles = async (req, res) => {
 
     const browser = await puppeteer.launch({
       executablePath,
-      headless: true ,
-      args: ["--no-sandbox",
+      headless: true,
+      args: [ 
         "--disable-setuid-sandbox",
-        "--disable-gpu",
-        "--single-process"]
+        "--disable-gpu"]
     });
     console.log('Browser launched successfully');
 
