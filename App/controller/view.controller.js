@@ -11,17 +11,6 @@ const { Types, default: mongoose } = require("mongoose");
 
 exports.AllFiles = async (req, res) => {
   try {
-    const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-    console.log("Executable Path:", executablePath);
-    const browser = await puppeteer.launch({
-      executablePath,
-      headless: true,
-      args: [
-        "--disable-setuid-sandbox",
-        "--disable-gpu"
-      ]
-    });
-    console.log('Browser launched successfully');
     console.log("*********");
     const id = req.params.id;
     console.log("id", id);
@@ -50,17 +39,17 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-    // console.log("Executable Path:", executablePath);
+    const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+    console.log("Executable Path:", executablePath);
 
-    // const browser = await puppeteer.launch({
-    //   executablePath,
-    //   headless: true,
-    //   args: [ 
-    //     "--disable-setuid-sandbox",
-    //     "--disable-gpu"]
-    // });
-    // console.log('Browser launched successfully');
+    const browser = await puppeteer.launch({
+      executablePath,
+      headless: 'new',
+      // args: [ 
+      //   "--disable-setuid-sandbox",
+      //   "--disable-gpu"]
+    });
+    console.log('Browser launched successfully');
 
     const page = await browser.newPage();
     await page.setContent(html);
@@ -74,8 +63,8 @@ exports.AllFiles = async (req, res) => {
       message: "PDF created successfully",
       data: base64String,
     });
-  } catch (launchError) {
-    console.error("Error creating Pdf Download:", launchError);
+  } catch (error) {
+    console.error("Error creating Pdf Download:", error);
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
