@@ -2,12 +2,13 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
+const os = require('os');
 
 exports.AllFiles = async (req, res) => {
   try {
@@ -39,17 +40,24 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+    const osPlatform = os.platform(); // possible values are: 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
+    console.log("Scraper running on platform: ", osPlatform);
+    let executablePath;
+    if (/^win/i.test(osPlatform)) {
+      executablePath = "";
+    } else if (/^linux/i.test(osPlatform)) {
+      executablePath = "/usr/bin/google-chrome";
+    }
+    // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
     console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
       executablePath,
-      headless: 'new',
-      // args: [ 
-      //   "--disable-setuid-sandbox",
-      //   "--disable-gpu"]
+      headless: "new",
+      args: ["--disable-setuid-sandbox", "--disable-gpu"],
     });
-    console.log('Browser launched successfully');
+    console.log("Browser launched successfully");
 
     const page = await browser.newPage();
     await page.setContent(html);
@@ -68,7 +76,6 @@ exports.AllFiles = async (req, res) => {
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
-
 
 // exports.AllFiles = async (req, res) => {
 //   try {
@@ -235,16 +242,19 @@ exports.createExcel = async (req, res) => {
 
     usersConnectedToSales.forEach((user) => {
       user.connectedUsers.forEach((cUser) => {
-        
         const totalData = user.totalData.filter((data) =>
-        data.user_id.equals(cUser._id)
+          data.user_id.equals(cUser._id)
         );
-      
-        const carpenterName = cUser.carpenter.map((carpenter) => carpenter.carpentersName);
-        const architecName = cUser.architec.map((architec) => architec.architecsName);
+
+        const carpenterName = cUser.carpenter.map(
+          (carpenter) => carpenter.carpentersName
+        );
+        const architecName = cUser.architec.map(
+          (architec) => architec.architecsName
+        );
         const shopName = cUser.shop.map((shop) => shop.shopName);
 
-        console.log("????????????????????????",architecName);
+        console.log("????????????????????????", architecName);
 
         const data = {
           serialNumber: cUser.serialNumber,
@@ -252,12 +262,12 @@ exports.createExcel = async (req, res) => {
           mobileNo: cUser.mobileNo,
           address: cUser.address,
           Date: cUser.Date,
-          carpenter: carpenterName.join(', '), // Set each carpenter's name in a separate column
-          architec: architecName.join(', '),   // Set each architec's name in a separate column
-          shop: shopName.join(', '),    
+          carpenter: carpenterName.join(", "), // Set each carpenter's name in a separate column
+          architec: architecName.join(", "), // Set each architec's name in a separate column
+          shop: shopName.join(", "),
         };
         worksheet.addRow(data);
-    
+
         // carpenterName.forEach((carpenterName) => {
         //   const data = {
         //     carpenter: carpenterName, // Set each carpenter's name in a separate row
