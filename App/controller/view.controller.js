@@ -2,7 +2,7 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
@@ -39,14 +39,18 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const executablePath = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-    console.log("Executable Path:", executablePath);
+    // const executablePath = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+    // console.log("Executable Path:", executablePath);
 
+    // const browser = await puppeteer.launch({
+    //   executablePath,
+    //   headless: false,
+    //   args: ["--no-sandbox",
+    //     "--disable-setuid-sandbox"]
+    // });
     const browser = await puppeteer.launch({
-      executablePath,
       headless: false,
-      args: ["--no-sandbox",
-        "--disable-setuid-sandbox"]
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
     });
     console.log('Browser launched successfully');
 
