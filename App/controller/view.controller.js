@@ -8,7 +8,7 @@ const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
-const os = require('os');
+const os = require("os");
 
 exports.AllFiles = async (req, res) => {
   try {
@@ -47,7 +47,7 @@ exports.AllFiles = async (req, res) => {
     if (/^win/i.test(osPlatform)) {
       executablePath = "";
     } else if (/^linux/i.test(osPlatform)) {
-      executablePath = "'/path/to/Chrome";
+      executablePath = "/path/to/Chrome";
     }
     // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
     console.log("Executable Path:", executablePath);
