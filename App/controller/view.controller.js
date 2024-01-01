@@ -39,11 +39,11 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const chromiumPath = 'C:\\Users\\Admin\\.cache\\puppeteer\\chrome\\win64-119.0.6045.105\\chrome-win64';
-    console.log("Executable Path:", chromiumPath);
+    const executablePath = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+    console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
-      executablePath: chromiumPath,
+      executablePath,
       headless: true,
       args: ["--no-sandbox",
         "--disable-setuid-sandbox"]
@@ -64,7 +64,6 @@ exports.AllFiles = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating Pdf Download:", error);
-    console.error("Error details:", error.stack); // Log the entire error stack for more information
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
