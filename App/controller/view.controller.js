@@ -44,7 +44,7 @@ exports.AllFiles = async (req, res) => {
 
     const browser = await puppeteer.launch({
       executablePath,
-      headless: true,
+      headless: false,
       args: ["--no-sandbox",
         "--disable-setuid-sandbox"]
     });
@@ -308,26 +308,5 @@ exports.createExcel = async (req, res) => {
       status: "Fail",
       message: error.message,
     });
-  }
-};
-const generatePDF = async (html) => {
-  try {
-    const executablePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-    const browser = await puppeteer.launch({
-      executablePath,
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html);
-
-    const pdfBuffer = await page.pdf();
-    await browser.close();
-
-    return pdfBuffer;
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-    throw error;
   }
 };
