@@ -42,12 +42,11 @@ exports.AllFiles = async (req, res) => {
     const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     const browser = await puppeteer.launch({
       executablePath,
-      headless: `new`
+      headless: true
     });
     console.log('Browser launched successfully');
 
     const page = await browser.newPage();
-    await page.goto('https://google.com');
     await page.setContent(html);
 
     const pdfBuffer = await page.pdf();
