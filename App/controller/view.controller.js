@@ -39,7 +39,7 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const executablePath = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+    const executablePath = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
     console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
