@@ -41,10 +41,10 @@ exports.AllFiles = async (req, res) => {
     console.log("html", html);
     const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     console.log("Executable Path:", executablePath);
-    
+
     const browser = await puppeteer.launch({
       executablePath,
-      headless: true,
+      headless: "new",
       args: ["--no-sandbox",
         "--disable-setuid-sandbox"]
     });
