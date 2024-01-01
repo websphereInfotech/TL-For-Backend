@@ -2,7 +2,7 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
@@ -39,14 +39,15 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const executablePath = String.raw`C:\Program Files\Google\Chrome\Application\chrome.exe`;
+    const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
     console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
       executablePath,
-      headless: "new",
+      headless: true,
       args: ["--no-sandbox",
-        "--disable-setuid-sandbox"]
+        "--disable-setuid-sandbox",
+        "--disable-gpu"]
     });
     console.log('Browser launched successfully');
 
