@@ -9,62 +9,64 @@ const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
 
-// exports.AllFiles = async (req, res) => {
-//   try {
-//     console.log("*********");
-//     const id = req.params.id;
-//     console.log("id", id);
-//     const users = await user
-//       .findById(id)
-//       .populate("sales")
-//       .populate("architec")
-//       .populate("carpenter")
-//       .populate("shop");
+exports.AllFiles = async (req, res) => {
+  try {
+    console.log("*********");
+    const id = req.params.id;
+    console.log("id", id);
+    const users = await user
+      .findById(id)
+      .populate("sales")
+      .populate("architec")
+      .populate("carpenter")
+      .populate("shop");
 
-//     const Totalwithuser = await Total.find({ user_id: id });
-//     const status = await Follow.findOne({ quatationId: id });
-//     console.log("total", Totalwithuser);
-//     console.log("status", status);
-//     console.log("user", user);
+    const Totalwithuser = await Total.find({ user_id: id });
+    const status = await Follow.findOne({ quatationId: id });
+    console.log("total", Totalwithuser);
+    console.log("status", status);
+    console.log("user", user);
 
-//     if (!users) {
-//       return res.status(404).json({
-//         status: "Fail",
-//         message: "Quatation not found",
-//       });
-//     }
+    if (!users) {
+      return res.status(404).json({
+        status: "Fail",
+        message: "Quatation not found",
+      });
+    }
 
-//     const html = await ejs.renderFile(
-//       path.join(__dirname, "../views/pdf.ejs"),
-//       { users, Totalwithuser, status }
-//     );
-//     console.log("html", html);
-//     const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-//     const browser = await puppeteer.launch({
-//       executablePath,
-//       headless: true,
-//       args: ["--no-sandbox",
-//         "--disable-setuid-sandbox"]
-//     });
-//     console.log('Browser launched successfully');
+    const html = await ejs.renderFile(
+      path.join(__dirname, "../views/pdf.ejs"),
+      { users, Totalwithuser, status }
+    );
+    console.log("html", html);
+    const executablePath ='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    console.log("Executable Path:", executablePath);
+    
+    const browser = await puppeteer.launch({
+      executablePath,
+      headless: true,
+      args: ["--no-sandbox",
+        "--disable-setuid-sandbox"]
+    });
+    console.log('Browser launched successfully');
 
-//     const page = await browser.newPage();
-//     await page.setContent(html);
+    const page = await browser.newPage();
+    await page.setContent(html);
 
-//     const pdfBuffer = await page.pdf();
-//     await browser.close();
+    const pdfBuffer = await page.pdf();
+    await browser.close();
 
-//     const base64String = pdfBuffer.toString("base64");
-//     return res.status(200).json({
-//       status: "Success",
-//       message: "PDF created successfully",
-//       data: base64String,
-//     });
-//   } catch (error) {
-//     console.error("Error creating Pdf Download:", error);
-//     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
-//   }
-// };
+    const base64String = pdfBuffer.toString("base64");
+    return res.status(200).json({
+      status: "Success",
+      message: "PDF created successfully",
+      data: base64String,
+    });
+  } catch (error) {
+    console.error("Error creating Pdf Download:", error);
+    res.status(500).json({ status: "Fail", message: "Internal Server Error" });
+  }
+};
 
 
 // exports.AllFiles = async (req, res) => {
@@ -121,45 +123,6 @@ const { Types, default: mongoose } = require("mongoose");
 //     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
 //   }
 // };
-exports.AllFiles = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const users = await user
-      .findById(id)
-      .populate("sales")
-      .populate("architec")
-      .populate("carpenter")
-      .populate("shop");
-
-    const Totalwithuser = await Total.find({ user_id: id });
-    const status = await Follow.findOne({ quatationId: id });
-
-    if (!users) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "Quatation not found",
-      });
-    }
-
-    const html = await ejs.renderFile(
-      path.join(__dirname, "../views/pdf.ejs"),
-      { users, Totalwithuser, status }
-    );
-
-    // Generate PDF separately
-    const pdfBuffer = await generatePDF(html);
-
-    const base64String = pdfBuffer.toString("base64");
-    return res.status(200).json({
-      status: "Success",
-      message: "PDF created successfully",
-      data: base64String,
-    });
-  } catch (error) {
-    console.error("Error creating Pdf Download:", error);
-    res.status(500).json({ status: "Fail", message: "Internal Server Error" });
-  }
-};
 
 exports.createExcel = async (req, res) => {
   try {
