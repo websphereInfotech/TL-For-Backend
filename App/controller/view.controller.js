@@ -39,15 +39,15 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-    console.log("Executable Path:", executablePath);
+    // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+    // console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
-      executablePath,
       headless: true,
       args: [ 
         "--disable-setuid-sandbox",
-        "--disable-gpu"]
+        "--disable-gpu"],
+        executablePath: puppeteer.executablePath(),
     });
     console.log('Browser launched successfully');
 
