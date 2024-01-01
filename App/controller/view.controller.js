@@ -2,7 +2,7 @@ const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
@@ -44,7 +44,7 @@ exports.AllFiles = async (req, res) => {
 
     const browser = await puppeteer.launch({
       executablePath,
-      headless: true,
+      headless: false,
       args: ["--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-gpu"]
