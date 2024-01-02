@@ -1,7 +1,6 @@
 const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
-const pdf = require("html-pdf");
 const puppeteer = require("puppeteer");
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
@@ -108,7 +107,7 @@ exports.AllFiles = async (req, res) => {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.setContent(html);
+    await page.setContent(html, { waitUntil: "networkidle0" });
     const pdfBuffer = await page.pdf({
       format: 'A4'
     });
