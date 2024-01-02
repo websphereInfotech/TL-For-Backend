@@ -78,57 +78,6 @@ exports.AllFiles = async (req, res) => {
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
   }
 };
-exports.AllFiles = async (req, res) => {
-  try {
-    console.log("*********");
-    const id = req.params.id;
-    console.log("id", id);
-    
-    const users = await user
-      .findById(id)
-      .populate("sales")
-      .populate("architec")
-      .populate("carpenter")
-      .populate("shop");
-
-    const Totalwithuser = await Total.find({ user_id: id });
-    const status = await Follow.findOne({ quatationId: id });
-    console.log("total", Totalwithuser);
-    console.log("status", status);
-    console.log("user", user);
-
-    if (!users) {
-      return res.status(404).json({
-        status: "Fail",
-        message: "Quotation not found",
-      });
-    }
-
-    const html = await ejs.renderFile(
-      path.join(__dirname, "../views/pdf.ejs"),
-      { users, Totalwithuser, status }
-    );
-
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
-    const pdfBuffer = await page.pdf({
-      format: 'A4'
-    });
-    await browser.close();
-
-    const base64String = pdfBuffer.toString("base64");
-    
-    return res.status(200).json({
-      status: "Success",
-      message: "PDF created successfully",
-      data: base64String,
-    });
-  } catch (error) {
-    console.error("Error creating PDF Download:", error);
-    res.status(500).json({ status: "Fail", message: "Internal Server Error" });
-  }
-};
 
 exports.createExcel = async (req, res) => {
   try {
