@@ -47,7 +47,9 @@ exports.AllFiles = async (req, res) => {
       executablePath = "";
     } else if (/^linux/i.test(osPlatform)) {
       executablePath = '/usr/bin/chromium-browser'
-    } 
+    } else {
+      executablePath ='';
+    }
     console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
