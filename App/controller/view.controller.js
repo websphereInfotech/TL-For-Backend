@@ -1,13 +1,12 @@
 const user = require("../model/quotation.model");
 const excelJs = require("exceljs");
 const ejs = require("ejs");
-const puppeteer = require("puppeteer");
+var html_to_pdf = require('html-pdf-node');
 const Total = require("../model/total.model");
 const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
-const os = require("os");
 
 exports.AllFiles = async (req, res) => {
   try {
@@ -39,40 +38,14 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-
-    // const osPlatform = os.platform(); 
-    // console.log("Scraper running on platform: ", osPlatform);
-    // let executablePath;
-    // if (/^win/i.test(osPlatform)) {
-    //   executablePath = "";
-    // } else if (/^linux/i.test(osPlatform)) {
-    //   executablePath = '/usr/bin/chromium-browser'
-    // } else {
-    //   executablePath ='';
-    // }
-    // console.log("Executable Path:", executablePath);
-
-    const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true,
-    });
-    console.log("Browser launched successfully");
-
-    const page = await browser.newPage();
-    // await page.setContent(html);
-    await page.setContent(html, { waitUntil: "networkidle0" });
-    const pdfBuffer = await page.pdf({
-      format: 'A4'
-    });
-    // const pdfBuffer = await page.pdf();
-    await browser.close();
-
-    const base64String = pdfBuffer.toString("base64");
-    return res.status(200).json({
-      status: "Success",
-      message: "PDF created successfully",
-      data: base64String,
-    });
+    html_to_pdf.generatePdf({ content: html }, { format: 'A4', printBackground: true }).then(pdfBuffer => {
+      const base64String = pdfBuffer.toString("base64");
+      return res.status(200).json({
+        status: "Success",
+        message: "pdf create successFully",
+        data: base64String,
+      });
+    })
   } catch (error) {
     console.error("Error creating Pdf Download:", error);
     res.status(500).json({ status: "Fail", message: "Internal Server Error" });
