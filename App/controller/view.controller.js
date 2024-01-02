@@ -53,8 +53,8 @@ exports.AllFiles = async (req, res) => {
 
     const browser = await puppeteer.launch({
       executablePath,
-      slowMo: undefined,
-      args: ['-no-sandbox']
+      headless: true,
+      ignoreDefaultArgs: ['--disable-extensions']
     });
     console.log("Browser launched successfully");
 
