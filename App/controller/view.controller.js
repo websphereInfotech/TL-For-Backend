@@ -40,23 +40,21 @@ exports.AllFiles = async (req, res) => {
     );
     console.log("html", html);
 
-    const osPlatform = os.platform(); 
-    console.log("Scraper running on platform: ", osPlatform);
-    let executablePath;
-    if (/^win/i.test(osPlatform)) {
-      executablePath = "";
-    } else if (/^linux/i.test(osPlatform)) {
-      executablePath = '/usr/bin/chromium-browser'
-    } else {
-      executablePath ='';
-    }
-    console.log("Executable Path:", executablePath);
+    // const osPlatform = os.platform(); 
+    // console.log("Scraper running on platform: ", osPlatform);
+    // let executablePath;
+    // if (/^win/i.test(osPlatform)) {
+    //   executablePath = "";
+    // } else if (/^linux/i.test(osPlatform)) {
+    //   executablePath = '/usr/bin/chromium-browser'
+    // } else {
+    //   executablePath ='';
+    // }
+    // console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
-      executablePath,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: 'new',
-      ignoreDefaultArgs: ['--disable-extensions']
+      headless: true,
     });
     console.log("Browser launched successfully");
 
