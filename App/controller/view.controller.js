@@ -47,7 +47,7 @@ exports.AllFiles = async (req, res) => {
     if (/^win/i.test(osPlatform)) {
       executablePath = "";
     } else if (/^linux/i.test(osPlatform)) {
-      executablePath = puppeteer.executablePath();
+      executablePath = '/usr/bin/chromium-browser'
     } 
     console.log("Executable Path:", executablePath);
 
