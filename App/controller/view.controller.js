@@ -8,7 +8,6 @@ const Sales = require("../model/salesPerson.model");
 const path = require("path");
 const Follow = require("../model/follow.model");
 const { Types, default: mongoose } = require("mongoose");
-const os = require("os");
 
 exports.AllFiles = async (req, res) => {
   try {
@@ -41,24 +40,10 @@ exports.AllFiles = async (req, res) => {
     );
     console.log("html", html);
 
-    // const osPlatform = os.platform(); 
-    // let executablePath;
-    // console.log("Scraper running on platform: ", osPlatform);
-    // if (/^win/i.test(osPlatform)) {
-    //   executablePath = "";
-    // } else if (/^linux/i.test(osPlatform)) {
-    //   executablePath = "/usr/bin/chromium-browser";
-    // } else {
-    //   console.error("Unsupported platform:", osPlatform);
-    //   return res.status(500).json({ status: "Fail", message: "Unsupported platform" });
-    // }
-    // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-    // console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
-      // executablePath,
       headless: "new",
-      args: ["--disable-setuid-sandbox", "--disable-gpu"],
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     console.log("Browser launched successfully");
 
