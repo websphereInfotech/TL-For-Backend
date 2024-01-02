@@ -41,13 +41,16 @@ exports.AllFiles = async (req, res) => {
     );
     console.log("html", html);
 
-    const osPlatform = os.platform(); // possible values are: 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
-    console.log("Scraper running on platform: ", osPlatform);
+    const osPlatform = os.platform(); 
     let executablePath;
+    console.log("Scraper running on platform: ", osPlatform);
     if (/^win/i.test(osPlatform)) {
       executablePath = "";
     } else if (/^linux/i.test(osPlatform)) {
       executablePath = "/usr/bin/chromium-browser";
+    } else {
+      console.error("Unsupported platform:", osPlatform);
+      return res.status(500).json({ status: "Fail", message: "Unsupported platform" });
     }
     // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
     console.log("Executable Path:", executablePath);
