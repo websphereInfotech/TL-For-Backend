@@ -47,7 +47,7 @@ exports.AllFiles = async (req, res) => {
     if (/^win/i.test(osPlatform)) {
       executablePath = "";
     } else if (/^linux/i.test(osPlatform)) {
-      executablePath = "/usr/bin/chromium-browser";
+      executablePath = '/path/to/chromium';
     } 
     console.log("Executable Path:", executablePath);
 
