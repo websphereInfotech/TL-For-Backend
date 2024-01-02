@@ -40,7 +40,6 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    console.log(puppeteer.executablePath())
 
     const osPlatform = os.platform(); 
     console.log("Scraper running on platform: ", osPlatform);
@@ -48,15 +47,14 @@ exports.AllFiles = async (req, res) => {
     if (/^win/i.test(osPlatform)) {
       executablePath = "";
     } else if (/^linux/i.test(osPlatform)) {
-      executablePath = "/path/to/chrome/executable";
+      executablePath = "/usr/bin/chromium-browser";
     } 
-    // const executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
     console.log("Executable Path:", executablePath);
 
     const browser = await puppeteer.launch({
       executablePath,
       headless: "new",
-      args: ["--disable-setuid-sandbox", "--disable-gpu"],
+      args: ["--disable-setuid-sandbox", "--disable-gpu", "--no-sandbox"],
     });
     console.log("Browser launched successfully");
 
