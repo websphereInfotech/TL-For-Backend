@@ -38,7 +38,7 @@ exports.AllFiles = async (req, res) => {
       { users, Totalwithuser, status }
     );
     console.log("html", html);
-    html_to_pdf.generatePdf({ content: html }, { printBackground: true }).then(pdfBuffer => {
+    html_to_pdf.generatePdf({ content: html }).then(pdfBuffer => {
       const base64String = pdfBuffer.toString("base64");
       return res.status(200).json({
         status: "Success",
