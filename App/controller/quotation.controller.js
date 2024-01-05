@@ -138,9 +138,6 @@ exports.quotation_update = async function (req, res) {
         shop: { $each: shop_id },
       },
     };
-    console.log("................update", updateuserdata.architecture_id);
-    console.log("<<<<<<<<<<<<<<<update", updateuserdata.carpenter_id);
-    console.log(">>>>>>>>>>>update", updateuserdata.shop_id);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
@@ -148,7 +145,7 @@ exports.quotation_update = async function (req, res) {
     console.log("userdata", userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
-    console.log("user_id", quatationId);
+    // console.log("user_id", quatationId);
     // const addTotalData = addtotal.map((item) => ({
     //   user_id : userdata._id,
     //   ...item,
