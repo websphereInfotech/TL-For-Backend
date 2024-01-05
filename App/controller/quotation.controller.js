@@ -169,13 +169,13 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architecture_id: architecture_id,  
-      carpenter_id: carpenter_id,        
-      shop_id: shop_id,  
+      architecture: architecture_id,  
+      carpenter: carpenter_id,        
+      shop: shop_id,  
       addtotal: totalOfAll,
     };
     userdata.totalOfAll = totalOfAll;
-    console.log("response", ResponseUserData);
+    // console.log("response", ResponseUserData);
 
     res.status(200).json({
       status: "Success",
