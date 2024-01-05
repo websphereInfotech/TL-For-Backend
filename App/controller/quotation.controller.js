@@ -108,10 +108,81 @@ exports.quotation_create = async function (req, res) {
 };
 
 //==============================================UPDATE DATA============================================================
+// exports.quotation_update = async function (req, res) {
+//   try {
+//     const quatationId = req.params.id;
+//     console.log(quatationId);
+//     const {
+//       userName,
+//       mobileNo,
+//       address,
+//       serialNumber,
+//       Date,
+//       sales,
+//       architec,
+//       carpenter,
+//       shop,
+//       addtotal,
+//     } = req.body;
+
+//     const updateuserdata = {
+//       userName: userName,
+//       mobileNo: mobileNo,
+//       address: address,
+//       serialNumber: serialNumber,
+//       Date: Date,
+//       sales: sales,
+//       architecture_id: architec,
+//       carpenter_id: carpenter,
+//       shop_id: shop,
+//     };
+//     // console.log(updateuserdata);
+//     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
+//       new: true,
+//     });
+//     // console.log(userdata);
+
+//     // console.log(userdata);
+
+//     const totalRemove = await Total.deleteMany({ user_id: quatationId });
+//     const addTotalData = addtotal.map((item) => ({
+//       user_id: userdata._id,
+//       ...item,
+//     }));
+//     // console.log(addTotalData);
+//     const totalOfAll = await Total.create(addTotalData);
+//     const ResponseUserData = {
+//       id: userdata._id,
+//       userName: userName,
+//       mobileNo: mobileNo,
+//       address: address,
+//       serialNumber: serialNumber,
+//       Date: Date,
+//       sales: sales,
+//       architec: architec,
+//       carpenter: carpenter,
+//       shop: shop,
+//       addtotal: totalOfAll,
+//     };
+//     userdata.totalOfAll = totalOfAll;
+//     // console.log(userdata)
+
+//     res.status(200).json({
+//       status: "Success",
+//       message: "Quotation Update Successfully",
+//       data: ResponseUserData,
+//     });
+//   } catch (error) {
+//     // console.log(error)
+//     res.status(404).json({
+//       status: "Fail",
+//       message: "Quotation not found",
+//     });
+//   }
+// };
 exports.quotation_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
-    console.log(quatationId);
     const {
       userName,
       mobileNo,
@@ -136,21 +207,22 @@ exports.quotation_update = async function (req, res) {
       carpenter_id: carpenter,
       shop_id: shop,
     };
-    // console.log(updateuserdata);
+
+    // Update the user document
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
-    // console.log(userdata);
 
-    // console.log(userdata);
-
-    const totalRemove = await Total.deleteMany({ user_id: quatationId });
+    // Assuming the Total model has a field 'user_id' for association
     const addTotalData = addtotal.map((item) => ({
-      user_id: userdata._id,
+      user_id: quatationId, // Use the user's ID for association
       ...item,
     }));
-    // console.log(addTotalData);
+
+    // Update the existing Total documents instead of creating new ones
+    await Total.deleteMany({ user_id: quatationId });
     const totalOfAll = await Total.create(addTotalData);
+
     const ResponseUserData = {
       id: userdata._id,
       userName: userName,
@@ -164,8 +236,8 @@ exports.quotation_update = async function (req, res) {
       shop: shop,
       addtotal: totalOfAll,
     };
+
     userdata.totalOfAll = totalOfAll;
-    // console.log(userdata)
 
     res.status(200).json({
       status: "Success",
@@ -173,10 +245,10 @@ exports.quotation_update = async function (req, res) {
       data: ResponseUserData,
     });
   } catch (error) {
-    // console.log(error)
-    res.status(404).json({
+    console.error(error);
+    res.status(500).json({
       status: "Fail",
-      message: "Quotation not found",
+      message: "Internal Server Error",
     });
   }
 };
