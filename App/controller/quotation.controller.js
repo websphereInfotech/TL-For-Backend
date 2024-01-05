@@ -130,21 +130,25 @@ exports.quotation_update = async function (req, res) {
       mobileNo: mobileNo,
       address: address,
       serialNumber: serialNumber,
-      Date: Date,                                           
+      Date: Date,
       sales: sales,
-      architecture_id: architecture_id,
-      carpenter_id: carpenter_id,
-      shop_id: shop_id,
+      $addToSet: {
+        architec: { $each: architecture_id },
+        carpenter: { $each: carpenter_id },
+        shop: { $each: shop_id },
+      },
     };
-    // console.log("update",updateuserdata);
-    // console.log("ID",quatationId);
+    console.log("................update", updateuserdata.architecture_id);
+    console.log("<<<<<<<<<<<<<<<update", updateuserdata.carpenter_id);
+    console.log(">>>>>>>>>>>update", updateuserdata.shop_id);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
-    // console.log("userdata",userdata);
+    // console.log("CCCCCCCCCC", carpenter_id);
+    console.log("userdata", userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
-    console.log("user_id",quatationId);
+    console.log("user_id", quatationId);
     // const addTotalData = addtotal.map((item) => ({
     //   user_id : userdata._id,
     //   ...item,
@@ -173,7 +177,7 @@ exports.quotation_update = async function (req, res) {
       addtotal: totalOfAll,
     };
     userdata.totalOfAll = totalOfAll;
-    // console.log(userdata)
+    console.log("response", ResponseUserData);
 
     res.status(200).json({
       status: "Success",
@@ -181,7 +185,7 @@ exports.quotation_update = async function (req, res) {
       data: ResponseUserData,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(404).json({
       status: "Fail",
       message: "Quotation not found",
