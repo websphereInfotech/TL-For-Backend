@@ -132,12 +132,13 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      $addToSet: {
-        architec: { $each: architecture_id },
-        carpenter: { $each: carpenter_id },
-        shop: { $each: shop_id },
-      },
+      architecture_id: architecture_id,
+      carpenter_id: carpenter_id,
+      shop_id: shop_id,
     };
+    // console.log("................update", updateuserdata.architecture_id);
+    // console.log("<<<<<<<<<<<<<<<update", updateuserdata.carpenter_id);
+    // console.log(">>>>>>>>>>>update", updateuserdata.shop_id);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
@@ -145,7 +146,7 @@ exports.quotation_update = async function (req, res) {
     console.log("userdata", userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
-    // console.log("user_id", quatationId);
+    console.log("user_id", quatationId);
     // const addTotalData = addtotal.map((item) => ({
     //   user_id : userdata._id,
     //   ...item,
@@ -168,9 +169,9 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architec: architec,
-      carpenter: carpenter,
-      shop: shops,
+      architecture_id: architecture_id,  
+      carpenter_id: carpenter_id,        
+      shop_id: shop_id,  
       addtotal: totalOfAll,
     };
     userdata.totalOfAll = totalOfAll;
