@@ -132,18 +132,18 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architecture_id: architecture_id,
-      carpenter_id: carpenter_id,
-      shop_id: shop_id,
+      architec: architecture_id, 
+      carpenter: carpenter_id,    
+      shop: shop_id, 
     };
-    // console.log("................update", updateuserdata.architecture_id);
-    // console.log("<<<<<<<<<<<<<<<update", updateuserdata.carpenter_id);
-    // console.log(">>>>>>>>>>>update", updateuserdata.shop_id);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
+    // console.log(carpenter_id);
+    // console.log(architecture_id);
+    // console.log(shop_id);
     // console.log("CCCCCCCCCC", carpenter_id);
-    console.log("userdata", userdata);
+    // console.log("userdata", userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
     console.log("user_id", quatationId);
