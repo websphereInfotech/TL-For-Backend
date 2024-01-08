@@ -131,16 +131,16 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architec: architecture_id,
-      carpenter: carpenter_id,
-      shop: shop_id,
+      architecture_id: architecture_id,
+      carpenter_id: carpenter_id,
+      shop_id: shop_id,
     };
 
-    // console.log(updateuserdata);
+    console.log(updateuserdata);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
-    })
-    
+    });
+
     // console.log(userdata);
 
     // console.log(userdata);
