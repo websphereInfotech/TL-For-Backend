@@ -106,7 +106,6 @@ exports.quotation_create = async function (req, res) {
     });
   }
 };
-
 //==============================================UPDATE DATA============================================================
 exports.quotation_update = async function (req, res) {
   try {
@@ -139,11 +138,6 @@ exports.quotation_update = async function (req, res) {
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
-    // console.log(carpenter_id);
-    // console.log(architecture_id);
-    // console.log(shop_id);
-    // console.log("CCCCCCCCCC", carpenter_id);
-    // console.log("userdata", userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
     console.log("user_id", quatationId);
@@ -169,13 +163,13 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architecture: architecture_id,  
+      architec: architecture_id,  
       carpenter: carpenter_id,        
       shop: shop_id,  
       addtotal: totalOfAll,
     };
     userdata.totalOfAll = totalOfAll;
-    // console.log("response", ResponseUserData);
+    console.log("response", ResponseUserData);
 
     res.status(200).json({
       status: "Success",
@@ -190,7 +184,6 @@ exports.quotation_update = async function (req, res) {
     });
   }
 };
-
 //==============================================DELETE DATA====================================================================
 exports.quotation_delete = async function (req, res) {
   try {
