@@ -160,9 +160,9 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architec: architec,
-      carpenter: carpenter,
-      shop: shop,
+      architec: architecture_id,
+      carpenter: carpenter_id,
+      shop: shop_id,
       addtotal: totalOfAll,
     };
     userdata.totalOfAll = totalOfAll;
