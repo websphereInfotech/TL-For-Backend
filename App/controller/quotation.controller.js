@@ -107,83 +107,6 @@ exports.quotation_create = async function (req, res) {
   }
 };
 //==============================================UPDATE DATA============================================================
-// exports.quotation_update = async function (req, res) {
-//   try {
-//     const quatationId = req.params.id;
-//     // console.log(quatationId);
-//     const {
-//       userName,
-//       mobileNo,
-//       address,
-//       serialNumber,
-//       Date,
-//       sales,
-//       architecture_id,
-//       carpenter_id,
-//       shop_id,
-//       addtotal,
-//     } = req.body;
-
-//     const updateuserdata = {
-//       userName: userName,
-//       mobileNo: mobileNo,
-//       address: address,
-//       serialNumber: serialNumber,
-//       Date: Date,
-//       sales: sales,
-//       architec: architecture_id, 
-//       carpenter: carpenter_id,    
-//       shop: shop_id, 
-//     };
-//     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
-//       new: true,
-//     });
-
-//     const totalRemove = await Total.deleteMany({ user_id: quatationId });
-//     console.log("user_id", quatationId);
-//     // const addTotalData = addtotal.map((item) => ({
-//     //   user_id : userdata._id,
-//     //   ...item,
-//     // }));
-//     const addTotalData = Array.isArray(addtotal)
-//       ? addtotal.map((item) => ({
-//           user_id: userdata._id,
-//           ...item,
-//         }))
-//       : [];
-//     // console.log("IDDd", userdata._id);
-//     // console.log("item", addTotalData);
-
-//     const totalOfAll = await Total.create(addTotalData);
-//     const ResponseUserData = {
-//       id: userdata._id,
-//       userName: userName,
-//       mobileNo: mobileNo,
-//       address: address,
-//       serialNumber: serialNumber,
-//       Date: Date,
-//       sales: sales,
-//       architec: architecture_id,  
-//       carpenter: carpenter_id,        
-//       shop: shop_id,  
-//       addtotal: totalOfAll,
-//     };
-//     userdata.totalOfAll = totalOfAll;
-//     console.log("response", ResponseUserData);
-
-//     res.status(200).json({
-//       status: "Success",
-//       message: "Quotation Update Successfully",
-//       data: ResponseUserData,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(404).json({
-//       status: "Fail",
-//       message: "Quotation not found",
-//     });
-//   }
-// };
 exports.quotation_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
@@ -195,9 +118,9 @@ exports.quotation_update = async function (req, res) {
       serialNumber,
       Date,
       sales,
-      architec,
-      carpenter,
-      shop,
+      architecture_id,
+      carpenter_id,
+      shop_id,
       addtotal,
     } = req.body;
 
@@ -208,14 +131,16 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architecture_id: architec,
-      carpenter_id: carpenter,
-      shop_id: shop,
+      architec: architecture_id,
+      carpenter: carpenter_id,
+      shop: shop_id,
     };
+
     // console.log(updateuserdata);
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
-    });
+    })
+    
     // console.log(userdata);
 
     // console.log(userdata);
