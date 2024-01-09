@@ -110,7 +110,6 @@ exports.quotation_create = async function (req, res) {
 exports.quotation_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
-    // console.log("**********", quatationId);
     const {
       userName,
       mobileNo,
@@ -123,7 +122,6 @@ exports.quotation_update = async function (req, res) {
       shop_id,
       addtotal,
     } = req.body;
-    // console.log("req", req.body);
 
     const updateuserdata = {
       userName: userName,
@@ -137,11 +135,14 @@ exports.quotation_update = async function (req, res) {
       shop_id: shop_id,
     };
 
-    // console.log("@@@@@@@@@@@@@@@@", updateuserdata);
+    console.log("Update Data:", updateuserdata);
 
-    const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
-      new: true,
-    });
+    // Update the user data
+    const userdata = await user.findOneAndUpdate(
+      { _id: quatationId },
+      updateuserdata,
+      { new: true }
+    );
 
     if (!userdata) {
       console.error(`No user found with ID ${quatationId}`);
@@ -151,7 +152,7 @@ exports.quotation_update = async function (req, res) {
       });
     }
 
-    console.log(userdata, "USERDATA");
+    console.log("Updated User Data:", userdata);
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
 
@@ -162,9 +163,9 @@ exports.quotation_update = async function (req, res) {
         }))
       : [];
 
-    // console.log("##################", addTotalData);
-
     const totalOfAll = await Total.create(addTotalData);
+
+    // Build the response data
     const ResponseUserData = {
       id: userdata._id,
       userName: userName,
@@ -180,7 +181,8 @@ exports.quotation_update = async function (req, res) {
     };
 
     userdata.totalOfAll = totalOfAll;
-    // console.log(ResponseUserData, ">>>>>>>>>>>>>>>");
+
+    console.log("Response Data:", ResponseUserData);
 
     res.status(200).json({
       status: "Success",
@@ -195,6 +197,7 @@ exports.quotation_update = async function (req, res) {
     });
   }
 };
+
 
 
 //==============================================DELETE DATA====================================================================
