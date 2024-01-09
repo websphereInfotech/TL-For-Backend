@@ -130,14 +130,13 @@ exports.quotation_update = async function (req, res) {
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
-      architecture_id: architecture_id,
-      carpenter_id: carpenter_id,
-      shop_id: shop_id,
+      architec: architecture_id,
+      carpenter: carpenter_id,
+      shop: shop_id,
     };
 
-    console.log("Update Data:", updateuserdata);
-
-    // Update the user data
+    // console.log("Update Data:", updateuserdata);
+    
     const userdata = await user.findOneAndUpdate(
       { _id: quatationId },
       updateuserdata,
