@@ -110,7 +110,7 @@ exports.quotation_create = async function (req, res) {
 exports.quotation_update = async function (req, res) {
   try {
     const quatationId = req.params.id;
-    console.log(quatationId);
+    // console.log("**********", quatationId);
     const {
       userName,
       mobileNo,
@@ -123,6 +123,7 @@ exports.quotation_update = async function (req, res) {
       shop_id,
       addtotal,
     } = req.body;
+    // console.log("req", req.body);
 
     const updateuserdata = {
       userName: userName,
@@ -136,21 +137,33 @@ exports.quotation_update = async function (req, res) {
       shop_id: shop_id,
     };
 
-    console.log(updateuserdata);
+    // console.log("@@@@@@@@@@@@@@@@", updateuserdata);
+
     const userdata = await user.findByIdAndUpdate(quatationId, updateuserdata, {
       new: true,
     });
 
-    // console.log(userdata);
+    if (!userdata) {
+      console.error(`No user found with ID ${quatationId}`);
+      return res.status(404).json({
+        status: "Fail",
+        message: "Quotation not found",
+      });
+    }
 
-    // console.log(userdata);
+    console.log(userdata, "USERDATA");
 
     const totalRemove = await Total.deleteMany({ user_id: quatationId });
-    const addTotalData = addtotal.map((item) => ({
-      user_id: userdata._id,
-      ...item,
-    }));
-    // console.log(addTotalData);
+
+    const addTotalData = Array.isArray(addtotal)
+      ? addtotal.map((item) => ({
+          user_id: userdata._id,
+          ...item,
+        }))
+      : [];
+
+    // console.log("##################", addTotalData);
+
     const totalOfAll = await Total.create(addTotalData);
     const ResponseUserData = {
       id: userdata._id,
@@ -165,8 +178,9 @@ exports.quotation_update = async function (req, res) {
       shop: shop_id,
       addtotal: totalOfAll,
     };
+
     userdata.totalOfAll = totalOfAll;
-    // console.log(userdata)
+    // console.log(ResponseUserData, ">>>>>>>>>>>>>>>");
 
     res.status(200).json({
       status: "Success",
@@ -174,13 +188,15 @@ exports.quotation_update = async function (req, res) {
       data: ResponseUserData,
     });
   } catch (error) {
-    // console.log(error)
-    res.status(404).json({
-      status: "Fail",
-      message: "Quotation not found",
+    console.error(error);
+    res.status(500).json({
+      status: "Error",
+      message: "Internal Server Error",
     });
   }
 };
+
+
 //==============================================DELETE DATA====================================================================
 exports.quotation_delete = async function (req, res) {
   try {
