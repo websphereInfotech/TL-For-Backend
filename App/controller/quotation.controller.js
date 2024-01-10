@@ -60,11 +60,9 @@ exports.quotation_create = async function (req, res) {
       user_id: userData._id,
       ...item,
     }));
-    // console.log(addTotalData);
+    
     const totalOfAll = await Total.create(addTotalData);
-    // console.log(totalOfAll);
-    // console.log(userData);
-    // console.log(userData.totalOfAll);
+  
     const payload = {
       id: userData._id,
       userName: userName,
@@ -135,7 +133,6 @@ exports.quotation_update = async function (req, res) {
       shop: shop_id,
     };
 
-    // console.log("Update Data:", updateuserdata);
     
     const userdata = await user.findOneAndUpdate(
       { _id: quatationId },
@@ -196,8 +193,6 @@ exports.quotation_update = async function (req, res) {
     });
   }
 };
-
-
 
 //==============================================DELETE DATA====================================================================
 exports.quotation_delete = async function (req, res) {

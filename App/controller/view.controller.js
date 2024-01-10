@@ -10,9 +10,9 @@ const { Types, default: mongoose } = require("mongoose");
 
 exports.AllFiles = async (req, res) => {
   try {
-    console.log("*********");
+
     const id = req.params.id;
-    console.log("id", id);
+  
     const users = await user
       .findById(id)
       .populate("sales")
@@ -22,9 +22,6 @@ exports.AllFiles = async (req, res) => {
 
     const Totalwithuser = await Total.find({ user_id: id });
     const status = await Follow.findOne({ quatationId: id });
-    console.log("total", Totalwithuser);
-    console.log("status", status);
-    console.log("user", user);
 
     if (!users) {
       return res.status(404).json({
@@ -37,8 +34,8 @@ exports.AllFiles = async (req, res) => {
       path.join(__dirname, "../views/pdf.ejs"),
       { users, Totalwithuser, status }
     );
-    console.log("html", html);
-    html_to_pdf.generatePdf({ content: html }, { printBackground: true }).then(pdfBuffer => {
+
+    html_to_pdf.generatePdf({ content: html }, { printBackground: true, format: 'A4'  }).then(pdfBuffer => {
       const base64String = pdfBuffer.toString("base64");
       return res.status(200).json({
         status: "Success",

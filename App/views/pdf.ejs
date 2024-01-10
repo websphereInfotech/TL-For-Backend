@@ -1,246 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pdf Download</title>
     <style>
-        .bordered-table {
-            border-spacing: 0;
-            border-collapse: separate;
-            border-radius: 10px;
-            border: 1px solid #a09c9c;
-        }
+      .bordered-table {
+        border-spacing: 0;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid #a09c9c;
+      }
 
-        table.bordered-table th:not(:last-child),
-        table.bordered-table td:not(:last-child) {
-            border-right: 1px solid #a09c9c;
-        }
+      table.bordered-table th:not(:last-child),
+      table.bordered-table td:not(:last-child) {
+        border-right: 1px solid #a09c9c;
+      }
 
-        table.bordered-table>thead th {
-            border-bottom: 1px solid #a09c9c;
-        }
+      table.bordered-table > thead th {
+        border-bottom: 1px solid #a09c9c;
+      }
 
-        .main-total {
-            border-top: 1px solid #a09c9c;
-        }
+      .main-total {
+        border-top: 1px solid #a09c9c;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <div style="background-color: white">
-        <header style="text-align: center; padding-top: 10px">
-            <h1 style="color: black">TIMBERLAND</h1>
-            <h4 style="color: black">HOME FOR VENEER</h4>
-            <div style="color: black">
-                <p style="text-align: right; padding-right: 30px">
-                    Date :- <%= new Date(users.Date).toLocaleDateString('en-GB') %>
-                </p>
-            </div>
-        </header>
-    </div>
-    <div style="border: 1px solid #ddd; border-radius: 10px; border-bottom: 1px solid #ddd;">
-        <table style="width: 100%">
-            <tr style="display: flex; justify-content: space-between">
-                <td style="
-              padding-left: 70px;
-              padding-right: 100px;
-            ">
-                    <div>
-                        <table>
-                            <tr>
-                                <th>Token No. :- &nbsp;&nbsp;&nbsp;</th>
-                                <td>
-                                    <p style="margin: 10px 0">
-                                        <%= users.serialNumber %>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Name
-                                    :-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                </th>
-                                <td>
-                                    <p style="margin: 10px 0">
-                                        <%= users.userName %>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Address :- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                <td>
-                                    <p style="margin: 10px 0">
-                                        <%= users.address %>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Moblie No. :- &nbsp;&nbsp;</th>
-                                <td>
-                                    <p style="margin: 10px 0">
-                                        <%= users.mobileNo %>
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div>
-                        <%if(users.sales){%>
-                            <table>
-                                <tr>
-                                    <th>Sales Person :- &nbsp;</th>
-                                    <td>
-                                        <p style="margin: 10px 0">
-                                            <%= users.sales.Name %>
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <td>
-                                        <p style="margin: 10px 0">
-                                            <%= users.sales.mobileNo %>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <%}%>
-                    </div>
+  <body style=" margin: 30px;">
+  <div style="border: 1px solid #a09c9c; border-radius: 10px;"> 
+    <div
+    style="width: 100%; height: 100px; border-bottom: 1px solid #a09c9c; border-radius: 5px;"
+  ></div>
+  <div
+    style="width: 100%; height: 20px; border: 1px solid #a09c9c; border-radius: 5px;"
+  ></div>
+  <div style="background-color: white; border-right: 1px solid #a09c9c;">
+    <header style="text-align: center; padding-top: 10px">
+      <h1 style="color: black">TIMBERLAND</h1>
+      <h4 style="color: black">HOME FOR VENEER</h4>
+      <div style="color: black">
+        <p style="text-align: right; padding-right: 30px">
+          Date :- <%= new Date(users.Date).toLocaleDateString('en-GB') %>
+        </p>
+      </div>
+    </header>
+  </div>
+    <table style="width: 100%">
+      <tr style="display: flex; border-top: 1px solid #a09c9c; border-radius: 5px;">
+        <td style="width: 33%;">
+          <div>
+            <table>
+              <tr>
+                <th>Token No. :- &nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <td>
+                  <p style="margin: 10px 0"><%= users.serialNumber %></p>
                 </td>
-                <% if (users.architec.length) { %>
-                    <td style="border-left: 1px solid #ddd;">
-                        <h2 style="
-                margin: 5px 0;
-                border-bottom: 1px solid #ddd;
-                text-align: center;
-                width: 30%;
-              ">
-                            Reference
-                        </h2>
-                        <div style="padding-left: 50px">
-                            <table style="margin: 40px 0">
-                                <tr>
-                                    <th style="padding-right: 110px">ARCHITEC</th>
-                                    <th>Mobile No.</th>
-                                </tr>
-                                <% users.architec.forEach(function(item) { %>
-                                    <tr>
-                                        <td style="margin-right: 110px">
-                                            <%= item.architecsName %>
-                                        </td>
-                                        <td>
-                                            <%= item.mobileNo %>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                            </table>
-                            <% } %>
-                        </div>
-                        <div style="padding-left: 50px">
-                            <%if(users.carpenter.length){%>
-                                <table style="margin: 40px 0">
-                                    <tr>
-                                        <th style="padding-right: 100px">CARPENTER</th>
-                                        <th>Mobile No.</th>
-                                    </tr>
-                                    <% users.carpenter.forEach(function(item){ %>
-                                        <tr>
-                                            <td style="padding-right: 100px">
-                                                <%= item.carpentersName %>
-                                            </td>
-                                            <td>
-                                                <%= item.mobileNo %>
-                                            </td>
-                                        </tr>
-                                        <% }) %>
-                                </table>
-                                <% } %>
-                        </div>
-                        <div style="padding-left: 50px">
-                            <%if(users.shop.length){%>
-                                <table style="margin: 40px 0">
-                                    <tr>
-                                        <th style="padding-right: 120px">SHOP</th>
-                                        <th>Mobile No.</th>
-                                    </tr>
-                                    <% users.shop.forEach(function(item){ %>
-                                        <tr>
-                                            <td style="padding-right: 120px">
-                                                <%= item.shopName %>
-                                            </td>
-                                            <td>
-                                                <%= item.mobileNo %>
-                                            </td>
-                                        </tr>
-                                        <% }) %>
-                                </table>
-                                <% } %>
-                        </div>
-                    </td>
-            </tr>
-        </table>
-
-        <div>
-            <table style="width: 85%; margin: auto" cellpadding="10px" class="bordered-table">
-                <%if(Totalwithuser.length){%>
-                    <thead>
-                        <tr>
-                            <th>Sr No.</th>
-                            <th>Description</th>
-                            <th>Area</th>
-                            <th>Size</th>
-                            <th>Rate</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody align="center">
-                        <% var totalSum=0; Totalwithuser.forEach(function(item, index) { totalSum +=item.total; %>
-                            <tr>
-                                <td>
-                                    <%= index + 1 %>
-                                </td>
-                                <td>
-                                    <%= item.description %>
-                                </td>
-                                <td>
-                                    <%= item.area %>
-                                </td>
-                                <td>
-                                    <%= item.size %>
-                                </td>
-                                <td>
-                                    <%= item.rate %>
-                                </td>
-                                <td>
-                                    <%= item.quantity %>
-                                </td>
-                                <td>
-                                    <%= item.total %>
-                                </td>
-                            </tr>
-                            <% }) %>
-                                <tr>
-                                    <th colspan="6" align="right" class="main-total">Main Total:</th>
-                                    <td class="main-total">
-                                        <%= totalSum %>
-                                    </td>
-                                </tr>
-                    </tbody>
-                    <%}%>
+              </tr>
+              <tr>
+                <th>
+                  Name :-
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </th>
+                <td>
+                  <p style="margin: 10px 0"><%= users.userName %></p>
+                </td>
+              </tr>
+              <tr>
+                <th>Address :- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <td>
+                  <p style="margin: 10px 0"><%= users.address %></p>
+                </td>
+              </tr>
+              <tr>
+                <th>Moblie No. :- &nbsp;&nbsp;&nbsp;</th>
+                <td>
+                  <p style="margin: 10px 0"><%= users.mobileNo %></p>
+                </td>
+              </tr>
             </table>
-        </div>
-        <div style="
-          background-color: white;
-          color: black;
-          text-align: center;
-          margin-top: 20px;
-        ">
-            &copy; Terms and conditions (T&C)
-        </div>
-    </div>
-</body>
+          </div>
+          <div>
+            <%if(users.sales){%>
+            <table>
+              <tr>
+                <th>Sales Person :- &nbsp;</th>
+                <td>
+                  <p style="margin: 10px 0"><%= users.sales.Name %></p>
+                </td>
+              </tr>
+              <tr>
+                <th></th>
+                <td>
+                  <p style="margin: 10px 0"><%= users.sales.mobileNo %></p>
+                </td>
+              </tr>
+            </table>
+            <%}%>
+          </div>
+        </td>
+        <td style="border-left: 1px solid #ddd; width: 67%;">
+          <h2
+            style="
+              margin: 5px 0;
+              border-bottom: 1px solid #ddd;
+              text-align: center;
+              width: 30%;
+            "
+          >
+            Reference
+          </h2>
+          <div style="padding-left: 10px; border-bottom: 1px solid #ddd;">
+            <% if (users.architec.length) { %>
+            <div
+              style="
+                display: flex;
+                margin: 40px 0;">
+              <div style="padding-right: 40px">
+                <div style=" font-weight: bold; font-size: small; padding-bottom: 10px;">ARCHITEC :-</div>
+                <div style="font-weight: bold; font-size: small">Mobile No. :- </div>
+              </div>
+              <% users.architec.forEach(function(item) { %>
+              <div style="padding-right: 20px">
+                <div style="padding-bottom: 10px; word-wrap: break-word;">
+                  <%= item.architecsName %>
+                </div>
+                <div><%= item.mobileNo %></div>
+              </div>
+              <% }) %>
+            </div>
+            <% } %>
+          </div>
+          <div style="padding-left: 10px; border-bottom: 1px solid #ddd;">
+            <%if(users.carpenter.length){%>
+            <div style=" display: flex; margin: 40px 0; ">
+              <div style="padding-right: 30px">
+                <div style="font-weight: bold; font-size: small; padding-bottom: 10px;">
+                  CARPENTER :-
+                </div>
+                <div style="font-weight: bold; font-size: small">
+                  Mobile No. :-
+                </div>
+              </div>
+              <% users.carpenter.forEach(function(item){ %>
+              <div style="padding-right: 20px">
+                <div style="padding-bottom: 10px; word-wrap: break-word;">
+                  <%= item.carpentersName %>
+                </div>
+                <div><%= item.mobileNo %></div>
+              </div>
+              <% }) %>
+            </div>
+            <% } %>
+          </div>
+          <div style="padding-left: 10px;">
+            <%if(users.shop.length){%>
+            <div
+              style="
+                display: flex;
+                margin: 40px 0;">
+              <div style="padding-right: 50px">
+                <div
+                  style="
+                    font-weight: bold;
+                    font-size: small;
+                    padding-bottom: 10px;
+                  "
+                >
+                  SHOP :-
+                </div>
+                <div style="font-weight: bold; font-size: small">
+                  Mobile No. :-
+                </div>
+              </div>
+              <% users.shop.forEach(function(item){ %>
+              <div style="padding-right: 20px">
+                <div style="padding-bottom: 10px; word-wrap: break-word;"><%= item.shopName %></div>
+                <div><%= item.mobileNo %></div>
+              </div>
+              <% }) %>
+            </div>
+            <% } %>
+          </div>
+        </td>
+      </tr>
+    </table>
 
+      <table
+        style="width: 100%; margin: auto"
+        cellpadding="10px"
+        class="bordered-table"
+      >
+        <%if(Totalwithuser.length){%>
+        <thead>
+          <tr>
+            <th>Sr No.</th>
+            <th>Description</th>
+            <th>Area</th>
+            <th>Size</th>
+            <th>Rate</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody align="center">
+          <% var totalSum=0; Totalwithuser.forEach(function(item, index) {
+          totalSum +=item.total; %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= item.description %></td>
+            <td><%= item.area %></td>
+            <td><%= item.size %></td>
+            <td><%= item.rate %></td>
+            <td><%= item.quantity %></td>
+            <td><%= item.total %></td>
+          </tr>
+          <% }) %>
+          <tr>
+            <th colspan="6" align="right" class="main-total">Main Total:</th>
+            <td class="main-total"><%= totalSum %></td>
+          </tr>
+        </tbody>
+        <%}%>
+      </table>
+      <div style="background-color: white; color: black; text-align: center; padding: 10px; border: 1px solid #a09c9c; border-radius: 10px;">
+        &copy; Terms and conditions (T&C)
+    </div>
+</div>
+  </body>
 </html>
