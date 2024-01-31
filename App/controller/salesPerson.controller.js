@@ -239,6 +239,7 @@ exports.salesPersonList = async (req, res) => {
           userName: { $first: "$Name" },
           mobileNo: { $first: "$mobileNo" },
           connectedUsers: { $push: "$connectedUsers" },
+          userCount: { $sum: 1 }, // Count the number of users
         },
       },
       {
