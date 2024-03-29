@@ -37,7 +37,6 @@ exports.approve = async (req, res) => {
   }
 };
 
-
 exports.Reject = async (req, res) => {
   try {
     const quatationId = req.params.id;

@@ -2,6 +2,7 @@ var shops = require("../model/shop.model");
 var jwt = require("jsonwebtoken");
 const user = require("../model/quotation.model");
 const { default: mongoose } = require("mongoose");
+const followModel = require("../model/follow.model");
 
 exports.shopdetails_create = async function (req, res) {
   try {
@@ -151,11 +152,25 @@ exports.shopdetails_listdata = async function (req, res) {
         message: "No users connected to the shop",
       });
     }
+    const usersWithStatus = await Promise.all(
+      usersConnectedToShop.map(async (user) => {
+        const follow = await followModel.findOne({ quatationId: user._id });
+        let status = "Follow Up"; 
+        if (follow) {
+          if (follow.Approve) {
+            status = "Approve";
+          } else if (follow.Reject) {
+            status = "Reject";
+          }
+        }
+        return { ...user, status };
+      })
+    );
 
     res.status(200).json({
       status: "Success",
       message: "get all data",
-      data: usersConnectedToShop,
+      data: usersWithStatus,
     });
   } catch (error) {
     res.status(404).json({

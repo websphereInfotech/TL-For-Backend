@@ -1,4 +1,5 @@
 var architec = require("../model/architec.model");
+const followModel = require("../model/follow.model");
 const user = require("../model/quotation.model");
 var jwt = require("jsonwebtoken");
 const { default: mongoose } = require("mongoose");
@@ -149,11 +150,24 @@ exports.architec_listdata = async function (req, res) {
         message: "No users connected to the architecher",
       });
     }
-
+    const usersWithStatus = await Promise.all(
+      usersConnectedToarchitecher.map(async (user) => {
+        const follow = await followModel.findOne({ quatationId: user._id});
+        let status ="Follow Up"
+        if(follow) {
+          if (follow.Apporave) {
+            status = 'Apporave'
+          } else if (follow.Reject) {
+            status = 'Reject'
+          }
+        }
+        return {...user,status}
+      })
+    )
     res.status(200).json({
       status: "Success",
       message: "get all data",
-      data: usersConnectedToarchitecher,
+      data: usersWithStatus,
     });
   } catch (error) {
     res.status(404).json({
