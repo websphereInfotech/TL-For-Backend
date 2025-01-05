@@ -60,9 +60,9 @@ exports.quotation_create = async function (req, res) {
       user_id: userData._id,
       ...item,
     }));
-    
+
     const totalOfAll = await Total.create(addTotalData);
-  
+
     const payload = {
       id: userData._id,
       userName: userName,
@@ -133,7 +133,7 @@ exports.quotation_update = async function (req, res) {
       shop: shop_id,
     };
 
-    
+
     const userdata = await user.findOneAndUpdate(
       { _id: quatationId },
       updateuserdata,
@@ -154,9 +154,9 @@ exports.quotation_update = async function (req, res) {
 
     const addTotalData = Array.isArray(addtotal)
       ? addtotal.map((item) => ({
-          user_id: userdata._id,
-          ...item,
-        }))
+        user_id: userdata._id,
+        ...item,
+      }))
       : [];
 
     const totalOfAll = await Total.create(addTotalData);
@@ -343,20 +343,104 @@ exports.quotation_list = async function (req, res) {
 };
 
 //==============================================SERCH DATA=========================================================
+// exports.quotation_search = async function (req, res) {
+//   try {
+//     // const nameField = ;
+//     // const serialNoField = ;
+
+//     let matchField = {};
+
+//     if (req.query.userName) {
+//       matchField.userName = new RegExp(req.query.userName, "i");
+//     }
+
+//     if (req.query.serialNumber) {
+//       //  matchField.serialNumber = parseInt(req.query.serialNumber);
+
+//       matchField = {
+//         $expr: {
+//           $regexMatch: {
+//             input: { $toString: "$serialNumber" },
+//             regex: req.query.serialNumber,
+//           },
+//         },
+//       };
+//       //  matchField.serialNumber =  new RegExp(req.query.serialNumber, "i")
+//     }
+
+//     const userData = await user.aggregate([
+//       {
+//         $match: matchField,
+//       },
+//       {
+//         $lookup: {
+//           from: "shops",
+//           localField: "shop",
+//           foreignField: "_id",
+//           as: "shop",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "carpenters",
+//           localField: "carpenter",
+//           foreignField: "_id",
+//           as: "carpenter",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "architectuers",
+//           localField: "architec",
+//           foreignField: "_id",
+//           as: "architecture",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "salespeople",
+//           localField: "sales",
+//           foreignField: "_id",
+//           as: "salesPersonDetails",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "follows",
+//           localField: "_id",
+//           foreignField: "quatationId",
+//           as: "followDetails",
+//         },
+//       },
+//       {
+//         $project: {
+//           __v: 0,
+//           "shop.__v": 0,
+//           "carpenter.__v": 0,
+//           "architecture.__v": 0,
+//         },
+//       },
+//     ]);
+//     res.status(200).json({
+//       status: "Success",
+//       message: "Fetch Successfully",
+//       data: userData,
+//     });
+//   } catch (error) {
+//     res.status(404).json({
+//       status: "Fail",
+//       message: error.message,
+//     });
+//   }
+// };
+
 exports.quotation_search = async function (req, res) {
   try {
-    // const nameField = ;
-    // const serialNoField = ;
-
+    console.log("Sample search:", req.query);
     let matchField = {};
 
-    if (req.query.userName) {
-      matchField.userName = new RegExp(req.query.userName, "i");
-    }
-
+    // Search by serialNumber first
     if (req.query.serialNumber) {
-      //  matchField.serialNumber = parseInt(req.query.serialNumber);
-
       matchField = {
         $expr: {
           $regexMatch: {
@@ -365,13 +449,16 @@ exports.quotation_search = async function (req, res) {
           },
         },
       };
-      //  matchField.serialNumber =  new RegExp(req.query.serialNumber, "i")
     }
 
-    const userData = await user.aggregate([
-      {
-        $match: matchField,
-      },
+    // Search by userName
+    if (req.query.userName) {
+      matchField.userName = new RegExp(req.query.userName, "i");
+    }
+
+    // Check if serialNumber yields any results
+    let userData = await user.aggregate([
+      { $match: matchField },
       {
         $lookup: {
           from: "shops",
@@ -421,6 +508,75 @@ exports.quotation_search = async function (req, res) {
         },
       },
     ]);
+
+    console.log(user.length)
+
+    // If no results from serialNumber search, try searching by mobileNo
+    if (req.query.mobileNo) {
+      console.log("No data found with serialNumber, trying mobileNo...");
+
+      // Update matchField to search by mobileNo if serialNumber returns no results
+      if (req.query.mobileNo) {
+          matchField = {
+            mobileNo: parseInt(req.query.mobileNo),  // Ensure it's a number for comparison
+          };
+
+        // Perform the query again with mobileNo
+        userData = await user.aggregate([
+          { $match: matchField },
+          {
+            $lookup: {
+              from: "shops",
+              localField: "shop",
+              foreignField: "_id",
+              as: "shop",
+            },
+          },
+          {
+            $lookup: {
+              from: "carpenters",
+              localField: "carpenter",
+              foreignField: "_id",
+              as: "carpenter",
+            },
+          },
+          {
+            $lookup: {
+              from: "architectuers",
+              localField: "architec",
+              foreignField: "_id",
+              as: "architecture",
+            },
+          },
+          {
+            $lookup: {
+              from: "salespeople",
+              localField: "sales",
+              foreignField: "_id",
+              as: "salesPersonDetails",
+            },
+          },
+          {
+            $lookup: {
+              from: "follows",
+              localField: "_id",
+              foreignField: "quatationId",
+              as: "followDetails",
+            },
+          },
+          {
+            $project: {
+              __v: 0,
+              "shop.__v": 0,
+              "carpenter.__v": 0,
+              "architecture.__v": 0,
+            },
+          },
+        ]);
+      }
+    }
+
+    // Return the results
     res.status(200).json({
       status: "Success",
       message: "Fetch Successfully",
@@ -433,3 +589,10 @@ exports.quotation_search = async function (req, res) {
     });
   }
 };
+
+
+
+
+
+
+

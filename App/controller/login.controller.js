@@ -5,9 +5,9 @@ var jwt = require('jsonwebtoken');
 exports.login_page = async function(req, res) {
     try {
         const { login_id, password } = req.body;
-
+     
         const loginIdFind = await login.findOne({login_id})
-
+        
         if (!loginIdFind) {
             return res.status(404).json({
                 status: "Fail",
