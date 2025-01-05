@@ -155,13 +155,8 @@ exports.architec_listdata = async function (req, res) {
         const follow = await followModel.findOne({ quatationId: user._id});
         let status ="Follow Up"
         if(follow) {
-<<<<<<< HEAD
           if (follow.Approve) {
             status = 'Approve'
-=======
-          if (follow.Apporave) {
-            status = 'Apporave'
->>>>>>> 99353be44c6f0bd0af7d6255cc42bc6756bf67d0
           } else if (follow.Reject) {
             status = 'Reject'
           }
