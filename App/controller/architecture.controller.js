@@ -3,6 +3,8 @@ const followModel = require("../model/follow.model");
 const user = require("../model/quotation.model");
 var jwt = require("jsonwebtoken");
 const { default: mongoose } = require("mongoose");
+const { Types } = require("mongoose");
+
 
 exports.architec_create = async function (req, res) {
   try {
@@ -119,16 +121,38 @@ exports.architec_viewdata = async function (req, res) {
   }
 };
 //========================================================================LIST DATA=========================================================
+
 exports.architec_listdata = async function (req, res) {
   try {
     const architecherId = req.params.id;
+    const statusFilter = req.query.status;
+    const { startDate, endDate } = req.query;
 
+    console.log(`📥 Request received for architecherId: ${architecherId}`);
+    console.log(`🔎 Filters - Status: ${statusFilter}, StartDate: ${startDate}, EndDate: ${endDate}`);
+
+    // Build match condition
+    const matchConditions = {
+      architec: new mongoose.Types.ObjectId(architecherId),
+    };
+
+    // Add date range filter if both dates are provided
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const adjustedEnd = new Date(endDate);
+      adjustedEnd.setDate(adjustedEnd.getDate() + 1); // include full end date
+
+      matchConditions.Date = { // ✅ Use correct field from your DB
+        $gte: start,
+        $lt: adjustedEnd,
+      };
+
+      console.log(`📆 Date filtering applied on 'Date' field: ${JSON.stringify(matchConditions.Date)}`);
+    }
+
+    console.log('⚙️ Aggregating users...');
     const usersConnectedToarchitecher = await user.aggregate([
-      {
-        $match: {
-          architec: new mongoose.Types.ObjectId(architecherId),
-        },
-      },
+      { $match: matchConditions },
       {
         $lookup: {
           from: "architectuers",
@@ -138,46 +162,57 @@ exports.architec_listdata = async function (req, res) {
         },
       },
       {
-        $project: {
-          __v: 0,
-        },
+        $project: { __v: 0 },
       },
     ]);
 
+    console.log(`🔍 Found ${usersConnectedToarchitecher.length} users`);
+
     if (usersConnectedToarchitecher.length === 0) {
+      console.warn("❗ No users connected to the architecher.");
       return res.status(404).json({
         status: "Fail",
         message: "No users connected to the architecher",
       });
     }
+
     const usersWithStatus = await Promise.all(
-      usersConnectedToarchitecher.map(async (user) => {
-        const follow = await followModel.findOne({ quatationId: user._id});
-        let status ="Follow Up"
-        if(follow) {
+      usersConnectedToarchitecher.map(async (userData) => {
+        const follow = await followModel.findOne({ quatationId: userData._id });
+        let status = "Follow Up";
+
+        if (follow) {
           if (follow.Approve) {
-            status = 'Approve'
+            status = "Approve";
           } else if (follow.Reject) {
-            status = 'Reject'
+            status = "Reject";
           }
         }
-        return {...user,status}
+
+        console.log(`👤 User ${userData._id} status resolved to: ${status}`);
+        return { ...userData, status };
       })
-    )
+    );
+
+    const filteredUsers = statusFilter
+      ? usersWithStatus.filter((u) => u.status === statusFilter)
+      : usersWithStatus;
+
+    console.log(`✅ Final user count after status filtering: ${filteredUsers.length}`);
+
     res.status(200).json({
       status: "Success",
       message: "get all data",
-      data: usersWithStatus,
+      data: filteredUsers,
     });
   } catch (error) {
+    console.error("🔥 Error in architec_listdata:", error.message);
     res.status(404).json({
       status: "Fail",
       message: error.message,
     });
   }
 };
-
-
 
 //================================================================SEARCH DATA===================================================================
 exports.architecdetails_searchdata = async function (req, res) {
