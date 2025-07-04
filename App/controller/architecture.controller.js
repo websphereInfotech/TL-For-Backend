@@ -1,4 +1,5 @@
 var architec = require("../model/architec.model");
+var Quotation = require("../model/quotation.model");
 const followModel = require("../model/follow.model");
 const user = require("../model/quotation.model");
 var jwt = require("jsonwebtoken");
@@ -267,22 +268,84 @@ exports.architecdetails_searchdata = async function (req, res) {
     });
   }
 };
-//========================================================================list=========================================================
 exports.architeclist = async function (req, res, next) {
   try {
-    const architecturelist = await architec.find();
-    dataCount = architecturelist.length;
+    const { filter, startDate, endDate } = req.query;
+
+    const dateFilter = {};
+    if (startDate) dateFilter.$gte = new Date(startDate);
+    if (endDate) dateFilter.$lte = new Date(endDate);
+
+    console.log("Incoming Filter:", filter || "None");
+    console.log("Date Range:", dateFilter);
+
+    // Step 1: Build follow query
+    const followQuery = {};
+    if (filter && filter.toLowerCase() !== "none") {
+      followQuery[filter] = true;
+    }
+
+    const follows = await followModel.find(followQuery).lean();
+
+    console.log(`Follow Query: ${JSON.stringify(followQuery)}`);
+    console.log(`Found ${follows.length} follow documents`);
+
+    if (!follows.length) {
+      return res.status(200).json({
+        status: "Success",
+        message: `No Follow documents matching the criteria`,
+        count: 0,
+        data: [],
+      });
+    }
+
+    const userIds = follows.map(f => f.quatationId).filter(Boolean);
+    console.log("User IDs from Follow:", userIds.map(id => id.toString()));
+
+    // Step 2: Build user query with optional date range
+    const userQuery = { _id: { $in: userIds } };
+    if (Object.keys(dateFilter).length) {
+      userQuery.Date = dateFilter;
+    }
+
+    console.log("User Query:", JSON.stringify(userQuery));
+
+    const usersWithArchitects = await user
+      .find(userQuery)
+      .populate("architec")
+      .lean();
+
+    console.log("Users with Architects:", usersWithArchitects.length);
+
+    // Step 3: Collect and deduplicate architects
+    let architectList = [];
+    usersWithArchitects.forEach(u => {
+      if (u.architec && Array.isArray(u.architec)) {
+        architectList.push(...u.architec);
+      }
+    });
+
+    const uniqueArchitectMap = new Map();
+    architectList.forEach(a => uniqueArchitectMap.set(a._id.toString(), a));
+
+    const uniqueArchitects = Array.from(uniqueArchitectMap.values());
+
+    console.log("Unique Architects Found:", uniqueArchitects.length);
 
     res.status(200).json({
       status: "Success",
-      message: "get all data",
-      count: dataCount,
-      data: architecturelist,
+      message: `Architects${filter && filter.toLowerCase() !== "none" ? ` with '${filter}' quotations` : ""}${Object.keys(dateFilter).length ? " within date range" : ""}`,
+      count: uniqueArchitects.length,
+      data: uniqueArchitects,
     });
+
   } catch (error) {
-    res.status(404).json({
+    console.error("❌ Error in architeclist:", error);
+    res.status(500).json({
       status: "Fail",
       message: error.message,
     });
   }
 };
+
+
