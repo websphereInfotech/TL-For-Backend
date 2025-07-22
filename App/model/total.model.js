@@ -20,11 +20,14 @@ const totalSchemas = Schema({
   },
   rate: {
     type: Number,
-    required: true,
+    // required: true,
   },
   quantity: {
     type: Number,
     required: true,
+  },
+  invoiceNumber: {
+    type: String
   },
   total: {
     type: Number,
