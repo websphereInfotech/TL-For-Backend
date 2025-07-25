@@ -180,24 +180,28 @@ exports.architec_listdata = async function (req, res) {
     const usersWithStatus = await Promise.all(
       usersConnectedToarchitecher.map(async (userData) => {
         const follow = await followModel.findOne({ quatationId: userData._id });
-        let status = "Follow Up";
+        let status = "None";
 
         if (follow) {
-          if (follow.Approve) {
+          if (follow.Approve === true) {
             status = "Approve";
-          } else if (follow.Reject) {
+          } else if (follow.Reject === true) {
             status = "Reject";
+          } else if (follow.followup === true) {
+            status = "followup";
           }
         }
+        console.log("status: ", status)
 
         console.log(`👤 User ${userData._id} status resolved to: ${status}`);
         return { ...userData, status };
       })
     );
+    const filteredUsers =
+      statusFilter && statusFilter !== "None"
+        ? usersWithStatus.filter((u) => u.status === statusFilter)
+        : usersWithStatus;
 
-    const filteredUsers = statusFilter
-      ? usersWithStatus.filter((u) => u.status === statusFilter)
-      : usersWithStatus;
 
     console.log(`✅ Final user count after status filtering: ${filteredUsers.length}`);
 
