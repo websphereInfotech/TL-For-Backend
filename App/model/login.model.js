@@ -1,16 +1,27 @@
-const mongoose= require('mongoose')
+const mongoose = require('mongoose');
+const { mobileNo } = require('../middlware/validation');
 const Schema = mongoose.Schema;
-
- const loginschema = Schema({
-    login_id:{
+const loginschema = Schema({
+    login_id: {
         type: String,
-        require:true
+        required: true
     },
-    password:{
-        type:String,
-        require:true
-    }
- });
- const Login = mongoose.model('Login',loginschema)
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'marketing'],
+        default: 'admin'
+    },
+    mobileNo: {
+        type: Number,
+        required: false
 
- module.exports=Login;
+    }
+});
+
+const Login = mongoose.model('Login', loginschema)
+
+module.exports = Login;

@@ -304,7 +304,6 @@ exports.architeclist = async function (req, res, next) {
     }
 
     const userIds = follows.map(f => f.quatationId).filter(Boolean);
-    console.log("User IDs from Follow:", userIds.map(id => id.toString()));
 
     // Step 2: Build user query with optional date range
     const userQuery = { _id: { $in: userIds } };

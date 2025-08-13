@@ -15,6 +15,19 @@ const userschema = Schema(
     address: {
       type: String,
     },
+
+    addressTwo: {
+      type: String,
+    },
+
+    marketingDataName: {
+      type: String,
+    },
+
+    marketingDataId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Marketing"
+    },
     serialNumber: {
       type: Number,
       require: true,

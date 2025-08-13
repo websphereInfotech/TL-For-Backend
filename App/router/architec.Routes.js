@@ -2,21 +2,21 @@ var express = require("express")
 var router = express.Router();
 const{architec_create,architec_update,architec_delete,architeclist,architec_viewdata,architec_listdata,architecdetails_searchdata, connectedUsersToArchitect}=require('../controller/architecture.controller')
 const{validate}=require('../../constant/validate');
-const { verifytoken } = require("../middlware/auth");
+const { verifytoken, allowRoles } = require("../middlware/auth");
 
-router.post('/architec/data/create',verifytoken,validate('architacecreate'),architec_create)
+router.post('/architec/data/create',verifytoken, allowRoles('admin'),validate('architacecreate'),architec_create)
 
-router.put('/architec/data/update/:id',verifytoken,validate('architaceupdate'),architec_update)
+router.put('/architec/data/update/:id',verifytoken, allowRoles('admin'),validate('architaceupdate'),architec_update)
 
-router.delete('/architec/data/delete/:id',verifytoken,architec_delete)
+router.delete('/architec/data/delete/:id',verifytoken, allowRoles('admin'),architec_delete)
 
-router.get('/architec/viewdata/:id',verifytoken,architec_viewdata)
+router.get('/architec/viewdata/:id',verifytoken, allowRoles('admin'),architec_viewdata)
 
-router.get('/architec/listdata/:id',verifytoken,architec_listdata)
+router.get('/architec/listdata/:id',verifytoken, allowRoles('admin'),architec_listdata)
 
-router.get('/architec/list',verifytoken,architeclist)
+router.get('/architec/list',verifytoken, allowRoles('admin'),architeclist)
 
-router.get('/architec/searchdata',verifytoken,architecdetails_searchdata)
+router.get('/architec/searchdata',verifytoken, allowRoles('admin'),architecdetails_searchdata)
 
 
 

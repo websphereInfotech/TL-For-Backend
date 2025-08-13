@@ -15,11 +15,14 @@ exports.quotation_create = async function (req, res) {
       userName,
       mobileNo,
       address,
+      addressTwo,
       serialNumber,
       Date,
       sales,
       architec,
       carpenter,
+      marketingDataId,
+      marketingDataName,
       shop,
       addtotal,
     } = req.body;
@@ -35,7 +38,9 @@ exports.quotation_create = async function (req, res) {
     const userData = await user.create({
       userName,
       mobileNo,
-      address,
+      marketingDataId,
+      marketingDataName,
+      address, addressTwo,
       serialNumber,
       Date: Date,
       sales,
@@ -68,6 +73,7 @@ exports.quotation_create = async function (req, res) {
       userName: userName,
       mobileNo: mobileNo,
       address: address,
+      addressTwo: addressTwo,
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
@@ -82,6 +88,8 @@ exports.quotation_create = async function (req, res) {
       userName: userName,
       mobileNo: mobileNo,
       address: address,
+      addressTwo: addressTwo,
+
       serialNumber: serialNumber,
       Date: Date,
       sales: sales,
@@ -98,6 +106,7 @@ exports.quotation_create = async function (req, res) {
       token: token,
     });
   } catch (error) {
+    console.log(error.message)
     res.status(404).json({
       status: "fail",
       message: error.message,
@@ -517,9 +526,9 @@ exports.quotation_search = async function (req, res) {
 
       // Update matchField to search by mobileNo if serialNumber returns no results
       if (req.query.mobileNo) {
-          matchField = {
-            mobileNo: parseInt(req.query.mobileNo),  // Ensure it's a number for comparison
-          };
+        matchField = {
+          mobileNo: parseInt(req.query.mobileNo),  // Ensure it's a number for comparison
+        };
 
         // Perform the query again with mobileNo
         userData = await user.aggregate([

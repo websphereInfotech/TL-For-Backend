@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const { validate } = require("../../constant/validate");
-const { verifytoken } = require("../middlware/auth");
+const { verifytoken, allowRoles } = require("../middlware/auth");
 const {
   personCreate,
   personUpdate,
@@ -14,27 +14,27 @@ const {
 } = require("../controller/salesPerson.controller");
 
 //craete
-router.post("/salesPerson/create", verifytoken, validate("salesPersonCreate"), personCreate );
+router.post("/salesPerson/create", verifytoken, allowRoles('admin'), validate("salesPersonCreate"), personCreate );
 
 //update
-router.put("/salesPerson/update/:id", verifytoken, validate("salesPersonCreate"), personUpdate );
+router.put("/salesPerson/update/:id", verifytoken,  allowRoles('admin'),validate("salesPersonCreate"), personUpdate );
 
 //delete
-router.delete("/salesPerson/delete/:id", verifytoken, PersonDelete);
+router.delete("/salesPerson/delete/:id", verifytoken, allowRoles('admin'), PersonDelete);
 
 //view
-router.get("/salesPerson/view/:id", verifytoken, salesPersonView);
+router.get("/salesPerson/view/:id", verifytoken,  allowRoles('admin'),salesPersonView);
 
 // search
-router.get("/salesPerson/search", verifytoken, salesPersonSearch);
+router.get("/salesPerson/search", verifytoken,  allowRoles('admin'),salesPersonSearch);
 
 // list Date wise
-router.get("/salesPerson/salespersonid/:id", verifytoken, salesPersonList);
+router.get("/salesPerson/salespersonid/:id", verifytoken, allowRoles('admin'), salesPersonList);
 
 // PersonListData
-router.get("/salesPerson/AllList", verifytoken, salesPersonListData);
+router.get("/salesPerson/AllList", verifytoken,  allowRoles('admin'),salesPersonListData);
 
 // salesPersonListData
-router.get("/salesPersonListWithUser/:id", verifytoken , salesPersonListWithUser);
+router.get("/salesPersonListWithUser/:id", verifytoken ,  allowRoles('admin'),salesPersonListWithUser);
 
 module.exports = router;
