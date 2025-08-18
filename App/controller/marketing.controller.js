@@ -210,9 +210,9 @@ exports.get_marketing_by_address = async (req, res) => {
       });
     }
 
-    // Step 1: Find first marketing record by address
+    // Step 1: Find first marketing record by address (case-insensitive)
     const marketingData = await Marketing.findOne({
-      address: address.trim(),
+      address: { $regex: new RegExp("^" + address.trim() + "$", "i") }
     });
 
     if (!marketingData) {
