@@ -136,26 +136,29 @@ exports.userName = function (req, res, next) {
     next();
   }
 };
-
 exports.serialNumber = function (req, res, next) {
-  var serialNumber = Joi.string().empty().required().regex(/^\d+$/).messages({
-    "string.base": "Serial Numbner Must Be A Number",
-    "string.empty": "Serial Number Cannot Be Empty",
-    "any.required": "required field : Serial Number",
-    "string.pattern.base": "Serial Number Must Contain Only Numeric Characters",
-  });
-  var { error: serialNumberError } = serialNumber.validate(
+  const serialNumber = Joi.string()
+    .trim()
+    .required()
+    .messages({
+      "string.base": "Serial Number must be a string",
+      "string.empty": "Serial Number cannot be empty",
+      "any.required": "Required field: Serial Number",
+    });
+
+  const { error: serialNumberError } = serialNumber.validate(
     req.body.serialNumber
   );
+
   if (serialNumberError) {
     return res.status(400).json({
       status: "fail",
       message: serialNumberError.message,
     });
-  } else {
-    next();
   }
+  next();
 };
+
 
 exports.password = function (req, res, next) {
   var password = Joi.string().empty().required().messages({

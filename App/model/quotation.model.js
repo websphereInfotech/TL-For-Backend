@@ -29,7 +29,7 @@ const userschema = Schema(
       ref: "Marketing"
     },
     serialNumber: {
-      type: Number,
+      type: String,
       require: true,
       unique: true,
     },
