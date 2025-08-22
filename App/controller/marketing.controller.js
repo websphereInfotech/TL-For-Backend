@@ -6,7 +6,7 @@ const excelJs = require("exceljs");
 
 exports.create_marketing = async (req, res) => {
   try {
-    const {
+    let {
       date,
       name,
       mobileNo,
@@ -17,6 +17,9 @@ exports.create_marketing = async (req, res) => {
     } = req.body;
 
     const loginId = req.user.id;
+
+    address = address.trim().replace(/\s+/g, " ");
+
 
     const newMarketing = new Marketing({
       date: date ? new Date(date) : undefined,
@@ -198,10 +201,9 @@ exports.get_marketing_by_login_id_excel = async (req, res) => {
   }
 };
 
-
 exports.get_marketing_by_address = async (req, res) => {
   try {
-    const { address } = req.body;
+    let { address } = req.body;
 
     if (!address) {
       return res.status(400).json({
@@ -210,7 +212,9 @@ exports.get_marketing_by_address = async (req, res) => {
       });
     }
 
-    // Step 1: Find first marketing record by address (case-insensitive)
+    address = address.trim().replace(/\s+/g, " ");
+
+
     const marketingData = await Marketing.findOne({
       address: { $regex: new RegExp("^" + address.trim() + "$", "i") }
     });
@@ -222,7 +226,6 @@ exports.get_marketing_by_address = async (req, res) => {
       });
     }
 
-    // Step 2: Find the login user linked to the marketing record
     const loginData = await Login.findById(marketingData.login_id);
 
     if (!loginData) {
@@ -232,7 +235,6 @@ exports.get_marketing_by_address = async (req, res) => {
       });
     }
 
-    // Step 3: Return both
     res.status(200).json({
       status: "Success",
       marketing: marketingData,
